@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  api:
+    build:
+      context: "/home/ireal/projects/licirom/Backend"
+      dockerfile: "API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net7.0/API.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "https://+:443;http://+:80"
+    image: "licirom/api:dev"
+    ports: []
+    volumes:
+    - "/home/ireal/.aspnet/https:/root/.aspnet/https"
+    - "/home/ireal/.microsoft/usersecrets:/root/.microsoft/usersecrets"
+    - "/home/ireal/projects/licirom/Backend/API:/app:rw"
+    working_dir: "/app"
