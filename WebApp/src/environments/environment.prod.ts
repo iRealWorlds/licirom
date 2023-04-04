@@ -1,4 +1,4 @@
-import {EnvironmentConfig} from "../app/core/environment/environment-config.model";
+import {EnvironmentConfig} from 'src/app/core/environment/environment-config.model';
 
 const configuration = new EnvironmentConfig();
 

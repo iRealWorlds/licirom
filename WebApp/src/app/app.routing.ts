@@ -1,8 +1,8 @@
-import {Route} from "@angular/router";
+import {Route} from '@angular/router';
 
 export const appRouting: Route[] = [
    // Redirect '/' to '/home'
-  { path: '', redirectTo: '/home', pathMatch: "full" },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
 
   // Routes that require the user to be a guest
   {

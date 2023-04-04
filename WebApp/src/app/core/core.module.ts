@@ -1,6 +1,6 @@
 import {NgModule, Optional, SkipSelf} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {EnvironmentConfig} from "./environment/environment-config.model";
+import {environment} from 'src/environments/environment';
+import {EnvironmentConfig} from 'src/app/core/environment/environment-config.model';
 
 
 @NgModule({
