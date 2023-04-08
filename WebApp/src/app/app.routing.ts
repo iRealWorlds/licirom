@@ -4,13 +4,13 @@ export const appRouting: Route[] = [
    // Redirect '/' to '/home'
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 
-  // Routes that require the user to be a guest
+  // Routes that require the identity to be a guest
   {
     path: '',
     children: [],
   },
 
-  // Routes that require the user to be authenticated
+  // Routes that require the identity to be authenticated
   {
     path: '',
     children: [],
