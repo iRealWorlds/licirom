@@ -16,7 +16,12 @@ export class ApiService {
    *
    * @param segments
    */
-  protected buildApiEndpointUri(segments: string[]): string {
+  protected buildApiEndpointUri(segments: string[]|string): string {
+    // Normalize the segments
+    if (!Array.isArray(segments)) {
+      segments = [segments];
+    }
+
     // Trim slashes from the segments
     segments = segments.map(segment => segment.replace(/\/+$/, ''));
 

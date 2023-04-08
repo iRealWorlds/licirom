@@ -1,1 +1,19 @@
-<p>home-page works!</p>
+<div class="p-7">
+  <ng-container *ngIf="identity$ | async as identity; else guestTemplate">
+    <h1 class="text-xl text-green-500">
+      You are signed in
+    </h1>
+    <pre class="p-5 bg-gray-100">{{ identity | json }}</pre>
+    <a routerLink="/auth/sign-out" mat-flat-button color="warn">
+      Sign out
+    </a>
+  </ng-container>
+  <ng-template #guestTemplate>
+    <h1 class="text-xl text-red-500">
+      You are not signed in
+    </h1>
+    <a routerLink="/auth/sign-in" mat-flat-button color="warn">
+      Sign in
+    </a>
+  </ng-template>
+</div>

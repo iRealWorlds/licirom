@@ -21,7 +21,7 @@ export class AuthService extends ApiService {
    */
   constructor(
     private readonly _http: HttpClient,
-    protected override readonly environment: EnvironmentConfig
+    protected override readonly environment: EnvironmentConfig,
   ) {
     super(environment);
   }
