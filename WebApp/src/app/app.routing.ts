@@ -9,6 +9,7 @@ export const appRouting: Route[] = [
     path: '',
     children: [
       { path: 'auth/sign-in', loadChildren: () => import('src/app/modules/auth/sign-in/sign-in.module').then(m => m.SignInModule) },
+      { path: 'auth/sign-out', loadChildren: () => import('src/app/modules/auth/sign-out/sign-out.module').then(m => m.SignOutModule) },
     ],
   },
 
