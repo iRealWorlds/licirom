@@ -6,9 +6,7 @@ import { Observable, tap } from 'rxjs';
 import { AuthSession } from 'src/app/core/auth/auth-session.model';
 import { ApiService } from 'src/app/core/api/api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService extends ApiService {
   /**
    * The name the auth token has in the local storage.

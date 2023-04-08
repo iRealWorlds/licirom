@@ -1,9 +1,15 @@
 import {NgModule, Optional, SkipSelf} from '@angular/core';
 import {environment} from 'src/environments/environment';
 import {EnvironmentConfig} from 'src/app/core/environment/environment-config.model';
+import { AuthModule } from 'src/app/core/auth/auth.module';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
+  imports: [
+    HttpClientModule,
+    AuthModule,
+  ],
   providers: [
     {
       provide: EnvironmentConfig,

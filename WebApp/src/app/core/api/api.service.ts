@@ -12,7 +12,7 @@ export class ApiService {
   constructor(protected readonly environment: EnvironmentConfig) { }
 
   /**
-   * Build an URI for accessing a given API endpoint.
+   * Build a URI for accessing a given API endpoint.
    *
    * @param segments
    */
