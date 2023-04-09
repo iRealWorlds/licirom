@@ -13,8 +13,10 @@ import { SignUpService } from 'src/app/modules/auth/sign-up/sign-up.service';
 })
 export class SignUpComponent {
   signUpForm = new FormGroup({
+    firstName: new FormControl<string>('', { validators: [Validators.required], nonNullable: true}),
+    lastName: new FormControl<string>('', { validators: [Validators.required], nonNullable: true}),
     emailAddress: new FormControl<string>('', { validators: [Validators.required, Validators.email], nonNullable: true}),
-    password: new FormControl<string>('', { validators: [Validators.required], nonNullable: true})
+    password: new FormControl<string>('', { validators: [Validators.required], nonNullable: true}),
   });
 
   private _loading = false;
@@ -72,10 +74,7 @@ export class SignUpComponent {
     // If the form is valid, build and send a request
     if (this.signUpForm.valid) {
       // Build the request
-      const data = new SignUpRequest({
-        emailAddress: this.signUpForm.controls.emailAddress.value,
-        password: this.signUpForm.controls.password.value,
-      });
+      const data = new SignUpRequest(this.signUpForm.value);
 
       // Send the request
       this.loading = true;

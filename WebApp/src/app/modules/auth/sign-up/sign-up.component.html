@@ -5,12 +5,34 @@
     </mat-card-header>
 
     <mat-card-content class="flex flex-col gap-5">
+      <!-- First Name -->
+      <mat-form-field>
+        <mat-label>
+          First Name
+        </mat-label>
+        <input type="text" matInput [formControl]="signUpForm.controls.firstName" autocomplete="given-name" />
+        <mat-error *ngFor="let error of signUpForm.controls.firstName.errors | keyvalue">
+          <app-field-validation-errors [error]="error.key"></app-field-validation-errors>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Last Name -->
+      <mat-form-field>
+        <mat-label>
+          Last Name
+        </mat-label>
+        <input type="text" matInput [formControl]="signUpForm.controls.lastName" autocomplete="family-name" />
+        <mat-error *ngFor="let error of signUpForm.controls.lastName.errors | keyvalue">
+          <app-field-validation-errors [error]="error.key"></app-field-validation-errors>
+        </mat-error>
+      </mat-form-field>
+
       <!-- E-mail address -->
       <mat-form-field>
         <mat-label>
           E-mail address
         </mat-label>
-        <input type="text" matInput [formControl]="signUpForm.controls.emailAddress" autocomplete="new-username" />
+        <input type="email" matInput [formControl]="signUpForm.controls.emailAddress" autocomplete="email" />
         <mat-error *ngFor="let error of signUpForm.controls.emailAddress.errors | keyvalue">
           <app-field-validation-errors [error]="error.key"></app-field-validation-errors>
         </mat-error>

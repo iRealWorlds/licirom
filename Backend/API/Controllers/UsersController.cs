@@ -34,6 +34,8 @@ public class UsersController : ControllerBase
         // Create the new user
         var user = new ApplicationUser
         {
+            FirstName = data.FirstName,
+            LastName = data.LastName,
             Email = data.EmailAddress,
             UserName = data.EmailAddress,
             SecurityStamp = Guid.NewGuid().ToString(),

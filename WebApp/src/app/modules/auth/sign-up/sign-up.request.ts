@@ -3,6 +3,8 @@ import { AuthSessionCreateRequest } from 'src/app/core/auth/auth-session-create.
 export class SignUpRequest extends AuthSessionCreateRequest {
   override emailAddress?: string;
   override password?: string;
+  firstName?: string;
+  lastName?: string;
 
   /**
    * SignUpRequest constructor method.

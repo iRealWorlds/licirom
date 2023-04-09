@@ -5,6 +5,8 @@ namespace API.ViewModels;
 public class UserViewModel
 {
     public string EmailAddress { get; set; } = String.Empty;
+    public string FirstName { get; set; } = String.Empty;
+    public string LastName { get; set; } = String.Empty;
     
     public UserViewModel()
     {
@@ -12,6 +14,8 @@ public class UserViewModel
 
     public UserViewModel(ApplicationUser user)
     {
+        this.FirstName = user.FirstName ?? String.Empty;
+        this.LastName = user.LastName ?? String.Empty;
         this.EmailAddress = user.Email ?? String.Empty;
     }
 }
