@@ -1,5 +1,14 @@
 <mat-toolbar color="primary" class="flex justify-between items-center">
-  <img ngSrc="assets/images/logo_dark_bg.png" alt="logo" height="60" width="160">
+  <div class="flex items-center gap-3">
+    <img ngSrc="assets/images/logo_dark_bg.png" alt="logo" height="60" width="160" class="mr-5">
+
+    <a routerLink="/home" routerLinkActive="bg-black/10" mat-button>
+      Home
+    </a>
+    <a routerLink="/support" routerLinkActive="bg-black/10" mat-button disabled class="opacity-50">
+      Support
+    </a>
+  </div>
 
   <div class="flex items-center gap-5">
     <!-- Current user -->
@@ -10,11 +19,14 @@
       </button>
       <mat-menu #userMenu="matMenu">
         <button disabled mat-menu-item>
+          <mat-icon>account_circle</mat-icon>
+          <span>Profile</span>
+        </button>
+        <button disabled mat-menu-item>
           <mat-icon>settings</mat-icon>
           <span>Settings</span>
         </button>
         <a routerLink="/auth/sign-out" mat-menu-item>
-
           <mat-icon>power_settings_new</mat-icon>
           <span>Sign out</span>
         </a>

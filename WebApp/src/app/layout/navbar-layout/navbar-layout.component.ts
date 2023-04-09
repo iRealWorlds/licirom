@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { IdentityService } from 'src/app/core/identity/identity.service';
@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-navbar-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, MatToolbarModule, NgOptimizedImage, MatMenuModule, MatIconModule, MatButtonModule, RouterLink],
+  imports: [CommonModule, RouterOutlet, MatToolbarModule, NgOptimizedImage, MatMenuModule, MatIconModule, MatButtonModule, RouterLink, RouterLinkActive],
   templateUrl: './navbar-layout.component.html'
 })
 export class NavbarLayoutComponent implements OnInit, OnDestroy {
