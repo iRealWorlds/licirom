@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
 import { HttpClient } from '@angular/common/http';
 import { AuthSessionCreateRequest } from 'src/app/core/auth/auth-session-create.request';
-import { Observable, tap } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { AuthSession } from 'src/app/core/auth/auth-session.model';
 import { ApiService } from 'src/app/core/api/api.service';
+import { IdentityService } from 'src/app/core/identity/identity.service';
+import { IdentityUser } from 'src/app/core/identity/identity-user.model';
+import { TAuthToken } from 'src/app/core/auth/auth-token.type';
 
 @Injectable()
 export class AuthService extends ApiService {
@@ -12,6 +15,11 @@ export class AuthService extends ApiService {
    * The name the auth token has in the local storage.
    */
   static TOKEN_STORAGE_NAME = 'auth_token';
+
+  /**
+   * Event that is triggered when the current auth token is changed.
+   */
+  tokenChanged = new EventEmitter<TAuthToken>();
 
   /**
    * AuthService constructor method.
@@ -29,7 +37,7 @@ export class AuthService extends ApiService {
   /**
    * Get the currently active token.
    */
-  get currentToken(): string|null {
+  get currentToken(): TAuthToken {
     return localStorage.getItem(AuthService.TOKEN_STORAGE_NAME);
   }
 
@@ -38,12 +46,16 @@ export class AuthService extends ApiService {
    *
    * @param token
    */
-  set currentToken(token: string|null) {
+  set currentToken(token: TAuthToken) {
+    // Update the value in the local storage
     if (token === null) {
       localStorage.removeItem(AuthService.TOKEN_STORAGE_NAME);
     } else {
-      localStorage.setItem(AuthService.TOKEN_STORAGE_NAME, token);
+      localStorage.setItem(AuthService.TOKEN_STORAGE_NAME, token.toString());
     }
+
+    // Emit the token changed event
+    this.tokenChanged.emit(token);
   }
 
   /**
@@ -63,7 +75,7 @@ export class AuthService extends ApiService {
       request = request.pipe(
         tap(session => {
           this.currentToken = session.token;
-        })
+        }),
       );
     }
 
@@ -71,5 +83,15 @@ export class AuthService extends ApiService {
     return request;
   }
 
+  /**
+   * Clear the current session data.
+   */
+  clearSession(): Observable<void> {
+    this.currentToken = null;
+    return new Observable<void>(subscriber => {
+      subscriber.next();
+      subscriber.complete();
+    });
+  }
 
 }

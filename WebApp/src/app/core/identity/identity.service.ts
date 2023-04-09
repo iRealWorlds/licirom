@@ -56,6 +56,7 @@ export class IdentityService extends ApiService {
       catchError(error => {
         if (error instanceof HttpErrorResponse) {
           if (error.status === 401) {
+            this._authService.clearSession();
             return of(null);
           }
         }
@@ -68,7 +69,4 @@ export class IdentityService extends ApiService {
       })
     );
   }
-
-
-
 }

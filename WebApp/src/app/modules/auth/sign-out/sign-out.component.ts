@@ -26,9 +26,10 @@ export class SignOutComponent implements OnInit {
    * @inheritDoc
    */
   ngOnInit(): void {
-    this._authService.currentToken = null;
-    this._router.navigate(['']).then(() => {
-      this._toastService.open('Signed out successfully!', 'Close');
+    this._authService.clearSession().subscribe(() => {
+      this._router.navigate(['']).then(() => {
+        this._toastService.open('Signed out successfully!', 'Close');
+      });
     });
   }
 }

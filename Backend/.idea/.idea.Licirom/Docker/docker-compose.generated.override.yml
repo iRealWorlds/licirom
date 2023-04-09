@@ -10,7 +10,6 @@ services:
     - "dotnet"
     - "/app/bin/Debug/net7.0/API.dll"
     environment:
-      ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "https://+:443;http://+:80"
     image: "licirom/api:dev"
     ports: []
