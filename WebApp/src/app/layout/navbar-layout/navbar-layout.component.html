@@ -1,2 +1,31 @@
-NAVBAR!
+<mat-toolbar color="primary" class="flex justify-between items-center">
+  <img ngSrc="assets/images/logo_dark_bg.png" alt="logo" height="60" width="160">
+
+  <div class="flex items-center gap-5">
+    <!-- Current user -->
+    <ng-container *ngIf="currentUser$ | async as user; else guestTemplate">
+      <button mat-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>person</mat-icon>
+        {{ user.firstName }} {{ user.lastName }}
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button disabled mat-menu-item>
+          <mat-icon>settings</mat-icon>
+          <span>Settings</span>
+        </button>
+        <a routerLink="/auth/sign-out" mat-menu-item>
+
+          <mat-icon>power_settings_new</mat-icon>
+          <span>Sign out</span>
+        </a>
+      </mat-menu>
+    </ng-container>
+    <ng-template #guestTemplate>
+      <a routerLink="/auth/sign-in" mat-button>Sign in</a>
+      <a routerLink="/auth/sign-up" mat-button>Create account</a>
+    </ng-template>
+
+  </div>
+</mat-toolbar>
+
 <router-outlet></router-outlet>
