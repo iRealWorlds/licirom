@@ -28,7 +28,7 @@
       </mat-form-field>
 
       <!-- Submit button -->
-      <button mat-flat-button type="submit" color="primary">
+      <button mat-flat-button type="submit" color="primary" [disabled]="signInForm.disabled" class="disabled:text-white disabled:bg-primary-100">
         <ng-container *ngIf="loading === false">Sign in</ng-container>
         <ng-container *ngIf="loading === true">Signing in</ng-container>
       </button>
