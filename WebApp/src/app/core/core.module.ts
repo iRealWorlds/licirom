@@ -4,6 +4,7 @@ import {EnvironmentConfig} from 'src/app/core/environment/environment-config.mod
 import { AuthModule } from 'src/app/core/auth/auth.module';
 import { HttpClientModule } from '@angular/common/http';
 import { IdentityModule } from 'src/app/core/identity/identity.module';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -16,6 +17,12 @@ import { IdentityModule } from 'src/app/core/identity/identity.module';
     {
       provide: EnvironmentConfig,
       useValue: environment,
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: {
+        duration: 2500
+      }
     },
   ]
 })

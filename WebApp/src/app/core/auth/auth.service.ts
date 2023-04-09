@@ -2,11 +2,9 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
 import { HttpClient } from '@angular/common/http';
 import { AuthSessionCreateRequest } from 'src/app/core/auth/auth-session-create.request';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AuthSession } from 'src/app/core/auth/auth-session.model';
 import { ApiService } from 'src/app/core/api/api.service';
-import { IdentityService } from 'src/app/core/identity/identity.service';
-import { IdentityUser } from 'src/app/core/identity/identity-user.model';
 import { TAuthToken } from 'src/app/core/auth/auth-token.type';
 
 @Injectable()
