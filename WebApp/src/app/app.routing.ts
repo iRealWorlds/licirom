@@ -7,7 +7,11 @@ export const appRouting: Route[] = [
   // Routes that require the user to be a guest
   {
     path: '',
-    children: [],
+    children: [
+      { path: 'auth/sign-in', loadChildren: () => import('src/app/modules/auth/sign-in/sign-in.module').then(m => m.SignInModule) },
+      { path: 'auth/sign-up', loadChildren: () => import('src/app/modules/auth/sign-up/sign-up.module').then(m => m.SignUpModule) },
+      { path: 'auth/sign-out', loadChildren: () => import('src/app/modules/auth/sign-out/sign-out.module').then(m => m.SignOutModule) },
+    ],
   },
 
   // Routes that require the user to be authenticated

@@ -1,0 +1,27 @@
+﻿name: "licirom-api"
+services:
+  api:
+    image: licirom/api
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=Licirom;User Id=sa;Password="${SQL_SERVER_PASSWORD}";TrustServerCertificate=true;
+    ports:
+      - "8001:80"
+      - "8000:443"
+    depends_on:
+      - sqldata
+
+  sqldata:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    ports:
+      - "5433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+    environment:
+      MSSQL_SA_PASSWORD: "${SQL_SERVER_PASSWORD}"
+      ACCEPT_EULA: "Y"
+volumes:
+  sqlvolume:

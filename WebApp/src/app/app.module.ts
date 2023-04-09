@@ -5,6 +5,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {CoreModule} from 'src/app/core/core.module';
 import {appRouting} from 'src/app/app.routing';
+import { LayoutModule } from 'src/app/layout/layout.module';
+import { identityLoadedGuard } from 'src/app/core/identity/identity-loaded.guard';
 
 @NgModule({
   declarations: [
@@ -14,10 +16,15 @@ import {appRouting} from 'src/app/app.routing';
     // Angular modules
     BrowserModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(appRouting),
+    RouterModule.forRoot([{
+      path: '',
+      canActivate: [identityLoadedGuard],
+      children: appRouting
+    }]),
 
     // Core module
     CoreModule,
+    LayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

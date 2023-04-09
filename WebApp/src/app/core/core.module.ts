@@ -1,13 +1,28 @@
 import {NgModule, Optional, SkipSelf} from '@angular/core';
 import {environment} from 'src/environments/environment';
 import {EnvironmentConfig} from 'src/app/core/environment/environment-config.model';
+import { AuthModule } from 'src/app/core/auth/auth.module';
+import { HttpClientModule } from '@angular/common/http';
+import { IdentityModule } from 'src/app/core/identity/identity.module';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 
 @NgModule({
+  imports: [
+    HttpClientModule,
+    AuthModule,
+    IdentityModule,
+  ],
   providers: [
     {
       provide: EnvironmentConfig,
       useValue: environment,
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: {
+        duration: 2500
+      }
     },
   ]
 })

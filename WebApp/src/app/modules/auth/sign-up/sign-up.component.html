@@ -1,0 +1,65 @@
+<form [formGroup]="signUpForm" (ngSubmit)="signUp()" class="flex flex-col items-center justify-center w-screen h-screen">
+  <mat-card class="bg-gray-800 px-20 py-7">
+    <mat-card-header class="flex items-center justify-center mb-10">
+      <img ngSrc="assets/images/logo_dark_bg.png" alt="logo" class="w-[400px]" height="484" width="1920">
+    </mat-card-header>
+
+    <mat-card-content class="flex flex-col gap-5">
+      <!-- First Name -->
+      <mat-form-field>
+        <mat-label>
+          First Name
+        </mat-label>
+        <input type="text" matInput [formControl]="signUpForm.controls.firstName" autocomplete="given-name" />
+        <mat-error *ngFor="let error of signUpForm.controls.firstName.errors | keyvalue">
+          <app-field-validation-errors [error]="error.key"></app-field-validation-errors>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Last Name -->
+      <mat-form-field>
+        <mat-label>
+          Last Name
+        </mat-label>
+        <input type="text" matInput [formControl]="signUpForm.controls.lastName" autocomplete="family-name" />
+        <mat-error *ngFor="let error of signUpForm.controls.lastName.errors | keyvalue">
+          <app-field-validation-errors [error]="error.key"></app-field-validation-errors>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- E-mail address -->
+      <mat-form-field>
+        <mat-label>
+          E-mail address
+        </mat-label>
+        <input type="email" matInput [formControl]="signUpForm.controls.emailAddress" autocomplete="email" />
+        <mat-error *ngFor="let error of signUpForm.controls.emailAddress.errors | keyvalue">
+          <app-field-validation-errors [error]="error.key"></app-field-validation-errors>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Password -->
+      <mat-form-field>
+        <mat-label>
+          Password
+        </mat-label>
+        <input type="password" matInput [formControl]="signUpForm.controls.password" autocomplete="new-password" />
+        <mat-error *ngFor="let error of signUpForm.controls.password.errors | keyvalue">
+          <app-field-validation-errors [error]="error.key"></app-field-validation-errors>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Submit button -->
+      <button mat-flat-button type="submit" color="primary" [disabled]="signUpForm.disabled" class="disabled:text-white disabled:bg-primary-100">
+        <ng-container *ngIf="loading === false">Create account</ng-container>
+        <ng-container *ngIf="loading === true">Creating account</ng-container>
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="mt-5">
+    <ul class="text-center">
+      <li><a routerLink="/auth/sign-in" class="text-primary-500 hover:text-primary-600">Sign in instead</a></li>
+    </ul>
+  </div>
+</form>

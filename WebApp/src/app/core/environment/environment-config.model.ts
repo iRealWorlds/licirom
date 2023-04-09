@@ -4,6 +4,14 @@ export class EnvironmentConfig {
   production = true;
   defaultLayout = Layout.Navbar;
 
+  api = {
+    baseUri: 'https://127.0.0.1:8000',
+    endpoints: {
+      authSessions: 'api/AuthSessions',
+      users: 'api/Users'
+    }
+  };
+
   /**
    * EnvironmentConfig constructor method.
    *

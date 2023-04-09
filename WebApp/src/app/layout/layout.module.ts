@@ -10,6 +10,9 @@ import { BlankLayoutComponent } from 'src/app/layout/blank-layout/blank-layout.c
   declarations: [
     LayoutComponent
   ],
+  exports: [
+    LayoutComponent
+  ],
   imports: [
     CommonModule,
     NavbarLayoutComponent,
