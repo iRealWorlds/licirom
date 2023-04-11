@@ -2,5 +2,6 @@ import {EnvironmentConfig} from 'src/app/core/environment/environment-config.mod
 
 const configuration = new EnvironmentConfig();
 configuration.production = false;
+configuration.api.baseUri = 'http://127.0.0.1:8001';
 
 export const environment = configuration;
