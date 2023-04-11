@@ -77,4 +77,28 @@ public class UsersController : ControllerBase
         // Otherwise, return the user's details
         return new JsonResult(new UserViewModel(user));
     }
+
+    [HttpPut("{key:guid}/password")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [Authorize]
+    public async Task<IActionResult> ChangePasswordAsync([FromBody] PasswordChangeModel data, Guid key)
+    {
+        var user = await this._userManager.FindByIdAsync(key.ToString());
+
+        if (user == null)
+        {
+            return new NotFoundResult();
+        }
+
+        if(!(await this._userManager.ChangePasswordAsync(user, data.CurrentPassword, data.NewPassword)).Succeeded)
+        {
+            return new UnprocessableEntityResult();
+        }
+
+        return new NoContentResult();
+    }
+
 }
