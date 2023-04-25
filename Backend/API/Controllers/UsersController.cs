@@ -102,6 +102,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{userKey:guid}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [Authorize(Policy="OwnsUser")]
     public async Task<IActionResult> DeleteUserAsync(Guid userKey)
@@ -116,4 +117,24 @@ public class UsersController : ControllerBase
         return new NoContentResult();
     }
 
+    [HttpPatch("{userKey:guid}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [Authorize(Policy="OwnsUser")]
+    public async Task<IActionResult> PatchUserAsync([FromBody] PatchUserModel data, Guid userKey)
+    {
+        var user = await this._userManager.FindByIdAsync(userKey.ToString());
+
+        if(user == null)
+        {
+            return new NotFoundResult();
+        }
+
+        user.FirstName = data.FirstName;
+        user.LastName = data.LastName;
+
+        await this._userManager.UpdateAsync(user);
+
+        return new JsonResult(new UserViewModel(user));
+    }
 }
