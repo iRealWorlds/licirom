@@ -101,4 +101,19 @@ public class UsersController : ControllerBase
         return new NoContentResult();
     }
 
+    [HttpDelete("{userKey:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [Authorize(Policy="OwnsUser")]
+    public async Task<IActionResult> DeleteUserAsync(Guid userKey)
+    {
+        var user = await this._userManager.FindByIdAsync(userKey.ToString());
+
+        if(user == null)
+        {
+            return new NotFoundResult();
+        }
+
+        return new NoContentResult();
+    }
+
 }
