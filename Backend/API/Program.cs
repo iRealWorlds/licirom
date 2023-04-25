@@ -36,7 +36,8 @@ builder.Services.AddAuthentication(options => {
         ValidAudience = builder.Configuration["JWT:ValidAudience"],  
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],  
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))  
-    };  
+    };
+    options.MapInboundClaims = false; // Prevent default behaviour which renames claims such as "sub" to "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
 });
 
 builder.Services.AddEndpointsApiExplorer();
