@@ -55,18 +55,18 @@ public class UsersController : ControllerBase
         }
         
         // Return a 201 Created response
-        return CreatedAtAction(nameof(ShowAsync), new { key = user.Id }, new UserViewModel(user));
+        return CreatedAtAction(nameof(ShowAsync), new { userKey = user.Id }, new UserViewModel(user));
     }
 
-    [HttpGet("{key:guid}")]
+    [HttpGet("{userKey:guid}")]
     [ActionName(nameof(ShowAsync))]
     [Produces("application/json")]
     [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
     [Authorize]
-    public async Task<IActionResult> ShowAsync(Guid key)
+    public async Task<IActionResult> ShowAsync(Guid userKey)
     {
         // Find the user
-        var user = await this._userManager.FindByIdAsync(key.ToString());
+        var user = await this._userManager.FindByIdAsync(userKey.ToString());
 
         // If none found, return a 404 response
         if (user == null)
@@ -78,15 +78,15 @@ public class UsersController : ControllerBase
         return new JsonResult(new UserViewModel(user));
     }
 
-    [HttpPut("{key:guid}/password")]
+    [HttpPut("{userKey:guid}/password")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [Authorize]
-    public async Task<IActionResult> ChangePasswordAsync([FromBody] PasswordChangeModel data, Guid key)
+    public async Task<IActionResult> ChangePasswordAsync([FromBody] PasswordChangeModel data, Guid userKey)
     {
-        var user = await this._userManager.FindByIdAsync(key.ToString());
+        var user = await this._userManager.FindByIdAsync(userKey.ToString());
 
         if (user == null)
         {
