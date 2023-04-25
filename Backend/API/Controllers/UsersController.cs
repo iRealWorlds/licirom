@@ -61,6 +61,7 @@ public class UsersController : ControllerBase
     [HttpGet("{userKey:guid}")]
     [ActionName(nameof(ShowAsync))]
     [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
     [Authorize]
     public async Task<IActionResult> ShowAsync(Guid userKey)
@@ -120,6 +121,7 @@ public class UsersController : ControllerBase
     [HttpPatch("{userKey:guid}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
     [Authorize(Policy="OwnsUser")]
     public async Task<IActionResult> PatchUserAsync([FromBody] PatchUserModel data, Guid userKey)
     {
