@@ -83,7 +83,7 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [Authorize]
+    [Authorize(Policy="OwnsUser")]
     public async Task<IActionResult> ChangePasswordAsync([FromBody] PasswordChangeModel data, Guid userKey)
     {
         var user = await this._userManager.FindByIdAsync(userKey.ToString());
