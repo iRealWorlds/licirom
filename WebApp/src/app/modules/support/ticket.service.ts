@@ -31,4 +31,8 @@ export class TicketService extends ApiService {
   create(data: CreateTicketRequest): Observable<SupportTicket> {
     return this._http.post<SupportTicket>(this.buildApiEndpointUri(this.environment.api.endpoints.tickets), data);
   }
+  getTicket(ticketId: string): Observable<SupportTicket> {
+    const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}`;
+    return this._http.get<SupportTicket>(this.buildApiEndpointUri(endpoint));
+  }
 }

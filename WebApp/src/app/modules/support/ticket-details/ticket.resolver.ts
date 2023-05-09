@@ -6,13 +6,16 @@ import {
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { SupportTicket } from '../support-ticket.model';
+import { TicketService } from '../ticket.service';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class TicketResolver implements Resolve<SupportTicket> {
+  constructor(private ticketService: TicketService) { }
+
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<SupportTicket> {
-    return of();
+    const ticketId = route.paramMap.get('ticketKey')!;
+    return this.ticketService.getTicket(ticketId);
   }
 }
