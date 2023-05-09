@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
-import { TicketListComponent } from './ticket-list.component';
-import { ticketListResolver } from './ticket-list.resolver';
+import { TicketListComponent } from '@licirom/modules/support/ticket-list/ticket-list.component';
+import { ticketListResolver } from '@licirom/modules/support/ticket-list/ticket-list.resolver';
 
 export const ticketListRouting: Route[] = [
     {

@@ -1,10 +1,14 @@
 export class CreateTicketRequest {
-    title?: string;
-    content?: string;
+  title?: string;
+  content?: string;
 
-    constructor(initial?: Partial<CreateTicketRequest>) {
-        if (initial) {
-            Object.assign(this, initial);
-        }
+  /**
+   * CreateTicketRequest constructor method.
+   * @param initial
+   */
+  constructor(initial?: Partial<CreateTicketRequest>) {
+    if (initial) {
+      Object.assign(this, initial);
     }
+  }
 }

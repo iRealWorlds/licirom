@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { TicketService } from '../ticket.service';
-import { SupportTicket } from '../support-ticket.model';
 import { ActivatedRoute } from '@angular/router';
+import { SupportTicket } from '@licirom/modules/support/support-ticket.model';
 
 @Component({
   selector: 'app-ticket-list',
@@ -15,8 +14,16 @@ export class TicketListComponent implements OnInit, OnDestroy {
 
   private readonly _unsubscribeAll = new Subject<void>();
 
+  /**
+   * TicketListComponent constructor method.
+   *
+   * @param _activatedRoute
+   */
   constructor(private readonly _activatedRoute: ActivatedRoute) { }
 
+  /**
+   * @inheritDoc
+   */
   ngOnInit(): void {
     this._activatedRoute.data.pipe(
       takeUntil(this._unsubscribeAll)
@@ -27,6 +34,9 @@ export class TicketListComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * @inheritDoc
+   */
   ngOnDestroy(): void {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CreateTicketComponent } from './create-ticket.component';
+import { CreateTicketComponent } from '@licirom/modules/support/create-ticket/create-ticket.component';
 
 describe('CreateTicketComponent', () => {
   let component: CreateTicketComponent;
