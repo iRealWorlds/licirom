@@ -9,6 +9,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
 {
     public DbSet<SupportTicket> SupportTickets { get; set; }
     public DbSet<SupportMessage> SupportMessages { get; set; }
+    public DbSet<AuctionCategory> AuctionCategories { get; set; }
+    public DbSet<Auction> Auctions { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -60,6 +62,23 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         builder.Entity<SupportMessage>(b =>
         {
             b.ToTable("SupportMessages");
+        });
+        builder.Entity<AuctionCategory>(e =>
+        {
+            e.HasKey(c => c.Key);
+            e.HasOne(c => c.Parent)
+                .WithMany(c => c.Children)
+                .HasForeignKey(c => c.ParentKey);
+        });
+        builder.Entity<Auction>(e =>
+        {
+            e.HasKey(a => a.Key);
+            e.HasOne(a => a.Creator)
+                .WithMany(a => a.Auctions)
+                .HasForeignKey(c => c.CreatorKey);
+            e.HasOne(a => a.Category)
+                .WithMany(a => a.Auctions)
+                .HasForeignKey(c => c.CategoryKey);
         });
     }
 }
