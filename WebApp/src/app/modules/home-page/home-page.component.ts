@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IdentityService } from 'src/app/core/identity/identity.service';
+import { IdentityService } from '@licirom/core/identity/identity.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { IdentityUser } from 'src/app/core/identity/identity-user.model';
+import { IdentityUser } from '@licirom/core/identity/identity-user.model';
 
 @Component({
   selector: 'app-home-page',

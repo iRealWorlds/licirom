@@ -31,9 +31,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { LayoutModule } from 'src/app/layout/layout.module';
+import { LayoutModule } from '@licirom/layout/layout.module';
 import { environment } from 'src/environments/environment';
-import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
+import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
 
 
 const sharedModules = new Set([

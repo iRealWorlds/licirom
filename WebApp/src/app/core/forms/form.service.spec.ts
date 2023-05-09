@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FormService } from 'src/app/core/forms/form.service';
+import { FormService } from '@licirom/core/forms/form.service';
 
 describe('FormService', () => {
   let service: FormService;

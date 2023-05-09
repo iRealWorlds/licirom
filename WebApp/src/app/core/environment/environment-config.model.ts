@@ -1,4 +1,4 @@
-import { Layout } from 'src/app/layout/layout.enum';
+import { Layout } from '@licirom/layout/layout.enum';
 
 export class EnvironmentConfig {
   production = true;

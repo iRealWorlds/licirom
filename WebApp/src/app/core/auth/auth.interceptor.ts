@@ -6,8 +6,8 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
-import { AuthService } from 'src/app/core/auth/auth.service';
+import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
+import { AuthService } from '@licirom/core/auth/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {

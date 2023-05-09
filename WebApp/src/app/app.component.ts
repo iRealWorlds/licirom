@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IdentityService } from 'src/app/core/identity/identity.service';
-import { AuthService } from 'src/app/core/auth/auth.service';
+import { IdentityService } from '@licirom/core/identity/identity.service';
+import { AuthService } from '@licirom/core/auth/auth.service';
 import { Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({

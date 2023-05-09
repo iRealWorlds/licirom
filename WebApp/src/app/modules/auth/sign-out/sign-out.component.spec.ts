@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SignOutComponent } from 'src/app/modules/auth/sign-out/sign-out.component';
+import { SignOutComponent } from '@licirom/modules/auth/sign-out/sign-out.component';
 
 describe('SignOutComponent', () => {
   let component: SignOutComponent;

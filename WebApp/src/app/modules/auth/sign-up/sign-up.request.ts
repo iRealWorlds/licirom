@@ -1,4 +1,4 @@
-import { AuthSessionCreateRequest } from 'src/app/core/auth/auth-session-create.request';
+import { AuthSessionCreateRequest } from '@licirom/core/auth/auth-session-create.request';
 
 export class SignUpRequest extends AuthSessionCreateRequest {
   override emailAddress?: string;

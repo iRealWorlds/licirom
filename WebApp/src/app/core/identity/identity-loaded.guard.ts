@@ -4,7 +4,7 @@ import {
   CanActivateFn,
 } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { IdentityService } from 'src/app/core/identity/identity.service';
+import { IdentityService } from '@licirom/core/identity/identity.service';
 
 /**
  * Make sure that a request has been sent to the API to check the current identity.

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
+import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
 
 @Injectable()
 export class ApiService {

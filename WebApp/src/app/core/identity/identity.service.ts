@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
-import { IdentityUser } from 'src/app/core/identity/identity-user.model';
+import { IdentityUser } from '@licirom/core/identity/identity-user.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ApiService } from 'src/app/core/api/api.service';
-import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
-import { AuthService } from 'src/app/core/auth/auth.service';
+import { ApiService } from '@licirom/core/api/api.service';
+import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
+import { AuthService } from '@licirom/core/auth/auth.service';
 import jwtDecode from 'jwt-decode';
 
 type TCurrentIdentity = IdentityUser|null;

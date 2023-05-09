@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { IdentityService } from 'src/app/core/identity/identity.service';
+import { IdentityService } from '@licirom/core/identity/identity.service';
 
 describe('IdentityService', () => {
   let service: IdentityService;

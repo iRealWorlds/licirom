@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, filter, map, Observable, startWith, switchMap } from 'rxjs';
-import { Layout } from 'src/app/layout/layout.enum';
-import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
+import { Layout } from '@licirom/layout/layout.enum';
+import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
 import { ActivatedRoute, Data, NavigationEnd, Router } from '@angular/router';
 
 @Injectable({

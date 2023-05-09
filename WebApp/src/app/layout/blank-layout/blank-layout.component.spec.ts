@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BlankLayoutComponent } from 'src/app/layout/blank-layout/blank-layout.component';
+import { BlankLayoutComponent } from '@licirom/layout/blank-layout/blank-layout.component';
 
 describe('BlankLayoutComponent', () => {
   let component: BlankLayoutComponent;

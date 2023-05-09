@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/core/auth/auth.service';
-import { AuthSessionCreateRequest } from 'src/app/core/auth/auth-session-create.request';
+import { AuthService } from '@licirom/core/auth/auth.service';
+import { AuthSessionCreateRequest } from '@licirom/core/auth/auth-session-create.request';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormService } from 'src/app/core/forms/form.service';
+import { FormService } from '@licirom/core/forms/form.service';
 
 @Component({
   selector: 'app-sign-in',

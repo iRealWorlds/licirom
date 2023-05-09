@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NavbarLayoutComponent } from 'src/app/layout/navbar-layout/navbar-layout.component';
+import { NavbarLayoutComponent } from '@licirom/layout/navbar-layout/navbar-layout.component';
 
 describe('NavbarLayoutComponent', () => {
   let component: NavbarLayoutComponent;

@@ -1,4 +1,4 @@
-import {EnvironmentConfig} from 'src/app/core/environment/environment-config.model';
+import {EnvironmentConfig} from '@licirom/core/environment/environment-config.model';
 
 const configuration = new EnvironmentConfig();
 

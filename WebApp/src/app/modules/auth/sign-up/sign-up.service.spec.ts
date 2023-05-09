@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SignUpService } from 'src/app/modules/auth/sign-up/sign-up.service';
+import { SignUpService } from '@licirom/modules/auth/sign-up/sign-up.service';
 
 describe('SignUpService', () => {
   let service: SignUpService;

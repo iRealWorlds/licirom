@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormService } from 'src/app/core/forms/form.service';
+import { FormService } from '@licirom/core/forms/form.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SignUpRequest } from 'src/app/modules/auth/sign-up/sign-up.request';
-import { SignUpService } from 'src/app/modules/auth/sign-up/sign-up.service';
+import { SignUpRequest } from '@licirom/modules/auth/sign-up/sign-up.request';
+import { SignUpService } from '@licirom/modules/auth/sign-up/sign-up.service';
 
 @Component({
   selector: 'app-sign-up',

@@ -1,9 +1,9 @@
 import {NgModule, Optional, SkipSelf} from '@angular/core';
 import {environment} from 'src/environments/environment';
-import {EnvironmentConfig} from 'src/app/core/environment/environment-config.model';
-import { AuthModule } from 'src/app/core/auth/auth.module';
+import {EnvironmentConfig} from '@licirom/core/environment/environment-config.model';
+import { AuthModule } from '@licirom/core/auth/auth.module';
 import { HttpClientModule } from '@angular/common/http';
-import { IdentityModule } from 'src/app/core/identity/identity.module';
+import { IdentityModule } from '@licirom/core/identity/identity.module';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 

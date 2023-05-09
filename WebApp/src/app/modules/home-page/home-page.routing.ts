@@ -1,4 +1,4 @@
-import {HomePageComponent} from 'src/app/modules/home-page/home-page.component';
+import {HomePageComponent} from '@licirom/modules/home-page/home-page.component';
 import {Route} from '@angular/router';
 
 export const homePageRouting: Route[] = [

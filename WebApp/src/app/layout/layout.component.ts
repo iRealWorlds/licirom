@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { Layout } from 'src/app/layout/layout.enum';
-import { LayoutService } from 'src/app/layout/layout.service';
+import { Layout } from '@licirom/layout/layout.enum';
+import { LayoutService } from '@licirom/layout/layout.service';
 
 @Component({
   selector: 'app-layout',

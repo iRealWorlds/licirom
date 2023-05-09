@@ -1,9 +1,9 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 
-import { LayoutService } from 'src/app/layout/layout.service';
-import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
+import { LayoutService } from '@licirom/layout/layout.service';
+import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Layout } from 'src/app/layout/layout.enum';
+import { Layout } from '@licirom/layout/layout.enum';
 import { of } from 'rxjs';
 import { environment as testEnvironment } from 'src/environments/environment';
 

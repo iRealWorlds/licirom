@@ -1,11 +1,11 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
+import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
 import { HttpClient } from '@angular/common/http';
-import { AuthSessionCreateRequest } from 'src/app/core/auth/auth-session-create.request';
+import { AuthSessionCreateRequest } from '@licirom/core/auth/auth-session-create.request';
 import { Observable, tap } from 'rxjs';
-import { AuthSession } from 'src/app/core/auth/auth-session.model';
-import { ApiService } from 'src/app/core/api/api.service';
-import { TAuthToken } from 'src/app/core/auth/auth-token.type';
+import { AuthSession } from '@licirom/core/auth/auth-session.model';
+import { ApiService } from '@licirom/core/api/api.service';
+import { TAuthToken } from '@licirom/core/auth/auth-token.type';
 
 @Injectable()
 export class AuthService extends ApiService {

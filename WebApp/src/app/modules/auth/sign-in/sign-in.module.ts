@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { SignInComponent } from 'src/app/modules/auth/sign-in/sign-in.component';
+import { SignInComponent } from '@licirom/modules/auth/sign-in/sign-in.component';
 import { RouterModule } from '@angular/router';
-import { signInRouting } from 'src/app/modules/auth/sign-in/sign-in.routing';
+import { signInRouting } from '@licirom/modules/auth/sign-in/sign-in.routing';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {
   FieldValidationErrorsComponent
-} from 'src/app/modules/shared/field-validation-errors/field-validation-errors.component';
+} from '@licirom/modules/shared/field-validation-errors/field-validation-errors.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 

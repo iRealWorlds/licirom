@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'src/app/core/api/api.service';
-import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
+import { ApiService } from '@licirom/core/api/api.service';
+import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from 'src/app/core/auth/auth.service';
-import { SignUpRequest } from 'src/app/modules/auth/sign-up/sign-up.request';
+import { AuthService } from '@licirom/core/auth/auth.service';
+import { SignUpRequest } from '@licirom/modules/auth/sign-up/sign-up.request';
 import { concatMap, map, Observable } from 'rxjs';
-import { IdentityUser } from 'src/app/core/identity/identity-user.model';
+import { IdentityUser } from '@licirom/core/identity/identity-user.model';
 
 @Injectable({
   providedIn: 'root'

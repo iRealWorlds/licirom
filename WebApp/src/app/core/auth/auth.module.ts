@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { AuthService } from 'src/app/core/auth/auth.service';
+import { AuthService } from '@licirom/core/auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthInterceptor } from 'src/app/core/auth/auth.interceptor';
+import { AuthInterceptor } from '@licirom/core/auth/auth.interceptor';
 
 
 

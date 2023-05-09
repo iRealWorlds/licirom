@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IdentityService } from 'src/app/core/identity/identity.service';
+import { IdentityService } from '@licirom/core/identity/identity.service';
 
 
 

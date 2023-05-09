@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from 'src/app/app.component';
+import { AppComponent } from '@licirom/app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
-import {CoreModule} from 'src/app/core/core.module';
-import {appRouting} from 'src/app/app.routing';
-import { LayoutModule } from 'src/app/layout/layout.module';
-import { identityLoadedGuard } from 'src/app/core/identity/identity-loaded.guard';
+import {CoreModule} from '@licirom/core/core.module';
+import {appRouting} from '@licirom/app.routing';
+import { LayoutModule } from '@licirom/layout/layout.module';
+import { identityLoadedGuard } from '@licirom/core/identity/identity-loaded.guard';
 
 @NgModule({
   declarations: [

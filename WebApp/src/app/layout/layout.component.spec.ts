@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LayoutComponent } from 'src/app/layout/layout.component';
+import { LayoutComponent } from '@licirom/layout/layout.component';
 import { Observable, ReplaySubject, take } from 'rxjs';
-import { Layout } from 'src/app/layout/layout.enum';
-import { LayoutService } from 'src/app/layout/layout.service';
+import { Layout } from '@licirom/layout/layout.enum';
+import { LayoutService } from '@licirom/layout/layout.service';
 import createSpyObj = jasmine.createSpyObj;
-import { NavbarLayoutComponent } from 'src/app/layout/navbar-layout/navbar-layout.component';
-import { BlankLayoutComponent } from 'src/app/layout/blank-layout/blank-layout.component';
-import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
-import { TestingModule } from 'src/app/core/testing/testing.module';
+import { NavbarLayoutComponent } from '@licirom/layout/navbar-layout/navbar-layout.component';
+import { BlankLayoutComponent } from '@licirom/layout/blank-layout/blank-layout.component';
+import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
+import { TestingModule } from '@licirom/core/testing/testing.module';
 import { environment } from 'src/environments/environment';
 
 describe('LayoutsComponent', () => {

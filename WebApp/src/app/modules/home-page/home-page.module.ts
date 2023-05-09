@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomePageComponent } from 'src/app/modules/home-page/home-page.component';
+import { HomePageComponent } from '@licirom/modules/home-page/home-page.component';
 import {RouterModule} from '@angular/router';
-import {homePageRouting} from 'src/app/modules/home-page/home-page.routing';
+import {homePageRouting} from '@licirom/modules/home-page/home-page.routing';
 import { MatButtonModule } from '@angular/material/button';
 
 

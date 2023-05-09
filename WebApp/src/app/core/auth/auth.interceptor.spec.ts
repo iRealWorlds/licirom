@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AuthInterceptor } from 'src/app/core/auth/auth.interceptor';
+import { AuthInterceptor } from '@licirom/core/auth/auth.interceptor';
 
 describe('AuthInterceptor', () => {
   beforeEach(() => TestBed.configureTestingModule({

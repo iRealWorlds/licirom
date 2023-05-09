@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FieldValidationErrorsComponent } from 'src/app/modules/shared/field-validation-errors/field-validation-errors.component';
+import { FieldValidationErrorsComponent } from '@licirom/modules/shared/field-validation-errors/field-validation-errors.component';
 
 describe('FieldValidationErrorsComponent', () => {
   let component: FieldValidationErrorsComponent;
