@@ -4,6 +4,7 @@ using API.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230411163837_changeTicketsName")]
+    partial class changeTicketsName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,47 +101,47 @@ namespace API.Database.Migrations
 
             modelBuilder.Entity("API.Database.Entities.SupportMessage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("SupportMessageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupportMessageId"));
 
                     b.Property<string>("MessageContent")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("SentAt")
+                    b.Property<DateTime>("SendTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("TicketId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SupportMessageId");
+
+                    b.HasIndex("SenderId");
 
                     b.HasIndex("TicketId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("SupportMessages", (string)null);
                 });
 
-            modelBuilder.Entity("API.Database.Entities.SupportTicket", b =>
+            modelBuilder.Entity("API.Database.Entities.Ticket", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TicketId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
 
                     b.Property<bool>("Resolved")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("SubmitTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -147,7 +150,7 @@ namespace API.Database.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("TicketId");
 
                     b.HasIndex("UserId");
 
@@ -287,24 +290,20 @@ namespace API.Database.Migrations
 
             modelBuilder.Entity("API.Database.Entities.SupportMessage", b =>
                 {
-                    b.HasOne("API.Database.Entities.SupportTicket", "Ticket")
-                        .WithMany("Messages")
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Database.Entities.ApplicationUser", "User")
+                    b.HasOne("API.Database.Entities.ApplicationUser", "Sender")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Ticket");
+                    b.HasOne("API.Database.Entities.Ticket", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("TicketId");
 
-                    b.Navigation("User");
+                    b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("API.Database.Entities.SupportTicket", b =>
+            modelBuilder.Entity("API.Database.Entities.Ticket", b =>
                 {
                     b.HasOne("API.Database.Entities.ApplicationUser", "User")
                         .WithMany()
@@ -366,7 +365,7 @@ namespace API.Database.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Database.Entities.SupportTicket", b =>
+            modelBuilder.Entity("API.Database.Entities.Ticket", b =>
                 {
                     b.Navigation("Messages");
                 });

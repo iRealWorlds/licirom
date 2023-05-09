@@ -20,7 +20,8 @@ import { identityLoadedGuard } from 'src/app/core/identity/identity-loaded.guard
       path: '',
       canActivate: [identityLoadedGuard],
       children: appRouting
-    }]),
+    },
+      { path: 'support', loadChildren: () => import('./modules/support/support.module').then(m => m.SupportModule) }]),
 
     // Core module
     CoreModule,
