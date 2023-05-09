@@ -20,13 +20,14 @@ import { identityLoadedGuard } from '@licirom/core/identity/identity-loaded.guar
       path: '',
       canActivate: [identityLoadedGuard],
       children: appRouting
-    }]),
+    },
 
-    // Core module
-    CoreModule,
-    LayoutModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+
+      // Core module
+      CoreModule,
+      LayoutModule,
+    ],
+      providers: [],
+      bootstrap: [AppComponent]
 })
 export class AppModule { }

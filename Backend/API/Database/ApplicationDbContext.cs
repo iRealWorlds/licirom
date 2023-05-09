@@ -7,6 +7,9 @@ namespace API.Database;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
 {
+    public DbSet<SupportTicket> SupportTickets { get; set; }
+    public DbSet<SupportMessage> SupportMessages { get; set; }
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
@@ -49,6 +52,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         builder.Entity<IdentityUserRole<Guid>>(b =>
         {
             b.ToTable("IdentityUserRoles");
+        });
+        builder.Entity<SupportTicket>(b =>
+        {
+            b.ToTable("SupportTickets");
+        });
+        builder.Entity<SupportMessage>(b =>
+        {
+            b.ToTable("SupportMessages");
         });
     }
 }

@@ -1,7 +1,7 @@
-import {Route} from '@angular/router';
+import { Route } from '@angular/router';
 
 export const appRouting: Route[] = [
-   // Redirect '/' to '/home'
+  // Redirect '/' to '/home'
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 
   // Routes that require the user to be a guest
@@ -17,7 +17,9 @@ export const appRouting: Route[] = [
   // Routes that require the user to be authenticated
   {
     path: '',
-    children: [],
+    children: [
+      { path: 'support', loadChildren: () => import('src/app/modules/support/support.module').then(m => m.SupportModule) },
+    ],
   },
 
   // Routes that do not care about authentication
