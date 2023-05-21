@@ -10,4 +10,6 @@ public class Auction
     
     public virtual ApplicationUser Creator { get; set; }
     public virtual AuctionCategory? Category { get; set; }
+    public virtual ICollection<AuctionComment> Comments { get; set; }
+    public virtual ICollection<Bid> Bids { get; set; }
 }
