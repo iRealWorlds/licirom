@@ -11,7 +11,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public DbSet<SupportMessage> SupportMessages { get; set; }
     public DbSet<AuctionCategory> AuctionCategories { get; set; }
     public DbSet<Auction> Auctions { get; set; }
-    public DbSet<AuctionComment> AutctionComments { get; set; }
+    public DbSet<AuctionComment> AuctionComments { get; set; }
     public DbSet<Bid> Bids { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -69,14 +69,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         {
             b.ToTable("IdentityUserRoles");
         });
+        
         builder.Entity<SupportTicket>(b =>
         {
             b.ToTable("SupportTickets");
         });
+        
         builder.Entity<SupportMessage>(b =>
         {
             b.ToTable("SupportMessages");
         });
+        
         builder.Entity<AuctionCategory>(e =>
         {
             e.HasKey(c => c.Key);
