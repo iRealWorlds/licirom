@@ -341,12 +341,13 @@ namespace API.Database.Migrations
                 {
                     b.HasOne("API.Database.Entities.AuctionCategory", "Category")
                         .WithMany("Auctions")
-                        .HasForeignKey("CategoryKey");
+                        .HasForeignKey("CategoryKey")
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.HasOne("API.Database.Entities.ApplicationUser", "Creator")
                         .WithMany("Auctions")
                         .HasForeignKey("CreatorKey")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Category");
