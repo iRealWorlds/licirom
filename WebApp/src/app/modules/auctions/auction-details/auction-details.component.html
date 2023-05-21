@@ -1,5 +1,4 @@
 <div class="w-main-content mx-auto mt-7" *ngIf="auction">
-
   <a routerLink="/auctions" mat-flat-button class="mb-3">
     <mat-icon>arrow_back</mat-icon>
     Back to list
@@ -25,5 +24,13 @@
         </ng-template>
       </p>
     </mat-card-content>
+    <mat-card-actions align="end" *ngIf="ownsCurrentAuction">
+      <!-- Delete -->
+      <button type="button" mat-flat-button color="warn" (click)="deleteAuction()" [disabled]="deleting">
+        <mat-icon>delete</mat-icon>
+        <ng-container *ngIf="deleting === true">Deleting</ng-container>
+        <ng-container *ngIf="deleting === false">Delete</ng-container>
+      </button>
+    </mat-card-actions>
   </mat-card>
 </div>

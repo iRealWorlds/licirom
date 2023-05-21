@@ -33,6 +33,16 @@ export class AuctionService extends ApiService {
   }
 
   /**
+   * Create a new auction.
+   *
+   * @param data
+   */
+  create(data: AuctionCreateRequest): Observable<Auction> {
+    const uri = this.buildApiEndpointUri('api/Auctions');
+    return this._http.post<Auction>(uri, data);
+  }
+
+  /**
    * Get a single auction from the API.
    *
    * @param auctionKey
@@ -43,12 +53,12 @@ export class AuctionService extends ApiService {
   }
 
   /**
-   * Create a new auction.
+   * Delete the given auction from the API.
    *
-   * @param data
+   * @param auctionKey
    */
-  create(data: AuctionCreateRequest): Observable<Auction> {
-    const uri = this.buildApiEndpointUri('api/Auctions');
-    return this._http.post<Auction>(uri, data);
+  deleteByKey(auctionKey: string): Observable<void> {
+    const uri = this.buildApiEndpointUri(['api', 'Auctions', auctionKey]);
+    return this._http.delete<void>(uri);
   }
 }

@@ -11,6 +11,7 @@ import {
   FieldValidationErrorsComponent
 } from '@licirom/modules/shared/field-validation-errors/field-validation-errors.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -26,7 +27,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatCardModule,
     MatButtonModule,
     MatSnackBarModule,
-    FieldValidationErrorsComponent
+    FieldValidationErrorsComponent,
+    MatIconModule
   ]
 })
 export class AuctionsCreateModule { }
