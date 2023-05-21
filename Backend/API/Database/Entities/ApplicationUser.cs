@@ -8,4 +8,6 @@ public class ApplicationUser : IdentityUser<Guid>
     public string LastName { get; set; }
 
     public virtual ICollection<Auction> Auctions { get; set; }
+    public virtual ICollection<Bid> Bids { get; set; }
+    public virtual ICollection<AuctionComment> AuctionComments { get; set; }
 }

@@ -30,6 +30,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 .WithOne(a => a.Creator)
                 .HasForeignKey(a => a.CreatorKey)
                 .OnDelete(DeleteBehavior.ClientCascade);
+            b.HasMany(a => a.Bids)
+                .WithOne(b => b.Buyer)
+                .HasForeignKey(b => b.BuyerKey)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            b.HasMany(a => a.AuctionComments)
+                .WithOne(c => c.Author)
+                .HasForeignKey(b => b.AuthorKey)
+                .OnDelete(DeleteBehavior.ClientCascade);
         });
 
         builder.Entity<IdentityUserClaim<Guid>>(b =>
@@ -82,8 +90,25 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 .OnDelete(DeleteBehavior.ClientCascade);
         });
         builder.Entity<Auction>(e =>
-        {
+        {   
             e.HasKey(a => a.Key);
+            e.HasMany(a => a.Comments)
+                .WithOne(c => c.Auction)
+                .HasForeignKey(c => c.AuctionKey)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            e.HasMany(a => a.Bids)
+                .WithOne(b => b.Auction)
+                .HasForeignKey(b => b.AuctionKey)
+                .OnDelete(DeleteBehavior.ClientCascade);
+        });
+        builder.Entity<AuctionComment>(e =>
+        {
+            e.HasKey(c => c.Key);
+        });
+        builder.Entity<Bid>(e =>
+        {
+            e.HasKey(b => b.Key);
+            e.Property(b => b.Amount).HasPrecision(10, 2);
         });
     }
 }
