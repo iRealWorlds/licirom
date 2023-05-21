@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 
 export const appRouting: Route[] = [
   // Redirect '/' to '/home'
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: '/auctions/list', pathMatch: 'full' },
 
   // Routes that require the user to be a guest
   {
@@ -27,7 +27,6 @@ export const appRouting: Route[] = [
   {
     path: '',
     children: [
-      { path: 'home', loadChildren: () => import('src/app/modules/home-page/home-page.module').then(m => m.HomePageModule) },
     ],
   },
 
