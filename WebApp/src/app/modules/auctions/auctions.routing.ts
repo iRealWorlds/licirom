@@ -9,5 +9,9 @@ export const auctionsRouting: Route[] = [
   {
     path: 'create',
     loadChildren: () => import('src/app/modules/auctions/auctions-create/auctions-create.module').then(m => m.AuctionsCreateModule),
+  },
+  {
+    path: 'details',
+    loadChildren: () => import('src/app/modules/auctions/auction-details/auction-details.module').then(m => m.AuctionDetailsModule),
   }
 ];

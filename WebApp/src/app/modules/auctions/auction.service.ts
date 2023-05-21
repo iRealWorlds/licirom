@@ -33,6 +33,16 @@ export class AuctionService extends ApiService {
   }
 
   /**
+   * Get a single auction from the API.
+   *
+   * @param auctionKey
+   */
+  getByKey(auctionKey: string): Observable<Auction> {
+    const uri = this.buildApiEndpointUri(['api', 'Auctions', auctionKey]);
+    return this._http.get<Auction>(uri);
+  }
+
+  /**
    * Create a new auction.
    *
    * @param data

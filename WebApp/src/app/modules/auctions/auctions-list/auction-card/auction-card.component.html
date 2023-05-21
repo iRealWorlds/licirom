@@ -1,7 +1,9 @@
 <mat-card *ngIf="auction" class="w-full h-full">
   <mat-card-header class="mb-3">
     <mat-card-title class="text-xl">
-      {{ auction.title }}
+      <a [routerLink]="['/auctions/details', auction.key]">
+        {{ auction.title }}
+      </a>
     </mat-card-title>
     <mat-card-subtitle class="text-sm">
       By {{ auction.creatorKey }}
