@@ -37,7 +37,37 @@ builder.Services.AddAuthentication(options => {
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],  
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))  
     };
-    options.MapInboundClaims = false; // Prevent default behaviour which renames claims such as "sub" to "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+
+    // Prevent default behaviour which renames claims such as "sub" to "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+    options.MapInboundClaims = false;
+
+    options.Events = new JwtBearerEvents()
+    {
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public JwtBearerEvents(UserManager<ApplicationUser> userManager)
+        {
+            this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+        },
+
+        // Additional jwt validation: check if "sub" claim refers to an actual user
+        OnTokenValidated = context =>
+        {
+            var userKey = context.Principal.Claims.Where(c => c.Type == "sub").First();
+
+            if(!userKey)
+            {
+                context.Fail("sub claim missing");
+            }
+
+            if(!await _usersManager.FindByIdAsync(userKey))
+            {
+                context.Fail("User doesn't exist");
+            }
+
+            return Task.CompletedTask;
+        },
+    };
 });
 
 builder.Services.AddEndpointsApiExplorer();
