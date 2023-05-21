@@ -7,6 +7,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  AuctionCommentsModule
+} from '@licirom/modules/auctions/auction-details/auction-comments/auction-comments.module';
 
 
 @NgModule({
@@ -20,6 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
+    AuctionCommentsModule,
   ]
 })
 export class AuctionDetailsModule { }
