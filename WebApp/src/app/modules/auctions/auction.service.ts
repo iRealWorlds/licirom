@@ -5,6 +5,7 @@ import { EnvironmentConfig } from '@licirom/core/environment/environment-config.
 import { Auction } from '@licirom/modules/auctions/auction.model';
 import { Observable } from 'rxjs';
 import { PaginatedResult } from '@licirom/core/pagination/paginated-result.model';
+import { AuctionCreateRequest } from '@licirom/modules/auctions/auction-create.request';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,15 @@ export class AuctionService extends ApiService {
   getAll(): Observable<PaginatedResult<Auction>> {
     const uri = this.buildApiEndpointUri('api/Auctions');
     return this._http.get<PaginatedResult<Auction>>(uri);
+  }
+
+  /**
+   * Create a new auction.
+   *
+   * @param data
+   */
+  create(data: AuctionCreateRequest): Observable<Auction> {
+    const uri = this.buildApiEndpointUri('api/Auctions');
+    return this._http.post<Auction>(uri, data);
   }
 }
