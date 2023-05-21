@@ -6,6 +6,7 @@ import { Auction } from '@licirom/modules/auctions/auction.model';
 import { Observable } from 'rxjs';
 import { PaginatedResult } from '@licirom/core/pagination/paginated-result.model';
 import { AuctionCreateRequest } from '@licirom/modules/auctions/auction-create.request';
+import { AuctionUpdateRequest } from '@licirom/modules/auctions/auction-update.request';
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +61,16 @@ export class AuctionService extends ApiService {
   deleteByKey(auctionKey: string): Observable<void> {
     const uri = this.buildApiEndpointUri(['api', 'Auctions', auctionKey]);
     return this._http.delete<void>(uri);
+  }
+
+  /**
+   * Update an auction in the API.
+   *
+   * @param auctionKey
+   * @param data
+   */
+  updateByKey(auctionKey: string, data: AuctionUpdateRequest): Observable<Auction> {
+    const uri = this.buildApiEndpointUri(['api', 'Auctions', auctionKey]);
+    return this._http.put<Auction>(uri, data);
   }
 }

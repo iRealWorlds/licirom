@@ -24,7 +24,13 @@
         </ng-template>
       </p>
     </mat-card-content>
-    <mat-card-actions align="end" *ngIf="ownsCurrentAuction">
+    <mat-card-actions align="end" *ngIf="ownsCurrentAuction" class="flex gap-4">
+      <!-- Update -->
+      <a [routerLink]="['/auctions/update', auction.key]" mat-flat-button color="primary">
+        <mat-icon>edit</mat-icon>
+        Update
+      </a>
+
       <!-- Delete -->
       <button type="button" mat-flat-button color="warn" (click)="deleteAuction()" [disabled]="deleting">
         <mat-icon>delete</mat-icon>

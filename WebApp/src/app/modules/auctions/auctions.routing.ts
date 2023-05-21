@@ -13,5 +13,9 @@ export const auctionsRouting: Route[] = [
   {
     path: 'details',
     loadChildren: () => import('src/app/modules/auctions/auction-details/auction-details.module').then(m => m.AuctionDetailsModule),
+  },
+  {
+    path: 'update',
+    loadChildren: () => import('src/app/modules/auctions/auction-update/auction-update.module').then(m => m.AuctionUpdateModule),
   }
 ];

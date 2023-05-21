@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { firstValueFrom, map, Observable, Subject, takeUntil } from 'rxjs';
+import { firstValueFrom, Subject, takeUntil } from 'rxjs';
 import { Auction } from '@licirom/modules/auctions/auction.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IdentityService } from '@licirom/core/identity/identity.service';
