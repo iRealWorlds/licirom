@@ -1,2 +1,19 @@
 @import "material";
 @import "tailwind";
+
+@media (max-width: 575.98px) {
+  .w-main-content {
+    width: calc(100vw - (100vw - 100%) - calc(2rem + .4rem)) !important;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .w-main-content {
+    width: calc(100vw - (100vw - 100%) - calc(2rem * 2)) !important;
+  }
+}
+@media (min-width: 1024px) {
+  .w-main-content {
+    width: calc(100vw - (100vw - 100%) - calc(2rem * 2) - 260px) !important;
+  }
+}

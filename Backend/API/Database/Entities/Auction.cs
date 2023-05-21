@@ -7,6 +7,7 @@ public class Auction
     public string? Description { get; set; }
     public Guid CreatorKey { get; set; }
     public Guid? CategoryKey { get; set; }
+    
     public virtual ApplicationUser Creator { get; set; }
     public virtual AuctionCategory? Category { get; set; }
 }

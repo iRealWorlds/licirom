@@ -13,12 +13,12 @@ namespace API.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class AuctionController : ControllerBase
+public class AuctionsController : ControllerBase
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public AuctionController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+    public AuctionsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
     {
         _dbContext = dbContext;
         _userManager = userManager;
