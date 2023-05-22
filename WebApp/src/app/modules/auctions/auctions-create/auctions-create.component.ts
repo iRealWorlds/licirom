@@ -19,8 +19,14 @@ export class AuctionsCreateComponent {
   auctionForm = new FormGroup({
     title: new FormControl<string>('', { validators: [Validators.required], nonNullable: true }),
     description: new FormControl<string>('', { nonNullable: true }),
-    category: new FormControl<AuctionCategory|undefined>(undefined, { validators: [Validators.required], nonNullable: true  }),
+    category: new FormControl<AuctionCategory|undefined>(undefined, { validators: [Validators.required], nonNullable: true }),
+    reservePrice: new FormControl<number>(0, { validators: [Validators.required, Validators.min(0)], nonNullable: true }),
+    minimumIncrement: new FormControl<number>(0, { validators: [Validators.required, Validators.min(0)], nonNullable: true }),
+    startPrice: new FormControl<number>(0, { validators: [Validators.required, Validators.min(0)], nonNullable: true }),
+    startTime: new FormControl<string>('', { validators: [Validators.required], nonNullable: true }),
+    endTime: new FormControl<string>('', { validators: [Validators.required], nonNullable: true }),
   });
+
   private _loading = false;
 
   /**
@@ -73,7 +79,12 @@ export class AuctionsCreateComponent {
       const data = new AuctionCreateRequest({
         title: this.auctionForm.controls.title.value,
         description: this.auctionForm.controls.description.value,
-        categoryKey: this.auctionForm.controls.category.value?.key
+        categoryKey: this.auctionForm.controls.category.value?.key,
+        reservePrice: this.auctionForm.controls.reservePrice.value,
+        minimumIncrement: this.auctionForm.controls.minimumIncrement.value,
+        startPrice: this.auctionForm.controls.startPrice.value,
+        startTime: new Date(this.auctionForm.controls.startTime.value).toISOString(),
+        endTime: new Date(this.auctionForm.controls.endTime.value).toISOString(),
       });
 
       // Send the request

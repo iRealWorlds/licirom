@@ -8,4 +8,9 @@ export interface Auction {
   creatorKey: string|null;
   creator: TExpandable<User, string>;
   categoryKey: string|null;
+  reservePrice: number;
+  minimumIncrement: number;
+  startPrice: number;
+  startTime: string;
+  endTime: string;
 }

@@ -1,9 +1,9 @@
 export class AuctionUpdateRequest {
   title?: string;
   description?: string;
+  startPrice?: number;
   reservePrice?: number;
   minimumIncrement?: number;
-  startPrice?: number;
   startTime?: string;
   endTime?: string;
 

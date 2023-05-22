@@ -69,6 +69,11 @@ public class AuctionsController : ControllerBase
             Description = request.Description,
             CategoryKey = request.CategoryKey,
             CreatorKey = currentUser.Id,
+            ReservePrice = request.ReservePrice,
+            MinimumIncrement = request.MinimumIncrement,
+            StartPrice = request.StartPrice,
+            StartTime = request.StartTime,
+            EndTime = request.EndTime,
         };
         
         // Persist the auction

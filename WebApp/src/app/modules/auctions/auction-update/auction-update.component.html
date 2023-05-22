@@ -1,7 +1,7 @@
-<form [formGroup]="auctionForm" (ngSubmit)="updateAuction()" class="w-main-content mx-auto mt-7">
-  <a routerLink="/auctions" mat-flat-button class="mb-3">
+<form [formGroup]="auctionForm" (ngSubmit)="updateAuction()" class="w-main-content mx-auto mt-7" *ngIf="auction">
+  <a [routerLink]="['/auctions/details', auction.key]" mat-flat-button class="mb-3">
     <mat-icon>arrow_back</mat-icon>
-    Back to list
+    Back to auction
   </a>
   <mat-card>
     <mat-card-header class="mb-5">
@@ -24,6 +24,64 @@
         <mat-label>Description</mat-label>
         <textarea type="text" matInput [formControl]="auctionForm.controls.description"></textarea>
       </mat-form-field>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Starting price -->
+        <mat-form-field>
+          <mat-label>Starting price</mat-label>
+          <input type="number" matInput [formControl]="auctionForm.controls.startPrice">
+          <mat-hint>
+            This auction's starting point.
+          </mat-hint>
+          <mat-error *ngFor="let value of auctionForm.controls.startPrice.errors | keyvalue">
+            <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Reserve price -->
+        <mat-form-field>
+          <mat-label>Reserve price</mat-label>
+          <input type="number" matInput [formControl]="auctionForm.controls.reservePrice">
+          <mat-hint>
+            A value under which you are unwilling to sell.
+          </mat-hint>
+          <mat-error *ngFor="let value of auctionForm.controls.reservePrice.errors | keyvalue">
+            <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Minimum increment -->
+      <mat-form-field>
+        <mat-label>Minimum increment</mat-label>
+        <input type="number" matInput [formControl]="auctionForm.controls.minimumIncrement">
+        <mat-hint>
+          The minimum value that a bid should increase over the previous highest one.
+        </mat-hint>
+        <mat-error *ngFor="let value of auctionForm.controls.minimumIncrement.errors | keyvalue">
+          <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+        </mat-error>
+      </mat-form-field>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Starting time -->
+        <mat-form-field>
+          <mat-label>Starting time</mat-label>
+          <input type="datetime-local" matInput [formControl]="auctionForm.controls.startTime">
+          <mat-error *ngFor="let value of auctionForm.controls.startTime.errors | keyvalue">
+            <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Ending time -->
+        <mat-form-field>
+          <mat-label>Ending time</mat-label>
+          <input type="datetime-local" matInput [formControl]="auctionForm.controls.endTime">
+          <mat-error *ngFor="let value of auctionForm.controls.endTime.errors | keyvalue">
+            <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
+      </div>
     </mat-card-content>
 
     <mat-card-actions align="end">

@@ -17,7 +17,12 @@ export class AuctionUpdateComponent implements OnInit, OnDestroy {
 
   auctionForm = new FormGroup({
     title: new FormControl('', { validators: [Validators.required], nonNullable: true  }),
-    description: new FormControl('', { nonNullable: true })
+    description: new FormControl('', { nonNullable: true }),
+    reservePrice: new FormControl<number>(0, { validators: [Validators.required, Validators.min(0)], nonNullable: true }),
+    minimumIncrement: new FormControl<number>(0, { validators: [Validators.required, Validators.min(0)], nonNullable: true }),
+    startPrice: new FormControl<number>(0, { validators: [Validators.required, Validators.min(0)], nonNullable: true }),
+    startTime: new FormControl<string>('', { validators: [Validators.required], nonNullable: true }),
+    endTime: new FormControl<string>('', { validators: [Validators.required], nonNullable: true }),
   });
 
   private _loading = false;
@@ -73,12 +78,16 @@ export class AuctionUpdateComponent implements OnInit, OnDestroy {
         if (this.auction) {
           this.auctionForm.setValue({
             title: this.auction.title,
-            description: this.auction.description ?? ''
+            description: this.auction.description ?? '',
+            reservePrice: this.auction.reservePrice,
+            minimumIncrement: this.auction.minimumIncrement,
+            startPrice: this.auction.startPrice,
+            startTime: this.formatDateForInput(new Date(this.auction.startTime)),
+            endTime: this.formatDateForInput(new Date(this.auction.endTime))
           });
         }
       }
     });
-
   }
 
 
@@ -86,6 +95,21 @@ export class AuctionUpdateComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+  }
+
+  /**
+   * Format the given {@link date} as an input value.
+   *
+   * @param date
+   */
+  formatDateForInput(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
   /**
@@ -111,6 +135,11 @@ export class AuctionUpdateComponent implements OnInit, OnDestroy {
       const data = new AuctionUpdateRequest({
         title: this.auctionForm.controls.title.value,
         description: this.auctionForm.controls.description.value,
+        reservePrice: this.auctionForm.controls.reservePrice.value,
+        minimumIncrement: this.auctionForm.controls.minimumIncrement.value,
+        startPrice: this.auctionForm.controls.startPrice.value,
+        startTime: new Date(this.auctionForm.controls.startTime.value).toISOString(),
+        endTime: new Date(this.auctionForm.controls.endTime.value).toISOString(),
       });
 
       // Send the request

@@ -7,11 +7,6 @@ public class Auction
     public string? Description { get; set; }
     public Guid CreatorKey { get; set; }
     public Guid? CategoryKey { get; set; }
-    
-    public virtual ApplicationUser Creator { get; set; }
-    public virtual AuctionCategory? Category { get; set; }
-    public virtual ICollection<AuctionComment> Comments { get; set; }
-    public virtual ICollection<Bid> Bids { get; set; }
 
     public decimal ReservePrice { get; set; } = 0;
     public decimal MinimumIncrement { get; set; } = 0;
@@ -19,4 +14,9 @@ public class Auction
 
     public DateTime StartTime { get; set; } = DateTime.UtcNow;
     public DateTime EndTime { get; set; }
+    
+    public virtual ApplicationUser Creator { get; set; }
+    public virtual AuctionCategory? Category { get; set; }
+    public virtual ICollection<AuctionComment> Comments { get; set; }
+    public virtual ICollection<Bid> Bids { get; set; }
 }
