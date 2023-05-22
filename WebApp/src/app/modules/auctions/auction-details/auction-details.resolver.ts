@@ -7,6 +7,7 @@ import {
 import { Observable } from 'rxjs';
 import { Auction } from '@licirom/modules/auctions/auction.model';
 import { AuctionService } from '@licirom/modules/auctions/auction.service';
+import { ApiOperationOptions } from '@licirom/core/api/api-operation-options.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,8 @@ export class AuctionDetailsResolver implements Resolve<Auction> {
       throw new Error('Invalid auction key');
     }
 
-    return this._auctionService.getByKey(auctionKey);
+    return this._auctionService.getByKey(auctionKey, new ApiOperationOptions({
+      expand: ['Creator']
+    }));
   }
 }

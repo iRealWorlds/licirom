@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { PaginatedResult } from '@licirom/core/pagination/paginated-result.model';
 import { AuctionCreateRequest } from '@licirom/modules/auctions/auction-create.request';
 import { AuctionUpdateRequest } from '@licirom/modules/auctions/auction-update.request';
+import { ApiOperationOptions } from '@licirom/core/api/api-operation-options.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,29 +29,37 @@ export class AuctionService extends ApiService {
   /**
    * Get all auctions from the API.
    */
-  getAll(): Observable<PaginatedResult<Auction>> {
+  getAll(options = new ApiOperationOptions()): Observable<PaginatedResult<Auction>> {
     const uri = this.buildApiEndpointUri('api/Auctions');
-    return this._http.get<PaginatedResult<Auction>>(uri);
+    return this._http.get<PaginatedResult<Auction>>(uri, {
+      params: this.buildParameters(options)
+    });
   }
 
   /**
    * Create a new auction.
    *
    * @param data
+   * @param options
    */
-  create(data: AuctionCreateRequest): Observable<Auction> {
+  create(data: AuctionCreateRequest, options = new ApiOperationOptions()): Observable<Auction> {
     const uri = this.buildApiEndpointUri('api/Auctions');
-    return this._http.post<Auction>(uri, data);
+    return this._http.post<Auction>(uri, data, {
+      params: this.buildParameters(options)
+    });
   }
 
   /**
    * Get a single auction from the API.
    *
    * @param auctionKey
+   * @param options
    */
-  getByKey(auctionKey: string): Observable<Auction> {
+  getByKey(auctionKey: string, options = new ApiOperationOptions()): Observable<Auction> {
     const uri = this.buildApiEndpointUri(['api', 'Auctions', auctionKey]);
-    return this._http.get<Auction>(uri);
+    return this._http.get<Auction>(uri, {
+      params: this.buildParameters(options)
+    });
   }
 
   /**
@@ -68,9 +77,12 @@ export class AuctionService extends ApiService {
    *
    * @param auctionKey
    * @param data
+   * @param options
    */
-  updateByKey(auctionKey: string, data: AuctionUpdateRequest): Observable<Auction> {
+  updateByKey(auctionKey: string, data: AuctionUpdateRequest, options = new ApiOperationOptions()): Observable<Auction> {
     const uri = this.buildApiEndpointUri(['api', 'Auctions', auctionKey]);
-    return this._http.put<Auction>(uri, data);
+    return this._http.put<Auction>(uri, data, {
+      params: this.buildParameters(options)
+    });
   }
 }

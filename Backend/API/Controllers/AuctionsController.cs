@@ -27,10 +27,18 @@ public class AuctionsController : ControllerBase
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int) HttpStatusCode.OK)]
-    public async Task<IActionResult> IndexAsync([FromQuery] PaginatedRequestModel query)
+    public async Task<IActionResult> IndexAsync([FromQuery] AuctionIndexModel query)
     {
-        var auctions = await _dbContext.Auctions.ToListAsync();
-        var result = new PaginatedResult<Auction>(auctions, query).Map(c => new AuctionModel(c));
+        var auctions = await _dbContext.Auctions.Include(a => a.Creator).ToListAsync();
+        var result = new PaginatedResult<Auction>(auctions, query).Map(delegate(Auction c)
+        {
+            var model = new AuctionModel(c);
+            foreach (var property in query.Expand)
+            {
+                model.Expand(property);
+            }
+            return model;
+        });
         return new JsonResult(result);
     }
 
@@ -76,16 +84,23 @@ public class AuctionsController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(AuctionModel), (int) HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> ShowAsync(Guid auctionKey)
+    public async Task<IActionResult> ShowAsync(Guid auctionKey, [FromQuery] AuctionShowModel options)
     {
-        var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == auctionKey);
+        var auction = await _dbContext.Auctions.Include(a => a.Creator).FirstOrDefaultAsync(c => c.Key == auctionKey);
 
         if (auction == null)
         {
             return NotFound();
         }
 
-        return Ok(new AuctionModel(auction));
+        var model = new AuctionModel(auction);
+       
+        foreach (var property in options.Expand)
+        {
+            model.Expand(property);
+        }
+
+        return Ok(model);
     }
 
     [HttpPut("{auctionKey}")]

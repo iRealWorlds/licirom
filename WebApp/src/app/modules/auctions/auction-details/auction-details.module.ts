@@ -10,20 +10,22 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
   AuctionCommentsModule
 } from '@licirom/modules/auctions/auction-details/auction-comments/auction-comments.module';
+import { ExpandablePipeModule } from '@licirom/modules/shared/expandable-pipe/expandable-pipe.module';
 
 
 @NgModule({
   declarations: [
     AuctionDetailsComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(auctionDetailsRouting),
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    AuctionCommentsModule,
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(auctionDetailsRouting),
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatSnackBarModule,
+        AuctionCommentsModule,
+        ExpandablePipeModule,
+    ]
 })
 export class AuctionDetailsModule { }

@@ -6,7 +6,7 @@
       </a>
     </mat-card-title>
     <mat-card-subtitle class="text-sm">
-      By {{ auction.creatorKey }}
+      By {{ auction.creator | expandable:displayCreatorName }}
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>

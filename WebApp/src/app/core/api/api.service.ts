@@ -42,11 +42,11 @@ export class ApiService {
    * @protected
    */
   protected buildParameters(options: ApiOperationOptions): Params {
-    const params = new HttpParams();
+    let params = new HttpParams();
 
     // Add expansions
     for (const property of options.expand) {
-      params.append('expand', property);
+      params = params.append('expand', property);
     }
 
     // Return the result
