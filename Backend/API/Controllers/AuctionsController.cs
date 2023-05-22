@@ -118,27 +118,27 @@ public class AuctionsController : ControllerBase
             return NotFound();
         }
 
-        if(request.Title is string title)
+        if(request.Title is not null)
         {
-            auction.Title = title;
+            auction.Title = request.Title;
         }
 
-        if(request.Description is string description)
+        if(request.Description is not null)
         {
-            auction.Description = description;
+            auction.Description = request.Description;
         }
 
-        if(request.ReservePrice is decimal reservePrice)
+        if(request.ReservePrice is not null)
         {
-            auction.ReservePrice = reservePrice;
+            auction.ReservePrice = (decimal) request.ReservePrice;
         }
 
-        if(request.MinimumIncrement is decimal minimumIncrement)
+        if(request.MinimumIncrement is not null)
         {
-            auction.MinimumIncrement = minimumIncrement;
+            auction.MinimumIncrement = (decimal) request.MinimumIncrement;
         }
 
-        if(request.StartPrice is decimal startPrice)
+        if(request.StartPrice is not null)
         {
             if(auction.StartTime < DateTime.UtcNow)
             {
@@ -146,33 +146,33 @@ public class AuctionsController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            auction.StartPrice = startPrice;
+            auction.StartPrice = (decimal) request.StartPrice;
         }
 
-        if (request.StartTime is DateTime startTime)
+        if (request.StartTime is not null)
         {
             if(auction.StartTime < DateTime.UtcNow)
             {
                 ModelState.AddModelError(nameof(request.StartTime), "Start time may only be changed before the auction has started.");
                 return BadRequest(ModelState);
             }
-            if(startTime < DateTime.UtcNow)
+            if(request.StartTime < DateTime.UtcNow)
             {
                 ModelState.AddModelError(nameof(request.StartTime), "Start time must be set in the future.");
                 return BadRequest(ModelState);
             }
 
-            auction.StartTime = startTime;
+            auction.StartTime = (DateTime) request.StartTime;
         }
 
-        if(request.EndTime is DateTime endTime)
+        if(request.EndTime is not null)
         {
-            if(endTime < auction.StartTime)
+            if(request.EndTime < auction.StartTime)
             {
-                ModelState.AddModelError(nameof(request.StartTime), "End time must be after the start time.");
+                ModelState.AddModelError(nameof(request.EndTime), "End time must be after the start time.");
                 return BadRequest(ModelState);
             }
-            auction.EndTime = endTime;
+            auction.EndTime = (DateTime) request.EndTime;
         }
         
         // Save changes
