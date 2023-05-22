@@ -28,6 +28,7 @@ export const appRouting: Route[] = [
     children: [
       { path: 'home', loadChildren: () => import('src/app/modules/home-page/home-page.module').then(m => m.HomePageModule) },
     ],
+
   },
 
   // Catch all route

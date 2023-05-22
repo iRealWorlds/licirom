@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/core/api/api.service';
 import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
 import { SupportTicket } from './support-ticket.model';
+import { SupportMessage } from './support-messages.model';
 import { Observable } from 'rxjs';
 import { CreateTicketRequest } from './create-ticket/create-ticket.request';
 
@@ -31,8 +32,15 @@ export class TicketService extends ApiService {
   create(data: CreateTicketRequest): Observable<SupportTicket> {
     return this._http.post<SupportTicket>(this.buildApiEndpointUri(this.environment.api.endpoints.tickets), data);
   }
+
   getTicket(ticketId: string): Observable<SupportTicket> {
     const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}`;
     return this._http.get<SupportTicket>(this.buildApiEndpointUri(endpoint));
+  }
+
+  getMessages(ticketId: string): Observable<SupportMessage[]> {
+    const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/all`;
+    console.log(endpoint);
+    return this._http.get<SupportMessage[]>(this.buildApiEndpointUri(endpoint))
   }
 }

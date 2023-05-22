@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SupportTicket } from '../support-ticket.model';
+import { SupportMessage } from '../support-messages.model';
 import { TicketService } from '../ticket.service';
 
 @Component({
@@ -11,12 +12,16 @@ import { TicketService } from '../ticket.service';
 export class TicketDetailsComponent implements OnInit {
   public ticket!: SupportTicket;
 
+  public messages!: SupportMessage[];
   constructor(private route: ActivatedRoute, private ticketService: TicketService) { }
 
   ngOnInit(): void {
-    const ticketKey = this.route.snapshot.paramMap.get('ticketKey')!;
-    this.ticketService.getTicket(ticketKey).subscribe(ticket => {
-      this.ticket = ticket;
+    this.route.data.subscribe(data => {
+      this.ticket = data['ticket'];
+      this.messages = data['messages'];
     });
+    console.log(this.ticket)
+    console.log(this.messages)
   }
+
 }

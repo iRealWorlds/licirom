@@ -1,3 +1,4 @@
+using System.Text.Json;
 using API.Database;
 using API.Database.Entities;
 using API.ViewModels;
@@ -6,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
+
+
 
 namespace API.Controllers;
 
@@ -56,7 +60,7 @@ public class TicketsController : ControllerBase
         await this._dbContext.SupportTickets.AddAsync(ticket);
         await this._dbContext.SaveChangesAsync();
 
-        // Add the content as the first ticket message
+        // dd the contenAt as the first ticket message
         var message = new SupportMessage
         {
             MessageContent = data.Content,
@@ -87,5 +91,37 @@ public class TicketsController : ControllerBase
         // Return the result
         return new JsonResult(new SupportTicketModel(ticket));
     }
+
+
+
+    [HttpGet("{key}/all")]
+    public async Task<IActionResult> GetAllMessagesForTicketId(int key)
+    {
+        // Retrieve all tickets for the specified ticket ID from the database
+        var messages = (await this._dbContext.SupportMessages
+            .Where(t => t.TicketId == key)
+            .ToListAsync())
+            .Select(m => new SupportMessageModel(m));
+        // Return the list of tickets as JSON
+        return new JsonResult(messages);
+    }
+
+    // [HttpPost("{key}/addMessage")]
+    // public async Task<IActionResult> CreateAsync([FromBody] MessageCreateModel data)
+    // {
+    //     var user = await this._userManager.GetUserAsync(HttpContext.User);
+
+    //     // Handle null user 
+    //     if (user == null)
+    //     {
+    //         return Unauthorized();
+    //     }
+
+    //     var message = new SupportMessage
+    //     {
+    //         UserId = user.Id
+    //     };
+
+    // }
 
 }
