@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
+import { AuctionCategoryModel } from '@licirom/modules/admin/auction-categories/auction-category.model';
 
 @Component({
   selector: 'app-category-list',
@@ -9,6 +10,7 @@ import { Subject } from 'rxjs';
 })
 export class CategoryListComponent implements OnInit, OnDestroy{
   private readonly _unsubscribeAll = new Subject<void>();
+  categories?: AuctionCategoryModel[];
 /**
  * 
  */
@@ -19,7 +21,13 @@ export class CategoryListComponent implements OnInit, OnDestroy{
 
   /** @inheritDoc **/
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this._activatedRoute.data.pipe(
+      takeUntil(this._unsubscribeAll)
+    ).subscribe(data => {
+      if('categories' in data){
+        this.categories = data['categories'].items;
+      }
+    });
   }
   
   /** @inheritDoc **/
