@@ -3,6 +3,7 @@ using API.Database;
 using API.Database.Entities;
 using API.ViewModels;
 using API.ViewModels.Requests;
+using API.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,7 @@ public class AuctionCategoriesController : ControllerBase
     [HttpPost]
     [Produces("application/json")]
     [ProducesResponseType(typeof(AuctionCategoryModel), (int) HttpStatusCode.Created)]
+    [Authorize(Policy=AuthorizationPolicies.UserIsAdmin)]
     public async Task<IActionResult> CreateAsync(AuctionCategoryCreateModel request)
     {
         // Make sure parent category exists
@@ -92,6 +94,7 @@ public class AuctionCategoriesController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(AuctionCategoryModel), (int) HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [Authorize(Policy=AuthorizationPolicies.UserIsAdmin)]
     public async Task<IActionResult> UpdateAsync(Guid categoryKey, AuctionCategoryUpdateModel request)
     {
         // Find category
@@ -132,6 +135,7 @@ public class AuctionCategoriesController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [Authorize(Policy=AuthorizationPolicies.UserIsAdmin)]
     public async Task<IActionResult> DeleteAsync(Guid categoryKey)
     {
         // Get category details

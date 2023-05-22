@@ -1,6 +1,7 @@
 using System.Text;
 using API.Database;
 using API.Database.Entities;
+using API.Authorization;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -37,7 +38,43 @@ builder.Services.AddAuthentication(options => {
         ValidAudience = builder.Configuration["JWT:ValidAudience"],  
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],  
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))  
-    };  
+    };
+
+    // Prevent default behaviour which renames claims such as "sub" to "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+    options.MapInboundClaims = false;
+
+    options.Events = new JwtBearerEvents
+    {
+        // Additional jwt validation: check if "sub" claim refers to an actual user
+        OnTokenValidated = async (context) =>
+        {
+            var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+            var subClaim = context.Principal.Claims.Where(c => c.Type == "sub").FirstOrDefault();
+
+            if(subClaim == null)
+            {
+                context.Fail("sub claim missing");
+            }
+
+            var subId = Guid.Parse(subClaim.Value);
+            if(await userManager.FindByIdAsync(subId.ToString()) == null)
+            {
+                context.Fail("User doesn't exist");
+            }
+        }
+    };
+});
+
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy(AuthorizationPolicies.UserOwnsResource, policy => {
+        policy.Requirements.Add(new UserOwnsResourceRequirement());
+    });
+    options.AddPolicy(AuthorizationPolicies.UserIsAdmin, policy => {
+        policy.Requirements.Add(new UserIsAdminRequirement());
+    });
+    options.AddPolicy(AuthorizationPolicies.UserOwnsResourceOrIsAdmin, policy => {
+        policy.Requirements.Add(new UserOwnsResourceOrIsAdminRequirement());
+    });
 });
 
 builder.Services.AddScoped<AuctionService>();
