@@ -37,11 +37,9 @@ builder.Services.AddAuthentication(options => {
         ValidateAudience = true,  
         ValidAudience = builder.Configuration["JWT:ValidAudience"],  
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],  
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))  
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+        NameClaimType = "sub"
     };
-
-    // Prevent default behaviour which renames claims such as "sub" to "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-    options.MapInboundClaims = false;
 
     options.Events = new JwtBearerEvents
     {
@@ -63,6 +61,15 @@ builder.Services.AddAuthentication(options => {
             }
         }
     };
+
+    // Prevent default behaviour which renames claims such as "sub" to "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+    options.MapInboundClaims = false;
+
+});
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.ClaimsIdentity.UserIdClaimType = "sub";
 });
 
 builder.Services.AddAuthorization(options => {
