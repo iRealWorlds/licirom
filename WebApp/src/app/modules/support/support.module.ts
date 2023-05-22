@@ -8,5 +8,6 @@ import { supportRouting } from '@licirom/modules/support/support.routing';
     CommonModule,
     RouterModule.forChild(supportRouting)
   ]
+
 })
 export class SupportModule { }
