@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { categoryListRouting } from './category-list.routing';
+import { categoryListRouting } from '@licirom/modules/admin/auction-categories/category-list/category-list.routing';
 
 
 

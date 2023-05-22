@@ -9,12 +9,15 @@ import { Subject } from 'rxjs';
 })
 export class CategoryListComponent implements OnInit, OnDestroy{
   private readonly _unsubscribeAll = new Subject<void>();
-
+/**
+ * 
+ */
   constructor(
     private readonly _activatedRoute: ActivatedRoute
   ) {
   }
 
+  /** @inheritDoc **/
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }

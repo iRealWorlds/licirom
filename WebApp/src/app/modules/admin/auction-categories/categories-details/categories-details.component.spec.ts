@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CategoriesDetailsComponent } from './categories-details.component';
+import { CategoriesDetailsComponent } from '@licirom/modules/admin/auction-categories/categories-details/categories-details.component';
 
 describe('CategoriesDetailsComponent', () => {
   let component: CategoriesDetailsComponent;

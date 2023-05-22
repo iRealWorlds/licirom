@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CategoriesCreateComponent } from './categories-create.component';
+import { CategoriesCreateComponent } from '@licirom/modules/admin/auction-categories/categories-create/categories-create.component';
 
 describe('CategoriesCreateComponent', () => {
   let component: CategoriesCreateComponent;

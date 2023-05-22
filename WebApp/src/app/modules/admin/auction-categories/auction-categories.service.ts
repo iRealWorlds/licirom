@@ -3,11 +3,9 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@licirom/core/api/api.service';
 import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
 import { PaginatedResult } from '@licirom/core/pagination/paginated-result.model';
-import { AuctionCategoryModel } from './auction-category.model';
+import { AuctionCategoryModel } from '@licirom/modules/admin/auction-categories/auction-category.model';
 import { Observable } from 'rxjs';
-import { AuctionCreateRequest } from '@licirom/modules/auctions/auction-create.request';
-import { AuctionCategoryUpdateRequest } from './auction-category-update.requests';
-import { AuctionCategoryCreateRequest } from './auction-category-create.request';
+import { AuctionCategoryCreateRequest } from '@licirom/modules/admin/auction-categories//auction-category-create.request';
 
 @Injectable({
   providedIn: 'root'
@@ -65,15 +63,5 @@ export class AdminCategoriesService extends ApiService{
     return this._http.delete<void>(uri);
   }
 
-  /**
-   * Update an auction in the API.
-   *
-   * @param auctionKey
-   * @param data
-   */
-  updateByKey(auctionKey: string, data: AuctionCategoryUpdateRequest): Observable<AuctionCategoryModel> {
-    const uri = this.buildApiEndpointUri(['api', 'Auctions', auctionKey]);
-    return this._http.put<AuctionCategoryModel>(uri, data);
-  }
 }
 

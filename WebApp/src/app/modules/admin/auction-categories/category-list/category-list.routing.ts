@@ -1,5 +1,5 @@
-import { Route } from "@angular/router";
-import { CategoryListComponent } from "./category-list.component";
+import { Route } from '@angular/router';
+import { CategoryListComponent } from '@licirom/modules/admin/auction-categories/category-list/category-list.component';
 
 export const categoryListRouting: Route[] = [
     {

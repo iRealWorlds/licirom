@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CategoryCardComponent } from './category-card.component';
+import { CategoryCardComponent } from '@licirom/modules/admin/auction-categories/category-list/category-card/category-card.component';
 
 describe('CategoryCardComponent', () => {
   let component: CategoryCardComponent;

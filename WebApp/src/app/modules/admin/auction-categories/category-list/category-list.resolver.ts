@@ -10,6 +10,10 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root'
 })
 export class CategoryListResolver implements Resolve<boolean> {
+  
+  /**
+   * 
+   **/
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return of(true);
   }
