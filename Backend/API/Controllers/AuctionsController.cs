@@ -71,7 +71,7 @@ public class AuctionsController : ControllerBase
 
         var auctionList = await auctions.ToListAsync();
             
-        var result = new PaginatedResult<Auction>(auctions, query).Map(delegate(Auction c)
+        var result = new PaginatedResult<Auction>(auctionList, query).Map(delegate(Auction c)
 
         {
             var model = new AuctionModel(c);
