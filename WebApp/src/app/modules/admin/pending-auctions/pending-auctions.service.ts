@@ -43,5 +43,9 @@ export class PendingAuctionsService extends ApiService {
     return this._http.put<boolean>(uri, auctionKey);
   }
 
+  Close(auctionKey: string): Observable<boolean> {
+    const uri = this.buildApiEndpointUri(`api/Auctions/${auctionKey}/close`);
+    return this._http.put<boolean>(uri, auctionKey);
+  }
 
 }
