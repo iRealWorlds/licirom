@@ -60,6 +60,25 @@ export class PendingAuctionsComponent implements OnInit {
     );
   }
 
+
+  closeAuction(auctionKey: string): void {
+    this.pendingAuctionService.Close(auctionKey).subscribe(
+      () => {
+        if (this.auctionList) {
+          const index = this.auctionList?.findIndex(a => a.key === auctionKey);
+          if (index !== -1) {
+            this.auctionList.splice(index, 1);
+          }
+        }
+      },
+      error => {
+        console.log('Error activating auction:', error);
+      }
+    );
+  }
+
+
+
   /** @inheritDoc */
   ngOnInit(): void {
     this.getAuctions();
