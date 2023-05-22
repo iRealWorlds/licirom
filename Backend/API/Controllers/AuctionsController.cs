@@ -103,24 +103,77 @@ public class AuctionsController : ControllerBase
         return Ok(model);
     }
 
-    [HttpPut("{auctionKey}")]
+    [HttpPatch("{auctionKey}")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(AuctionModel), (int) HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> UpdateAsync(Guid auctionKey, AuctionUpdateModel request)
     {
         // Find auction
-        var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == auctionKey);
+        var auction = await _dbContext.Auctions.Include(a => a.Creator).FirstOrDefaultAsync(c => c.Key == auctionKey);
         
         // Make sure that the auction exists
-        if (auction == null)
+        if (auction is null)
         {
             return NotFound();
         }
-        
-        // Update the auction's details
-        auction.Title = request.Title;
-        auction.Description = request.Description;
+
+        if(request.Title is string title)
+        {
+            auction.Title = title;
+        }
+
+        if(request.Description is string description)
+        {
+            auction.Description = description;
+        }
+
+        if(request.ReservePrice is decimal reservePrice)
+        {
+            auction.ReservePrice = reservePrice;
+        }
+
+        if(request.MinimumIncrement is decimal minimumIncrement)
+        {
+            auction.MinimumIncrement = minimumIncrement;
+        }
+
+        if(request.StartPrice is decimal startPrice)
+        {
+            if(auction.StartTime < DateTime.UtcNow)
+            {
+                ModelState.AddModelError(nameof(request.StartPrice), "Start price may only be changed before the auction has started.");
+                return BadRequest(ModelState);
+            }
+
+            auction.StartPrice = startPrice;
+        }
+
+        if (request.StartTime is DateTime startTime)
+        {
+            if(auction.StartTime < DateTime.UtcNow)
+            {
+                ModelState.AddModelError(nameof(request.StartTime), "Start time may only be changed before the auction has started.");
+                return BadRequest(ModelState);
+            }
+            if(startTime < DateTime.UtcNow)
+            {
+                ModelState.AddModelError(nameof(request.StartTime), "Start time must be set in the future.");
+                return BadRequest(ModelState);
+            }
+
+            auction.StartTime = startTime;
+        }
+
+        if(request.EndTime is DateTime endTime)
+        {
+            if(endTime < auction.StartTime)
+            {
+                ModelState.AddModelError(nameof(request.StartTime), "End time must be after the start time.");
+                return BadRequest(ModelState);
+            }
+            auction.EndTime = endTime;
+        }
         
         // Save changes
         _dbContext.Auctions.Entry(auction).State = EntityState.Modified;

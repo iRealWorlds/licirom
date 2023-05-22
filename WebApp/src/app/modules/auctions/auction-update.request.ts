@@ -1,6 +1,11 @@
 export class AuctionUpdateRequest {
   title?: string;
-  description?: string|null;
+  description?: string;
+  reservePrice?: number;
+  minimumIncrement?: number;
+  startPrice?: number;
+  startTime?: string;
+  endTime?: string;
 
   /**
    * AuctionCategoryCreateRequest constructor mehtod.

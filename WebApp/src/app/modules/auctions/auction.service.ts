@@ -81,7 +81,7 @@ export class AuctionService extends ApiService {
    */
   updateByKey(auctionKey: string, data: AuctionUpdateRequest, options = new ApiOperationOptions()): Observable<Auction> {
     const uri = this.buildApiEndpointUri(['api', 'Auctions', auctionKey]);
-    return this._http.put<Auction>(uri, data, {
+    return this._http.patch<Auction>(uri, data, {
       params: this.buildParameters(options)
     });
   }
