@@ -39,12 +39,37 @@ public class AuctionsController : ControllerBase
             return Unauthorized();
         }
 
-        var auctions = await _dbContext.Auctions
-                .Include(a => a.Creator)
+        var auctions = _dbContext.Auctions
+            .Include(a => a.Creator)
             .Where(a => a.CreatorKey == currentUser.Id || a.CurrentStatus == Auction.Status.ACTIVE ||
                         a.CurrentStatus == Auction.Status.ENDED ||
-                        a.CurrentStatus == Auction.Status.CLOSED)
-            .ToListAsync();
+                        a.CurrentStatus == Auction.Status.CLOSED);
+
+        if(query.Query != null)
+        {
+            auctions = auctions.Where(a => a.Title.Contains(query.Query) || a.Description.Contains(query.Query));
+        }
+
+        if(query.CreatedByMe == true)
+        {
+            auctions = auctions.Where(a => a.CreatorKey == currentUser.Id);
+        }
+        else if(query.CreatedByMe == false)
+        {
+            auctions = auctions.Where(a => a.CreatorKey != currentUser.Id);
+        }
+
+        if(query.CategoryKeys != null)
+        {
+            auctions = auctions.Where(a => query.CategoryKeys.Any(c => a.CategoryKey == Guid.Parse(c)));
+        }
+
+        if(query.Statuses != null)
+        {
+            auctions = auctions.Where(a => query.Statuses.Any(s => a.CurrentStatus == s));
+        }
+
+        var auctionList = await auctions.ToListAsync();
             
         var result = new PaginatedResult<Auction>(auctions, query).Map(delegate(Auction c)
         {
