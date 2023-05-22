@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot
 } from '@angular/router';
 import { PaginatedResult } from '@licirom/core/pagination/paginated-result.model';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuctionCategoryModel } from '@licirom/modules/admin/auction-categories/auction-category.model';
 import { AuctionCategoriesService } from '@licirom/modules/admin/auction-categories/auction-categories.service';
 
@@ -16,18 +16,17 @@ import { AuctionCategoriesService } from '@licirom/modules/admin/auction-categor
 export class CategoryListResolver implements Resolve<PaginatedResult<AuctionCategoryModel>> {
   /**
    * Constructor of CategoryListResolver
-   * @param _auctionService 
+   * @param _auctionService
    */
   constructor(
     private readonly _auctionService: AuctionCategoriesService
-  ){
-    
+  ) {
   }
 
   /**
-   * 
+   *
    **/
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PaginatedResult<AuctionCategoryModel>> {
+  resolve(): Observable<PaginatedResult<AuctionCategoryModel>> {
     return this._auctionService.getAll();
   }
 }
