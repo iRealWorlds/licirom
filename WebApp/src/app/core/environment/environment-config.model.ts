@@ -13,6 +13,11 @@ export class EnvironmentConfig {
     }
   };
 
+  pusher = {
+    cluster: 'eu',
+    appKey: 'e9a10c6aa09f1a2cdca5'
+  };
+
   /**
    * EnvironmentConfig constructor method.
    *

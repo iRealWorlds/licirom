@@ -38,7 +38,13 @@ export class AuctionCreatorGuard implements CanActivate {
 
     return this._auctionService. getByKey(auctionKey).pipe(
       switchMap(auction => this._identityService.currentIdentity$.pipe(
-        map(identity => auction.creatorKey === identity?.key)
+        map(identity => {
+          if (typeof auction.creator === 'string') {
+            return auction.creator === identity?.key;
+          } else {
+            return auction.creator.key === identity?.key;
+          }
+        })
       )),
 
       tap(async passes => {

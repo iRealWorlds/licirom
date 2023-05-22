@@ -21,7 +21,7 @@ public class PaginatedResult<T>
         this.LastPage = (int) Math.Ceiling((double) this.Total / pageSize);
     }
 
-    public PaginatedResult(IEnumerable<T> items, PaginatedRequestModel options)
+    public PaginatedResult(IEnumerable<T> items, IPaginatedRequestModel options)
     {
         this.Items = items.Skip(Math.Max(options.Page - 1 * options.PageSize, 0)).Take(options.PageSize);
         this.Total = items.Count();

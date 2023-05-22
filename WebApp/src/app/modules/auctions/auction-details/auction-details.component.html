@@ -11,7 +11,7 @@
         </a>
       </mat-card-title>
       <mat-card-subtitle class="text-sm">
-        By {{ auction.creatorKey }}
+        By {{ auction.creator | expandable: displayCreatorName }}
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -23,8 +23,28 @@
           <em>No description</em>
         </ng-template>
       </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-5 text-center">
+        <div class="">
+          <h3 class="text-xl">{{ auction.startTime | date:'medium' }}</h3>
+          <h5 class="text-gray-500">Starts on</h5>
+        </div>
+        <div class="">
+          <h3 class="text-xl">{{ auction.endTime | date:'medium' }}</h3>
+          <h5 class="text-gray-500">Ends on</h5>
+        </div>
+        <div class="">
+          <h3 class="text-xl">{{ auction.startPrice | currency }}</h3>
+          <h5 class="text-gray-500">Starting price</h5>
+        </div>
+      </div>
     </mat-card-content>
-    <mat-card-actions align="end" *ngIf="ownsCurrentAuction" class="flex gap-4">
+    <mat-card-actions align="end" *ngIf="ownsCurrentAuction" class="flex gap-4 p-5">
+      <p class="flex items-center gap-2 text-sm">
+        Reserve price: {{ auction.reservePrice | currency }}
+        <mat-icon matTooltip="Only you can see this">visibility_off</mat-icon>
+      </p>
+
       <!-- Update -->
       <a [routerLink]="['/auctions/update', auction.key]" mat-flat-button color="primary">
         <mat-icon>edit</mat-icon>
@@ -40,8 +60,18 @@
     </mat-card-actions>
   </mat-card>
 
+  <!-- Bidding -->
+  <div class="mt-5 grid grid-cols-1 xl:grid-cols-3 gap-5">
+    <!-- Top bids -->
+    <app-auction-bids-list [auction]="auction" class="col-span-2"></app-auction-bids-list>
+
+    <!-- Bid now -->
+    <app-auction-bid-create [auction]="auction"></app-auction-bid-create>
+
+  </div>
+
   <!-- Comments -->
-  <div class="mt-5 grid grid-cols-1 xl:grid-cols-3">
-    <app-auction-comments class="col-span-2" [auction]="auction"></app-auction-comments>
+  <div class="mt-5">
+    <app-auction-comments [auction]="auction"></app-auction-comments>
   </div>
 </div>
