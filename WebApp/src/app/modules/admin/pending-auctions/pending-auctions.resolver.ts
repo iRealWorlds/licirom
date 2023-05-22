@@ -7,7 +7,7 @@ import {
 import { Observable, } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PaginatedResult } from '@licirom/core/pagination/paginated-result.model';
-import { PendingAuctionsService } from '@licirom/modules/admin/pending-auctions.service';
+import { PendingAuctionsService } from '@licirom/modules/admin/pending-auctions/pending-auctions.service';
 import { Auction } from '@licirom/modules/auctions/auction.model';
 
 @Injectable({

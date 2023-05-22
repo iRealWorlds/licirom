@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Auction } from '@licirom/modules/auctions/auction.model';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { PendingAuctionsService } from '@licirom/modules/admin/pending-auctions.service';
+import { PendingAuctionsService } from '@licirom/modules/admin/pending-auctions/pending-auctions.service';
 
 @Component({
   selector: 'app-pending-auctions',
