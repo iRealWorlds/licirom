@@ -31,7 +31,7 @@ public class BidsController : ControllerBase
     [ActionName(nameof(IndexAsync))]
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<BidModel>), (int) HttpStatusCode.OK)]
-    public async Task<IActionResult> IndexAsync(Guid auctionKey)
+    public async Task<IActionResult> IndexAsync(Guid auctionKey, [FromQuery] BidIndexModel options)
     {
         // Find auction
         var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == auctionKey);
@@ -43,14 +43,28 @@ public class BidsController : ControllerBase
         }
         
         // Load bids
-        await _dbContext.Entry(auction).Collection(a => a.Bids).LoadAsync();
+        await _dbContext.Entry(auction)
+            .Collection(a => a.Bids)
+            .Query()
+            .Include(b => b.Buyer)
+            .LoadAsync();
         
         // Get bids
-        var bids = auction.Bids.ToList();
-        bids.Sort((a, z) => a.SubmitTime.CompareTo(z.SubmitTime));
+        var bids = auction.Bids.OrderByDescending(b => b.Amount).ToList();
+        
+        // Paginate the bids
+        var result = new PaginatedResult<Bid>(bids, options).Map(bid =>
+        {
+            var model = new BidModel(bid);
+            foreach (var property in options.Expand)
+            {
+                model.Expand(property);
+            }
+            return model;
+        });
         
         // Return a 200 OK response
-        return new JsonResult(bids.Select(bid => new BidModel(bid)));
+        return new JsonResult(result);
     }
     
     [HttpPost]
@@ -61,7 +75,7 @@ public class BidsController : ControllerBase
     public async Task<IActionResult> CreateAsync([FromBody] BidCreateModel request, Guid auctionKey)
     {
         // Find auction
-        var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == auctionKey);
+        var auction = await _dbContext.Auctions.Include(a => a.Creator).FirstOrDefaultAsync(c => c.Key == auctionKey);
         
         // Make sure that the auction exists
         if (auction == null)

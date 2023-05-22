@@ -60,8 +60,18 @@
     </mat-card-actions>
   </mat-card>
 
+  <!-- Bidding -->
+  <div class="mt-5 grid grid-cols-1 xl:grid-cols-3 gap-5">
+    <!-- Top bids -->
+    <app-auction-bids-list [auction]="auction" class="col-span-2"></app-auction-bids-list>
+
+    <!-- Bid now -->
+    <app-auction-bid-create [auction]="auction"></app-auction-bid-create>
+
+  </div>
+
   <!-- Comments -->
-  <div class="mt-5 grid grid-cols-1 xl:grid-cols-3">
-    <app-auction-comments class="col-span-2" [auction]="auction"></app-auction-comments>
+  <div class="mt-5">
+    <app-auction-comments [auction]="auction"></app-auction-comments>
   </div>
 </div>
