@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Auction } from '@licirom/modules/auctions/auction.model';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
+import { AuctionStatus } from '@licirom/modules/auctions/auction-status.enum';
 
 @Component({
   selector: 'app-auction-card',
@@ -13,4 +14,5 @@ import { RouterLink } from '@angular/router';
 })
 export class AuctionCardComponent {
   @Input() auction?: Auction;
+  statuses = AuctionStatus;
 }

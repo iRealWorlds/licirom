@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-
-import { PendingAuctionsResolver } from './pending-auctions.resolver';
+import { PendingAuctionsResolver } from '@licirom/modules/admin/pending-auctions.resolver';
 
 describe('PendingAuctionsResolver', () => {
   let resolver: PendingAuctionsResolver;

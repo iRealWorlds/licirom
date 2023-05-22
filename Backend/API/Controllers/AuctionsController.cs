@@ -30,7 +30,17 @@ public class AuctionsController : ControllerBase
     [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> IndexAsync([FromQuery] PaginatedRequestModel query)
     {
-        var auctions = await _dbContext.Auctions.ToListAsync();
+        // Get current user's details
+        var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+        if (currentUser == null)
+        {
+            return Unauthorized();
+        }
+        
+        var auctions = await _dbContext.Auctions
+            .Where(a => a.CreatorKey == currentUser.Id || a.CurrentStatus == Auction.Status.ACTIVE || a.CurrentStatus == Auction.Status.ENDED ||
+                       a.CurrentStatus == Auction.Status.CLOSED)
+            .ToListAsync();
         var result = new PaginatedResult<Auction>(auctions, query).Map(c => new AuctionModel(c));
         return new JsonResult(result);
     }

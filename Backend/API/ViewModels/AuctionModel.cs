@@ -11,8 +11,8 @@ public class AuctionModel
     public string Description { get; set; }
     public Guid CreatorKey { get; set; }
     public Guid? CategoryKey { get; set; }
-
     public Auction.Status CurrentStatus { get; set; } = Auction.Status.PENDING;
+    
     public AuctionModel()
     {
 

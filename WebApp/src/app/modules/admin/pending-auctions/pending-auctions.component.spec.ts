@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { PendingAuctionsComponent } from './pending-auctions.component';
+import { PendingAuctionsComponent } from '@licirom/modules/admin/pending-auctions/pending-auctions.component';
 
 describe('PendingAuctionsComponent', () => {
   let component: PendingAuctionsComponent;

@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-
-import { PendingAuctionsService } from './pending-auctions.service';
+import { PendingAuctionsService } from '@licirom/modules/admin/pending-auctions.service';
 
 describe('PendingAuctionsService', () => {
   let service: PendingAuctionsService;
