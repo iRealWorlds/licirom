@@ -12,6 +12,12 @@ import {
 } from '@licirom/modules/auctions/auction-details/auction-comments/auction-comments.module';
 import { ExpandablePipeModule } from '@licirom/modules/shared/expandable-pipe/expandable-pipe.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {
+  AuctionBidsListModule
+} from '@licirom/modules/auctions/auction-details/auction-bids/auction-bids-list/auction-bids-list.module';
+import {
+  AuctionBidCreateModule
+} from '@licirom/modules/auctions/auction-details/auction-bids/auction-bid-create/auction-bid-create.module';
 
 
 @NgModule({
@@ -28,6 +34,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     AuctionCommentsModule,
     ExpandablePipeModule,
     MatTooltipModule,
+    AuctionBidsListModule,
+    AuctionBidCreateModule,
   ]
 })
 export class AuctionDetailsModule { }

@@ -2,6 +2,7 @@ using System.Text;
 using API.Database;
 using API.Database.Entities;
 using API.Authorization;
+using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +76,8 @@ builder.Services.AddAuthorization(options => {
         policy.Requirements.Add(new UserOwnsResourceOrIsAdminRequirement());
     });
 });
+
+builder.Services.AddScoped<AuctionService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

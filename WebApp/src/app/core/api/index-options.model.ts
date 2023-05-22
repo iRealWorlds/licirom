@@ -2,6 +2,8 @@ import { ApiOperationOptions } from '@licirom/core/api/api-operation-options.mod
 
 export class IndexOptions<TFilterSet> extends ApiOperationOptions {
   filters?: TFilterSet;
+  page = 1;
+  pageSize = 10;
 
   /**
    * IndexOptions constructor method.

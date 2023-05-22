@@ -1,5 +1,16 @@
 <mat-card *ngIf="auction" class="w-full h-full">
-  <mat-card-header class="mb-3">
+  <mat-card-header class="mb-3 relative">
+
+    <div class="absolute top-0 right-0 px-3 py-1 bg-green-500 text-white text-xs" *ngIf="auction.currentStatus === statuses.ACTIVE">
+      Active
+    </div>
+    <div class="absolute top-0 right-0 px-3 py-1 bg-amber-500 text-white text-xs" *ngIf="auction.currentStatus === statuses.PENDING">
+      Pending
+    </div>
+    <div class="absolute top-0 right-0 px-3 py-1 bg-red-500 text-white text-xs" *ngIf="auction.currentStatus === statuses.CLOSED">
+      Closed
+    </div>
+
     <mat-card-title class="text-xl">
       <a [routerLink]="['/auctions/details', auction.key]">
         {{ auction.title }}

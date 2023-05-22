@@ -12,7 +12,7 @@ public class AuctionModel : EntityModel<Guid>
     public ExpandableModel<UserViewModel, Guid> Creator { get; set; }
     
     public Guid? CategoryKey { get; set; }
-    
+    public Auction.Status CurrentStatus { get; set; } = Auction.Status.PENDING;
     public decimal ReservePrice { get; set; }
     public decimal MinimumIncrement { get; set; }
     public decimal StartPrice { get; set; }
@@ -31,6 +31,7 @@ public class AuctionModel : EntityModel<Guid>
         this.Description = auction.Description ?? String.Empty;
         this.Creator = new ExpandableModel<UserViewModel, Guid>(new UserViewModel(auction.Creator));
         this.CategoryKey = auction.CategoryKey;
+        this.CurrentStatus = auction.CurrentStatus;
         this.ReservePrice = auction.ReservePrice;
         this.MinimumIncrement = auction.MinimumIncrement;
         this.StartPrice = auction.StartPrice;

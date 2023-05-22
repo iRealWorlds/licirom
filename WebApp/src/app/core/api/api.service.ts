@@ -54,6 +54,18 @@ export class ApiService {
       }
     }
 
+    // Add pagination (if present)
+    if ('page' in options) {
+      if (options.page) {
+        params = params.append('page', options.page);
+      }
+    }
+    if ('pageSize' in options) {
+      if (options.pageSize) {
+        params = params.append('pageSize', options.pageSize);
+      }
+    }
+
     // Add expansions
     for (const property of options.expand) {
       params = params.append('expand', property);

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PusherServer;
 
 namespace API.Controllers;
 
@@ -19,19 +20,21 @@ public class BidsController : ControllerBase
     private readonly ApplicationDbContext _dbContext;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly AuctionService _auctionService;
+    private readonly IConfiguration _configuration;
 
-    public BidsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, AuctionService auctionService)
+    public BidsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, AuctionService auctionService, IConfiguration configuration)
     {
         _dbContext = dbContext;
         _userManager = userManager;
         _auctionService = auctionService;
+        _configuration = configuration;
     }
 
     [HttpGet]
     [ActionName(nameof(IndexAsync))]
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<BidModel>), (int) HttpStatusCode.OK)]
-    public async Task<IActionResult> IndexAsync(Guid auctionKey)
+    public async Task<IActionResult> IndexAsync(Guid auctionKey, [FromQuery] BidIndexModel options)
     {
         // Find auction
         var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == auctionKey);
@@ -43,14 +46,28 @@ public class BidsController : ControllerBase
         }
         
         // Load bids
-        await _dbContext.Entry(auction).Collection(a => a.Bids).LoadAsync();
+        await _dbContext.Entry(auction)
+            .Collection(a => a.Bids)
+            .Query()
+            .Include(b => b.Buyer)
+            .LoadAsync();
         
         // Get bids
-        var bids = auction.Bids.ToList();
-        bids.Sort((a, z) => a.SubmitTime.CompareTo(z.SubmitTime));
+        var bids = auction.Bids.OrderByDescending(b => b.Amount).ToList();
+        
+        // Paginate the bids
+        var result = new PaginatedResult<Bid>(bids, options).Map(bid =>
+        {
+            var model = new BidModel(bid);
+            foreach (var property in options.Expand)
+            {
+                model.Expand(property);
+            }
+            return model;
+        });
         
         // Return a 200 OK response
-        return new JsonResult(bids.Select(bid => new BidModel(bid)));
+        return new JsonResult(result);
     }
     
     [HttpPost]
@@ -61,7 +78,7 @@ public class BidsController : ControllerBase
     public async Task<IActionResult> CreateAsync([FromBody] BidCreateModel request, Guid auctionKey)
     {
         // Find auction
-        var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == auctionKey);
+        var auction = await _dbContext.Auctions.Include(a => a.Creator).FirstOrDefaultAsync(c => c.Key == auctionKey);
         
         // Make sure that the auction exists
         if (auction == null)
@@ -107,6 +124,24 @@ public class BidsController : ControllerBase
         // Persist the bid
         await _dbContext.Bids.AddAsync(bid);
         await _dbContext.SaveChangesAsync();
+        
+        // Send a notification through Pusher
+        var options = new PusherOptions
+        {
+            Cluster = this._configuration.GetValue<string>("Pusher:Cluster"),
+            Encrypted = true
+        };
+
+        var pusher = new Pusher(
+            this._configuration.GetValue<string>("Pusher:AppId"),
+            this._configuration.GetValue<string>("Pusher:AppKey"),
+            this._configuration.GetValue<string>("Pusher:AppSecret"),
+            options);
+
+        var result = await pusher.TriggerAsync(
+            $"auctions.{auction.Key}",
+            "bids.created",
+            new { auctionKey = auction.Key, bidKey = bid.Key } );
         
         // Return a 201 Created response
         return new JsonResult(new BidModel(bid))

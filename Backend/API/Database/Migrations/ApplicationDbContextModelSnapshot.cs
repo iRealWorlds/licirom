@@ -108,6 +108,9 @@ namespace API.Database.Migrations
                     b.Property<Guid>("CreatorKey")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("CurrentStatus")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
