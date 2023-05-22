@@ -6,6 +6,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormService } from '@licirom/core/forms/form.service';
+import { IdentityService } from '@licirom/core/identity/identity.service';
+import { filter, mergeWith, take } from 'rxjs';
 
 @Component({
   selector: 'app-sign-in',
@@ -22,12 +24,14 @@ export class SignInComponent {
   /**
    * SignInComponent constructor method.
    *
+   * @param _identityService
    * @param _authService
    * @param _toastService
    * @param _formService
    * @param _router
    */
   constructor(
+    private readonly _identityService: IdentityService,
     private readonly _authService: AuthService,
     private readonly _toastService: MatSnackBar,
     private readonly _formService: FormService,
@@ -79,12 +83,14 @@ export class SignInComponent {
 
       // Send the request
       this.loading = true;
-      this._authService.createSession(data).subscribe({
-        next: async () => {
-          this._toastService.open('You have signed in successfully.', 'Close');
-          await this._router.navigate(['']);
-          this.loading = false;
-        },
+      this._authService.createSession(data).pipe(
+        mergeWith(
+          this._identityService.currentIdentity$.pipe(
+            filter(identity => !!identity),
+            take(1)
+          ),
+        )
+      ).subscribe({
         error: (response: HttpErrorResponse) => {
           this.loading = false;
 
@@ -93,6 +99,11 @@ export class SignInComponent {
           }
 
           this._toastService.open('An error has occurred. Please try again!', 'Close');
+        },
+        complete: async () => {
+          this._toastService.open('You have signed in successfully.', 'Close');
+          await this._router.navigate(['']);
+          this.loading = false;
         }
       });
     }

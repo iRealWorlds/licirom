@@ -41,6 +41,7 @@ builder.Services.AddAuthentication(options => {
 });
 
 builder.Services.AddScoped<AuctionService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

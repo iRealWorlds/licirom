@@ -1,4 +1,5 @@
 using API.Database.Entities;
+using API.Services;
 using API.ViewModels;
 using API.ViewModels.Requests;
 using Microsoft.AspNetCore.Authorization;
@@ -12,10 +13,12 @@ namespace API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    
-    public UsersController(UserManager<ApplicationUser> userManager)
+    private readonly UserService _userService;
+
+    public UsersController(UserManager<ApplicationUser> userManager, UserService userService)
     {
         this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+        _userService = userService;
     }
 
     [HttpPost]
@@ -75,6 +78,9 @@ public class UsersController : ControllerBase
         }
 
         // Otherwise, return the user's details
-        return new JsonResult(new UserViewModel(user));
+        return new JsonResult(new UserViewModel(user)
+        {
+            IsAdmin = _userService.IsAdminAsync(user).Result // TODO find a better way to pass this
+        });
     }
 }
