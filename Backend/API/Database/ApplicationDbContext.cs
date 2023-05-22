@@ -103,6 +103,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 .WithOne(b => b.Auction)
                 .HasForeignKey(b => b.AuctionKey)
                 .OnDelete(DeleteBehavior.ClientCascade);
+
+            e.Property(a => a.ReservePrice).HasPrecision(10, 2);
+            e.Property(a => a.MinimumIncrement).HasPrecision(10, 2);
+            e.Property(a => a.StartPrice).HasPrecision(10, 2);
         });
         builder.Entity<AuctionComment>(e =>
         {

@@ -12,4 +12,11 @@ public class Auction
     public virtual AuctionCategory? Category { get; set; }
     public virtual ICollection<AuctionComment> Comments { get; set; }
     public virtual ICollection<Bid> Bids { get; set; }
+
+    public decimal ReservePrice { get; set; } = 0;
+    public decimal MinimumIncrement { get; set; } = 0;
+    public decimal StartPrice { get; set; } = 0;
+
+    public DateTime StartTime { get; set; } = DateTime.UtcNow;
+    public DateTime EndTime { get; set; }
 }
