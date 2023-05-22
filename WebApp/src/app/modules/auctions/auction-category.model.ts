@@ -1,4 +1,4 @@
-export interface AuctionCategoryModel {
+export interface AuctionCategory {
   key: string;
   name: string;
   description: string|null;

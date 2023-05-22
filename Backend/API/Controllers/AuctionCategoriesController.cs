@@ -27,10 +27,15 @@ public class AuctionCategoriesController : ControllerBase
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(typeof(PaginatedResult<AuctionCategoryModel>), (int) HttpStatusCode.OK)]
-    public async Task<IActionResult> IndexAsync([FromQuery] AuctionCategoryIndexModel query)
+    public async Task<IActionResult> IndexAsync([FromQuery] AuctionCategoryIndexModel options)
     {
         var categories = await _dbContext.AuctionCategories.ToListAsync();
-        var result = new PaginatedResult<AuctionCategory>(categories, query).Map(c => new AuctionCategoryModel(c));
+        if (!string.IsNullOrWhiteSpace(options.Query))
+        {
+            categories = categories.Where(c => c.Name.ToLowerInvariant().StartsWith(options.Query.ToLowerInvariant())).ToList();
+        }
+        
+        var result = new PaginatedResult<AuctionCategory>(categories, options).Map(c => new AuctionCategoryModel(c));
         return new JsonResult(result);
     }
 

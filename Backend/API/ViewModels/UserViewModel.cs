@@ -4,7 +4,6 @@ namespace API.ViewModels;
 
 public class UserViewModel : EntityModel<Guid>
 {
-    public Guid Key { get; set; } = Guid.Empty;
     public string EmailAddress { get; set; } = String.Empty;
     public string FirstName { get; set; } = String.Empty;
     public string LastName { get; set; } = String.Empty;

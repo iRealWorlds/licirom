@@ -6,7 +6,6 @@ import { adminRouting } from '@licirom/modules/admin/admin.routing';
 
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
     RouterModule.forChild(adminRouting)

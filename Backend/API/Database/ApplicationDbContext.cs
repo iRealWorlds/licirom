@@ -23,6 +23,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     {
         base.OnModelCreating(builder);
 
+
+        builder.Entity<Auction>()
+        .Property(e => e.CurrentStatus)
+        .HasConversion<int>();
+
         builder.Entity<ApplicationUser>(b =>
         {
             b.ToTable("IdentityUsers");
@@ -69,17 +74,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         {
             b.ToTable("IdentityUserRoles");
         });
-        
+
         builder.Entity<SupportTicket>(b =>
         {
             b.ToTable("SupportTickets");
         });
-        
+
         builder.Entity<SupportMessage>(b =>
         {
             b.ToTable("SupportMessages");
         });
-        
+
         builder.Entity<AuctionCategory>(e =>
         {
             e.HasKey(c => c.Key);
@@ -93,7 +98,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 .OnDelete(DeleteBehavior.ClientCascade);
         });
         builder.Entity<Auction>(e =>
-        {   
+        {
             e.HasKey(a => a.Key);
             e.HasMany(a => a.Comments)
                 .WithOne(c => c.Auction)
@@ -103,6 +108,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 .WithOne(b => b.Auction)
                 .HasForeignKey(b => b.AuctionKey)
                 .OnDelete(DeleteBehavior.ClientCascade);
+
+            e.Property(a => a.ReservePrice).HasPrecision(10, 2);
+            e.Property(a => a.MinimumIncrement).HasPrecision(10, 2);
+            e.Property(a => a.StartPrice).HasPrecision(10, 2);
         });
         builder.Entity<AuctionComment>(e =>
         {
