@@ -76,7 +76,7 @@ public class UsersController : ControllerBase
             return new NotFoundResult();
         }
 
-        if(!(await _authorizationService.AuthorizeAsync(User, user, AuthorizationPolicies.UserOwnsResource)).Succeeded)
+        if(!(await _authorizationService.AuthorizeAsync(User, user, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
         {
             return Unauthorized();
         }

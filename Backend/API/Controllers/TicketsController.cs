@@ -88,7 +88,7 @@ public class TicketsController : ControllerBase
             return NotFound();
         }
 
-        if(!(await _authorizationService.AuthorizeAsync(User, ticket, AuthorizationPolicies.UserOwnsResource)).Succeeded)
+        if(!(await _authorizationService.AuthorizeAsync(User, ticket, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
         {
             return Unauthorized();
         }
