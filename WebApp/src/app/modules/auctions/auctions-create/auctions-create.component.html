@@ -9,7 +9,7 @@
         Create auction
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content class="flex flex-col gap-5 items-stretch">
+    <mat-card-content class="flex flex-col gap-5 items-stretch p-5">
       <!-- Title -->
       <mat-form-field>
         <mat-label>Title</mat-label>
@@ -24,8 +24,21 @@
         <mat-label>Description</mat-label>
         <textarea type="text" matInput [formControl]="auctionForm.controls.description"></textarea>
       </mat-form-field>
+
+      <!-- Category -->
+      <app-searchable-model-input
+        [formControl]="auctionForm.controls.category"
+        label="Category"
+        [displayFn]="formatCategorySuggestion"
+        [searchFn]="searchCategories.bind(this)"></app-searchable-model-input>
+      <ng-container *ngIf="auctionForm.controls.category.touched || auctionForm.controls.category.dirty">
+        <p class="text-red-500" *ngFor="let value of auctionForm.controls.category.errors | keyvalue">
+          <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+        </p>
+      </ng-container>
+
     </mat-card-content>
-    <mat-card-actions align="end">
+    <mat-card-actions align="end" class="p-5">
       <button type="submit" mat-flat-button color="primary" [disabled]="auctionForm.disabled">
         <ng-container *ngIf="loading === true">Creating</ng-container>
         <ng-container *ngIf="loading === false">Create</ng-container>

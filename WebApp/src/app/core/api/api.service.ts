@@ -3,6 +3,7 @@ import { EnvironmentConfig } from '@licirom/core/environment/environment-config.
 import { ApiOperationOptions } from '@licirom/core/api/api-operation-options.model';
 import { Params } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
+import { IndexOptions } from '@licirom/core/api/index-options.model';
 
 @Injectable()
 export class ApiService {
@@ -41,8 +42,17 @@ export class ApiService {
    * @param options
    * @protected
    */
-  protected buildParameters(options: ApiOperationOptions): Params {
+  protected buildParameters(options: IndexOptions<unknown>|ApiOperationOptions): Params {
     let params = new HttpParams();
+
+    // Add filters (if present)
+    if ('filters' in options) {
+      if (options.filters) {
+        for (const [key, value] of Object.entries(options.filters)) {
+          params = params.append(key, value);
+        }
+      }
+    }
 
     // Add expansions
     for (const property of options.expand) {
