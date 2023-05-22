@@ -1,18 +1,21 @@
+using System.Security.Cryptography;
 using API.Database.Entities;
 
 namespace API.ViewModels;
 
 public class AuctionModel
 {
+
     public Guid Key { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public Guid CreatorKey { get; set; }
     public Guid? CategoryKey { get; set; }
-    
+
+    public Auction.Status CurrentStatus { get; set; } = Auction.Status.PENDING;
     public AuctionModel()
     {
-        
+
     }
 
     public AuctionModel(Auction auction)
@@ -22,6 +25,7 @@ public class AuctionModel
         this.Description = auction.Description;
         this.CreatorKey = auction.CreatorKey;
         this.CategoryKey = auction.CategoryKey;
+        this.CurrentStatus = auction.CurrentStatus;
     }
-    
+
 }
