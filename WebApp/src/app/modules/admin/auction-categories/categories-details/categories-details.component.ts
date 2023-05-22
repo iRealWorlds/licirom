@@ -21,7 +21,7 @@ export class CategoriesDetailsComponent implements OnInit, OnDestroy {
     description: new FormControl('', { nonNullable: true })
   });
 
-   _loading = false;
+  loading = false;
   deleting = false;
 
   private readonly _unsubscribeAll = new Subject<void>();
@@ -30,8 +30,7 @@ export class CategoriesDetailsComponent implements OnInit, OnDestroy {
    * AuctionDetailsComponent constructor method.
    *
    * @param _activatedRoute
-   * @param _identityService
-   * @param _auctionService
+   * @param _categoryService
    * @param _toastService
    * @param _router
    */
@@ -51,6 +50,12 @@ export class CategoriesDetailsComponent implements OnInit, OnDestroy {
     ).subscribe(async data => {
       if ('category' in data) {
         this.category = data['category'];
+        if (this.category) {
+          this.categoryForm.patchValue({
+            name: this.category.name,
+            description: this.category.description ?? undefined
+          });
+        }
       }
     });
   }
@@ -61,18 +66,17 @@ export class CategoriesDetailsComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.complete();
   }
 
-
-   /**
+  /**
    * Update the auction category.
    */
-   updateCategory(): void {
-    // Make sure an category exists
+  updateCategory(): void {
+    // Make sure a category exists
     if (!this.category) {
       throw new Error('No category provided.');
     }
 
     // If already loading, throw an error
-    if (this._loading) {
+    if (this.loading) {
       throw new Error('Already creating a category.');
     }
 
@@ -88,17 +92,17 @@ export class CategoriesDetailsComponent implements OnInit, OnDestroy {
       });
 
       // Send the request
-      this._loading = true;
+      this.loading = true;
       this._categoryService.updateByKey(this.category.key, data).subscribe({
-        next: async category => {
+        next: async () => {
           if(this.category){
-          await this._router.navigate(['/admin/categories']);
-          this._toastService.open('Category updated successfully.', 'Close');
+            await this._router.navigate(['/admin/categories']);
+            this._toastService.open('Category updated successfully.', 'Close');
           }
-          this._loading = false;
+          this.loading = false;
         },
         error: () => {
-          this._loading = false;
+          this.loading = false;
           this._toastService.open('category could not be updated.', 'Close');
         }
       });

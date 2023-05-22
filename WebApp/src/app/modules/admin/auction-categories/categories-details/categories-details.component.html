@@ -1,55 +1,40 @@
 <div class="w-main-content mx-auto mt-7" *ngIf="category">
-<form [formGroup]="categoryForm" (ngSubmit)="updateCategory()" class="w-main-content mx-auto mt-7">
+  <form [formGroup]="categoryForm" (ngSubmit)="updateCategory()" class="w-main-content mx-auto mt-7">
     <a routerLink="/admin/categories" mat-flat-button class="mb-3">
-        <mat-icon>arrow_back</mat-icon>
-        Back to list
-      </a>
+      <mat-icon>arrow_back</mat-icon>
+      Back to list
+    </a>
     <mat-card>
       <mat-card-header class="mb-3">
         <mat-card-title class="text-xl">
-          <a [routerLink]="['admin/categories/details', category.key]">
-            {{ category.name }}
-          </a>
+          Update category
         </mat-card-title>
-   
+      </mat-card-header>
+
+      <mat-card-content class="flex flex-col gap-5 p-5">
         <!--New Name -->
         <mat-form-field class="mb-3 ml-3">
-            <mat-label>New Name</mat-label>
-            <input type="text" matInput [formControl]="categoryForm.controls.name">
-            <mat-error *ngFor="let value of categoryForm.controls.name.errors | keyvalue">
-              <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
-            </mat-error>
-          </mat-form-field>
-        </mat-card-header>
+          <mat-label>New Name</mat-label>
+          <input type="text" matInput [formControl]="categoryForm.controls.name">
+          <mat-error *ngFor="let value of categoryForm.controls.name.errors | keyvalue">
+            <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
 
-
-      <mat-card-content>
-        <p class="text-sm text-gray-500">
-          <ng-container *ngIf="category.description?.length; else noDescriptionTemplate">
-            {{ category.description }}
-          </ng-container>
-          <ng-template #noDescriptionTemplate>
-            <em>No description</em>
-          </ng-template>
-        
-         <!-- Description -->
-         <mat-form-field class="mb-3 ml-3">
-            <mat-label>New Description</mat-label>
-            <textarea type="text" matInput [formControl]="categoryForm.controls.description"></textarea>
-          </mat-form-field>
-    </p>
+        <!-- Description -->
+        <mat-form-field class="mb-3 ml-3">
+          <mat-label>New Description</mat-label>
+          <textarea type="text" matInput [formControl]="categoryForm.controls.description"></textarea>
+        </mat-form-field>
       </mat-card-content>
-
-
-        <mat-card-actions align="end">
-            <button type="submit" mat-flat-button color="primary" [disabled]="categoryForm.disabled">
-          <ng-container *ngIf="_loading === true">Saving</ng-container>
-          <ng-container *ngIf="_loading === false">    <mat-icon>edit</mat-icon> 
-            Update</ng-container>
+      
+      <mat-card-actions align="end" class="flex gap-5 p-5">
+        <button type="submit" mat-flat-button color="primary" [disabled]="categoryForm.disabled">
+          <mat-icon>edit</mat-icon>
+          <ng-container *ngIf="loading === true">Updating</ng-container>
+          <ng-container *ngIf="loading === false">Update</ng-container>
         </button>
-      </mat-card-actions>
 
-      <mat-card-actions align="end">
         <!-- Delete -->
         <button type="button" mat-flat-button color="warn" (click)="deleteCategory()" [disabled]="deleting">
           <mat-icon>delete</mat-icon>
@@ -58,6 +43,6 @@
         </button>
       </mat-card-actions>
     </mat-card>
-  
-</form>
+
+  </form>
 </div>
