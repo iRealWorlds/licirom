@@ -44,14 +44,14 @@ export class PendingAuctionsComponent implements OnInit {
    * @param auctionKey
    * @constructor
    */
-  ActivateAuction(auctionKey: string): void {
-    console.log(auctionKey);
-
+  activateAuction(auctionKey: string): void {
     this.pendingAuctionService.Activate(auctionKey).subscribe(
       () => {
-        const auction = this.auctionList?.find(a => a.key === auctionKey);
-        if (auction) {
-          // Do nothing
+        if (this.auctionList) {
+          const index = this.auctionList?.findIndex(a => a.key === auctionKey);
+          if (index !== -1) {
+            this.auctionList.splice(index, 1);
+          }
         }
       },
       error => {
@@ -62,7 +62,6 @@ export class PendingAuctionsComponent implements OnInit {
 
   /** @inheritDoc */
   ngOnInit(): void {
-
     this.getAuctions();
   }
 

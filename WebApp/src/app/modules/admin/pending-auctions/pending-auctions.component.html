@@ -1,20 +1,20 @@
-<h1 class="text-xl">Pending auctions</h1>
-<div *ngFor="let auction of auctionList">
-    <p>{{ auction.title }}</p>
-    <button (click)="ActivateAuction(auction.key)">Activate auction</button>
+<div class="w-main-content mx-auto mt-7">
+  <div class="mb-5 flex flex-col lg:flex-row lg:justify-between lg:items-center">
+    <h2 class="text-xl">
+      Pending auctions
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+    <mat-card *ngFor="let auction of auctionList">
+      <mat-card-content class="text-center text-xl">
+        <p>{{ auction.title }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button (click)="activateAuction(auction.key)" mat-flat-button color="primary" class="w-full">
+          Activate auction
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </div>
-
-<!-- <form [formGroup]="messageForm" (ngSubmit)="createMessage() " *ngIf="ownsCurrentTicket && ticket.resolved===false"
-    class="m-5">
-
-    <mat-form-field>
-        <mat-label>Description</mat-label>
-        <textarea type="text" matInput [formControl]="messageForm.controls.messageContent"></textarea>
-
-    </mat-form-field>
-    <button type="submit" mat-flat-button color="primary" [disabled]="messageForm.disabled">
-        <ng-container *ngIf="loading === true">Creating</ng-container>
-        <ng-container *ngIf="loading === false">Create</ng-container>
-    </button>
-
-</form> -->
