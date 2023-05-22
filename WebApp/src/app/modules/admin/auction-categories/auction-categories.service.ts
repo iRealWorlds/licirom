@@ -10,7 +10,7 @@ import { AuctionCategoryCreateRequest } from '@licirom/modules/admin/auction-cat
 @Injectable({
   providedIn: 'root'
 })
-export class AdminCategoriesService extends ApiService{
+export class AuctionCategoriesService extends ApiService{
 
   /**
    * AuctionCategory Service constructor method.

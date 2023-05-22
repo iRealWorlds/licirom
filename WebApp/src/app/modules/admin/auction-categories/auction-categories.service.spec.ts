@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AdminCategoriesService } from '@licirom/modules/admin/auction-categories/auction-categories.service';
+import { AuctionCategoriesService } from '@licirom/modules/admin/auction-categories/auction-categories.service';
 
-describe('AdminCategoriesService', () => {
-  let service: AdminCategoriesService;
+describe('AuctionCategoriesService', () => {
+  let service: AuctionCategoriesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AdminCategoriesService);
+    service = TestBed.inject(AuctionCategoriesService);
   });
 
   it('should be created', () => {

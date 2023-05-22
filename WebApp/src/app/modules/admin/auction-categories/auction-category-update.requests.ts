@@ -4,7 +4,7 @@ export class AuctionCategoryUpdateRequest {
     parentKey?: string|null;
   
     /**
-     * AuctionCategoryCreateRequest constructor mehtod.
+     * AuctionCategoryUpdateRequest constructor mehtod.
      *
      * @param initial
      */
