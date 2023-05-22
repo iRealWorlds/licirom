@@ -30,13 +30,24 @@ public class TicketsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> IndexAsync()
     {
-        var ticketList = await this._dbContext.SupportTickets.ToListAsync();
+        var user = await this._userManager.GetUserAsync(HttpContext.User);
 
-        var ticketModels = ticketList.Select(ticket => new SupportTicketModel(ticket));
+        // Handle null user 
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        var ticketList = await this._dbContext.SupportTickets
+            .Where(t => user.Id == t.UserId)
+            .Select(ticket => new SupportTicketModel(ticket))
+            .ToListAsync();
 
         // Return the result
-        return new JsonResult(ticketModels);
+        return new JsonResult(ticketList);
     }
+
+
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] TicketCreateModel data)
@@ -106,22 +117,57 @@ public class TicketsController : ControllerBase
         return new JsonResult(messages);
     }
 
-    // [HttpPost("{key}/addMessage")]
-    // public async Task<IActionResult> CreateAsync([FromBody] MessageCreateModel data)
-    // {
-    //     var user = await this._userManager.GetUserAsync(HttpContext.User);
+    [HttpPost("{key}/addMessage")]
+    public async Task<IActionResult> CreateAsync(string key, [FromBody] MessageCreateModel data)
+    {
+        var user = await this._userManager.GetUserAsync(HttpContext.User);
 
-    //     // Handle null user 
-    //     if (user == null)
-    //     {
-    //         return Unauthorized();
-    //     }
+        // Handle null user 
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+        int intKey = int.Parse(key);
+        var message = new SupportMessage
+        {
+            MessageContent = data.MessageContent,
+            TicketId = intKey,
+            UserId = user.Id
+        };
 
-    //     var message = new SupportMessage
-    //     {
-    //         UserId = user.Id
-    //     };
+        await this._dbContext.SupportMessages.AddAsync(message);
+        await this._dbContext.SaveChangesAsync();
+        return new JsonResult(message);
 
-    // }
+    }
+
+    [HttpPut("{key}/resolve")]
+    public async Task<IActionResult> ResolveTicket(string key)
+    {
+        int intKey = int.Parse(key);
+        var ticket = await _dbContext.SupportTickets.FindAsync(intKey);
+        if (ticket == null)
+        {
+            return NotFound();
+        }
+
+        ticket.Resolved = true; // Set the Resolved property to true
+        _dbContext.SupportTickets.Entry(ticket).State = EntityState.Modified;
+        await _dbContext.SaveChangesAsync();
+        return Ok();
+    }
+
+    [HttpGet("{key}/isResolved")]
+    public async Task<IActionResult> isResolved(string key)
+    {
+        int intKey = int.Parse(key);
+        var ticket = await _dbContext.SupportTickets.FindAsync(intKey);
+        if (ticket == null)
+        {
+            return NotFound();
+        }
+        bool isTicketResolved = ticket.Resolved;
+        return Ok(isTicketResolved);
+    }
 
 }
