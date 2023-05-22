@@ -1,0 +1,13 @@
+<ng-container *ngIf="identity$ | async as identity;">
+    <h1 class="text-xl text-green-500">
+      You are signed in
+    </h1>
+    <h2>
+        {{identity.firstName}}
+    </h2>
+    <div class="flex items-center gap-5 mt-5">
+      <a routerLink="/auth/sign-out" mat-flat-button color="warn">
+        Sign out
+      </a>
+    </div>
+  </ng-container>

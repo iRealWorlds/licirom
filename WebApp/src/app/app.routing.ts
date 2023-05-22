@@ -20,6 +20,7 @@ export const appRouting: Route[] = [
     children: [
       { path: 'support', loadChildren: () => import('src/app/modules/support/support.module').then(m => m.SupportModule) },
       { path: 'auctions', loadChildren: () => import('src/app/modules/auctions/auctions.module').then(m => m.AuctionsModule) },
+      { path: 'profile', loadChildren: () => import('src/app/modules/profile/profile.module').then(m => m.ProfileModule)},
     ],
   },
 
