@@ -1,0 +1,20 @@
+<h1 class="text-xl">Pending auctions</h1>
+<div *ngFor="let auction of auctionList">
+    <p>{{ auction.title }}</p>
+    <button (click)="ActivateAuction(auction.key)">Activate auction</button>
+</div>
+
+<!-- <form [formGroup]="messageForm" (ngSubmit)="createMessage() " *ngIf="ownsCurrentTicket && ticket.resolved===false"
+    class="m-5">
+
+    <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea type="text" matInput [formControl]="messageForm.controls.messageContent"></textarea>
+
+    </mat-form-field>
+    <button type="submit" mat-flat-button color="primary" [disabled]="messageForm.disabled">
+        <ng-container *ngIf="loading === true">Creating</ng-container>
+        <ng-container *ngIf="loading === false">Create</ng-container>
+    </button>
+
+</form> -->

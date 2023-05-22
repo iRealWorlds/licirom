@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace API.Controllers;
 
 [Authorize]
@@ -26,7 +27,7 @@ public class AuctionsController : ControllerBase
 
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int) HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> IndexAsync([FromQuery] PaginatedRequestModel query)
     {
         var auctions = await _dbContext.Auctions.ToListAsync();
@@ -34,9 +35,19 @@ public class AuctionsController : ControllerBase
         return new JsonResult(result);
     }
 
+    [HttpGet("pending")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> PendingIndexAsync([FromQuery] PaginatedRequestModel query)
+    {
+        var auctions = await _dbContext.Auctions.Where(auction => auction.CurrentStatus == Auction.Status.PENDING).ToListAsync();
+        var result = new PaginatedResult<Auction>(auctions, query).Map(c => new AuctionModel(c));
+        return new JsonResult(result);
+    }
+
     [HttpPost]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(AuctionModel), (int) HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(AuctionModel), (int)HttpStatusCode.Created)]
     public async Task<IActionResult> CreateAsync(AuctionCreateModel request)
     {
         // Make sure category exists
@@ -46,14 +57,14 @@ public class AuctionsController : ControllerBase
             ModelState.AddModelError(nameof(request.CategoryKey), "Category does not exist.");
             return BadRequest(ModelState);
         }
-        
+
         // Get current user's details
         var currentUser = await _userManager.GetUserAsync(HttpContext.User);
         if (currentUser == null)
         {
             return Unauthorized();
         }
-        
+
         // Create auction
         var auction = new Auction()
         {
@@ -62,11 +73,11 @@ public class AuctionsController : ControllerBase
             CategoryKey = request.CategoryKey,
             CreatorKey = currentUser.Id,
         };
-        
+
         // Persist the auction
         await _dbContext.Auctions.AddAsync(auction);
         await _dbContext.SaveChangesAsync();
-        
+
         // Return a 201 Created response
         return CreatedAtAction(nameof(ShowAsync), new { auctionKey = auction.Key }, new AuctionModel(auction));
     }
@@ -74,7 +85,7 @@ public class AuctionsController : ControllerBase
     [HttpGet("{auctionKey}")]
     [ActionName(nameof(ShowAsync))]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(AuctionModel), (int) HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(AuctionModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> ShowAsync(Guid auctionKey)
     {
@@ -90,27 +101,27 @@ public class AuctionsController : ControllerBase
 
     [HttpPut("{auctionKey}")]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(AuctionModel), (int) HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(AuctionModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> UpdateAsync(Guid auctionKey, AuctionUpdateModel request)
     {
         // Find auction
         var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == auctionKey);
-        
+
         // Make sure that the auction exists
         if (auction == null)
         {
             return NotFound();
         }
-        
+
         // Update the auction's details
         auction.Title = request.Title;
         auction.Description = request.Description;
-        
+
         // Save changes
         _dbContext.Auctions.Entry(auction).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
-        
+
         // Return the updated result
         return Ok(new AuctionModel(auction));
     }
@@ -130,12 +141,34 @@ public class AuctionsController : ControllerBase
         {
             return NotFound();
         }
-        
+
         // Delete the auction
         _dbContext.Entry(auction).State = EntityState.Deleted;
         await _dbContext.SaveChangesAsync();
-        
+
         // Return a 204 No Content response
         return NoContent();
     }
+
+    [HttpPut("{auctionKey}/activate")]
+    public async Task<IActionResult> Activate(string auctionKey)
+    {
+        var guidAuctionKey = Guid.Parse(auctionKey);
+        // Get auction details
+        var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == guidAuctionKey);
+
+        // Make sure the auction exists
+        if (auction == null)
+        {
+            return NotFound();
+        }
+
+        // Activate the auction
+        auction.CurrentStatus = Auction.Status.ACTIVE;
+        _dbContext.Entry(auction).State = EntityState.Modified;
+        await _dbContext.SaveChangesAsync();
+
+        return Ok();
+    }
+
 }
