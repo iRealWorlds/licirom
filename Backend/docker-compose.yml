@@ -8,6 +8,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=Licirom;User Id=sa;Password="${SQL_SERVER_PASSWORD}";TrustServerCertificate=true;
+      - Pusher:Cluster=${PUSHER_CLUSTER}
+      - Pusher:AppId=${PUSHER_APP_ID}
+      - Pusher:AppKey=${PUSHER_APP_KEY}
+      - Pusher:AppSecret=${PUSHER_APP_SECRET}
     ports:
       - "8001:80"
       - "8000:443"

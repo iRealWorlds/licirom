@@ -4,6 +4,8 @@ import { Auction } from '@licirom/modules/auctions/auction.model';
 import { BidService } from '@licirom/modules/auctions/auction-details/auction-bids/bid.service';
 import { Subject, takeUntil } from 'rxjs';
 import { IndexOptions } from '@licirom/core/api/index-options.model';
+import Pusher, { Channel } from 'pusher-js';
+import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
 
 @Component({
   selector: 'app-auction-bids-list',
@@ -15,14 +17,24 @@ export class AuctionBidsListComponent implements OnChanges, OnDestroy {
 
   bids?: Bid[];
 
+  bidUpdateChannel?: Channel;
+
   private readonly _unsubscribeAll = new Subject<void>();
+  private readonly _pusher: Pusher;
 
   /**
    * AuctionBidsListComponent constructor method.
    *
    * @param _bidService
+   * @param environment
    */
-  constructor(private readonly _bidService: BidService) {
+  constructor(
+    private readonly _bidService: BidService,
+    environment: EnvironmentConfig
+  ) {
+    this._pusher = new Pusher(environment.pusher.appKey, {
+      cluster: environment.pusher.cluster,
+    });
   }
 
   /** @inheritDoc */
@@ -31,6 +43,12 @@ export class AuctionBidsListComponent implements OnChanges, OnDestroy {
       if (this.auction) {
         this.bids = undefined;
         this._fetchBids();
+
+        this.bidUpdateChannel?.unsubscribe();
+        this.bidUpdateChannel = this._pusher.subscribe(`auctions.${this.auction.key}`);
+        this.bidUpdateChannel.bind('bids.created', () => {
+          this._fetchBids();
+        });
       }
     }
   }
@@ -39,6 +57,7 @@ export class AuctionBidsListComponent implements OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+    this.bidUpdateChannel?.unsubscribe();
   }
 
   /**

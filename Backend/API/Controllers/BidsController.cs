@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PusherServer;
 
 namespace API.Controllers;
 
@@ -19,12 +20,14 @@ public class BidsController : ControllerBase
     private readonly ApplicationDbContext _dbContext;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly AuctionService _auctionService;
+    private readonly IConfiguration _configuration;
 
-    public BidsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, AuctionService auctionService)
+    public BidsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, AuctionService auctionService, IConfiguration configuration)
     {
         _dbContext = dbContext;
         _userManager = userManager;
         _auctionService = auctionService;
+        _configuration = configuration;
     }
 
     [HttpGet]
@@ -121,6 +124,24 @@ public class BidsController : ControllerBase
         // Persist the bid
         await _dbContext.Bids.AddAsync(bid);
         await _dbContext.SaveChangesAsync();
+        
+        // Send a notification through Pusher
+        var options = new PusherOptions
+        {
+            Cluster = this._configuration.GetValue<string>("Pusher:Cluster"),
+            Encrypted = true
+        };
+
+        var pusher = new Pusher(
+            this._configuration.GetValue<string>("Pusher:AppId"),
+            this._configuration.GetValue<string>("Pusher:AppKey"),
+            this._configuration.GetValue<string>("Pusher:AppSecret"),
+            options);
+
+        var result = await pusher.TriggerAsync(
+            $"auctions.{auction.Key}",
+            "bids.created",
+            new { auctionKey = auction.Key, bidKey = bid.Key } );
         
         // Return a 201 Created response
         return new JsonResult(new BidModel(bid))
