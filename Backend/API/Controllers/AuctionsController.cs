@@ -3,6 +3,7 @@ using API.Database;
 using API.Database.Entities;
 using API.ViewModels;
 using API.ViewModels.Requests;
+using API.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,13 @@ public class AuctionsController : ControllerBase
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IAuthorizationService _authorizationService;
 
-    public AuctionsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+    public AuctionsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
     {
         _dbContext = dbContext;
         _userManager = userManager;
+        _authorizationService = authorizationService;
     }
 
     [HttpGet]
@@ -99,7 +102,7 @@ public class AuctionsController : ControllerBase
         }
 
         var model = new AuctionModel(auction);
-       
+
         foreach (var property in options.Expand)
         {
             model.Expand(property);
@@ -116,11 +119,16 @@ public class AuctionsController : ControllerBase
     {
         // Find auction
         var auction = await _dbContext.Auctions.Include(a => a.Creator).FirstOrDefaultAsync(c => c.Key == auctionKey);
-        
+
         // Make sure that the auction exists
         if (auction is null)
         {
             return NotFound();
+        }
+
+        if(!(await _authorizationService.AuthorizeAsync(User, auction, AuthorizationPolicies.UserOwnsResource)).Succeeded)
+        {
+            return Unauthorized();
         }
 
         if(request.Title is not null)
@@ -202,6 +210,11 @@ public class AuctionsController : ControllerBase
         if (auction == null)
         {
             return NotFound();
+        }
+
+        if(!(await _authorizationService.AuthorizeAsync(User, auction, AuthorizationPolicies.UserOwnsResource)).Succeeded)
+        {
+            return Unauthorized();
         }
         
         // Delete the auction

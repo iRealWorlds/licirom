@@ -1,6 +1,7 @@
 using API.Database.Entities;
 using API.ViewModels;
 using API.ViewModels.Requests;
+using API.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IAuthorizationService _authorizationService;
     
-    public UsersController(UserManager<ApplicationUser> userManager)
+    public UsersController(UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
     {
         this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+        this._authorizationService = authorizationService;
     }
 
     [HttpPost]
@@ -62,7 +65,6 @@ public class UsersController : ControllerBase
     [ActionName(nameof(ShowAsync))]
     [Produces("application/json")]
     [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
-    [Authorize]
     public async Task<IActionResult> ShowAsync(Guid key)
     {
         // Find the user
@@ -72,6 +74,11 @@ public class UsersController : ControllerBase
         if (user == null)
         {
             return new NotFoundResult();
+        }
+
+        if(!(await _authorizationService.AuthorizeAsync(User, user, AuthorizationPolicies.UserOwnsResource)).Succeeded)
+        {
+            return Unauthorized();
         }
 
         // Otherwise, return the user's details

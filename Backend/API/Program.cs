@@ -1,6 +1,7 @@
 using System.Text;
 using API.Database;
 using API.Database.Entities;
+using API.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -41,33 +42,38 @@ builder.Services.AddAuthentication(options => {
     // Prevent default behaviour which renames claims such as "sub" to "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
     options.MapInboundClaims = false;
 
-    options.Events = new JwtBearerEvents()
+    options.Events = new JwtBearerEvents
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public JwtBearerEvents(UserManager<ApplicationUser> userManager)
-        {
-            this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        },
-
         // Additional jwt validation: check if "sub" claim refers to an actual user
-        OnTokenValidated = context =>
+        OnTokenValidated = async (context) =>
         {
-            var userKey = context.Principal.Claims.Where(c => c.Type == "sub").First();
+            var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+            var subClaim = context.Principal.Claims.Where(c => c.Type == "sub").FirstOrDefault();
 
-            if(!userKey)
+            if(subClaim == null)
             {
                 context.Fail("sub claim missing");
             }
 
-            if(!await _usersManager.FindByIdAsync(userKey))
+            var subId = Guid.Parse(subClaim.Value);
+            if(await userManager.FindByIdAsync(subId.ToString()) == null)
             {
                 context.Fail("User doesn't exist");
             }
-
-            return Task.CompletedTask;
-        },
+        }
     };
+});
+
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy(AuthorizationPolicies.UserOwnsResource, policy => {
+        policy.Requirements.Add(new UserOwnsResourceRequirement());
+    });
+    options.AddPolicy(AuthorizationPolicies.UserIsAdmin, policy => {
+        policy.Requirements.Add(new UserIsAdminRequirement());
+    });
+    options.AddPolicy(AuthorizationPolicies.UserOwnsResourceOrIsAdmin, policy => {
+        policy.Requirements.Add(new UserOwnsResourceOrIsAdminRequirement());
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();

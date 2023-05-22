@@ -1,6 +1,6 @@
 namespace API.Database.Entities;
 
-public class Auction
+public class Auction : IUserOwnable
 {
     public Guid Key { get; set; } = Guid.NewGuid();
     public string Title { get; set; }
@@ -19,4 +19,9 @@ public class Auction
     public virtual AuctionCategory? Category { get; set; }
     public virtual ICollection<AuctionComment> Comments { get; set; }
     public virtual ICollection<Bid> Bids { get; set; }
+
+    public Guid GetOwnerId()
+    {
+        return CreatorKey;
+    }
 }
