@@ -49,7 +49,13 @@ export class ApiService {
     if ('filters' in options) {
       if (options.filters) {
         for (const [key, value] of Object.entries(options.filters)) {
-          params = params.append(key, value);
+          if (Array.isArray(value)) {
+            for (const valueElement of value) {
+              params = params.append(key, valueElement);
+            }
+          } else {
+            params = params.append(key, value);
+          }
         }
       }
     }

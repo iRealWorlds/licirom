@@ -29,7 +29,7 @@ public class AuctionsController : ControllerBase
 
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int) HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> IndexAsync([FromQuery] AuctionIndexModel query)
     {
         // Get current user's details
@@ -72,6 +72,7 @@ public class AuctionsController : ControllerBase
         var auctionList = await auctions.ToListAsync();
             
         var result = new PaginatedResult<Auction>(auctions, query).Map(delegate(Auction c)
+
         {
             var model = new AuctionModel(c);
             foreach (var property in query.Expand)
@@ -98,7 +99,7 @@ public class AuctionsController : ControllerBase
 
     [HttpPost]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(AuctionModel), (int) HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(AuctionModel), (int)HttpStatusCode.Created)]
     public async Task<IActionResult> CreateAsync(AuctionCreateModel request)
     {
         // Make sure category exists
@@ -108,14 +109,14 @@ public class AuctionsController : ControllerBase
             ModelState.AddModelError(nameof(request.CategoryKey), "Category does not exist.");
             return BadRequest(ModelState);
         }
-        
+
         // Get current user's details
         var currentUser = await _userManager.GetUserAsync(HttpContext.User);
         if (currentUser == null)
         {
             return Unauthorized();
         }
-        
+
         // Create auction
         var auction = new Auction()
         {
@@ -129,11 +130,11 @@ public class AuctionsController : ControllerBase
             StartTime = request.StartTime,
             EndTime = request.EndTime,
         };
-        
+
         // Persist the auction
         await _dbContext.Auctions.AddAsync(auction);
         await _dbContext.SaveChangesAsync();
-        
+
         // Return a 201 Created response
         return CreatedAtAction(nameof(ShowAsync), new { auctionKey = auction.Key }, new AuctionModel(auction));
     }
@@ -141,7 +142,7 @@ public class AuctionsController : ControllerBase
     [HttpGet("{auctionKey}")]
     [ActionName(nameof(ShowAsync))]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(AuctionModel), (int) HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(AuctionModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> ShowAsync(Guid auctionKey, [FromQuery] AuctionShowModel options)
     {
@@ -164,7 +165,7 @@ public class AuctionsController : ControllerBase
 
     [HttpPatch("{auctionKey}")]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(AuctionModel), (int) HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(AuctionModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> UpdateAsync(Guid auctionKey, AuctionUpdateModel request)
     {
@@ -177,72 +178,76 @@ public class AuctionsController : ControllerBase
             return NotFound();
         }
 
+<<<<<<< HEAD
         if(!(await _authorizationService.AuthorizeAsync(User, auction, AuthorizationPolicies.UserOwnsResource)).Succeeded)
         {
             return Unauthorized();
         }
 
         if(request.Title is not null)
+=======
+        if (request.Title is not null)
+>>>>>>> origin/dev/auctions
         {
             auction.Title = request.Title;
         }
 
-        if(request.Description is not null)
+        if (request.Description is not null)
         {
             auction.Description = request.Description;
         }
 
-        if(request.ReservePrice is not null)
+        if (request.ReservePrice is not null)
         {
-            auction.ReservePrice = (decimal) request.ReservePrice;
+            auction.ReservePrice = (decimal)request.ReservePrice;
         }
 
-        if(request.MinimumIncrement is not null)
+        if (request.MinimumIncrement is not null)
         {
-            auction.MinimumIncrement = (decimal) request.MinimumIncrement;
+            auction.MinimumIncrement = (decimal)request.MinimumIncrement;
         }
 
-        if(request.StartPrice is not null)
+        if (request.StartPrice is not null)
         {
-            if(auction.StartTime < DateTime.UtcNow)
+            if (auction.StartTime < DateTime.UtcNow)
             {
                 ModelState.AddModelError(nameof(request.StartPrice), "Start price may only be changed before the auction has started.");
                 return BadRequest(ModelState);
             }
 
-            auction.StartPrice = (decimal) request.StartPrice;
+            auction.StartPrice = (decimal)request.StartPrice;
         }
 
         if (request.StartTime is not null)
         {
-            if(auction.StartTime < DateTime.UtcNow)
+            if (auction.StartTime < DateTime.UtcNow)
             {
                 ModelState.AddModelError(nameof(request.StartTime), "Start time may only be changed before the auction has started.");
                 return BadRequest(ModelState);
             }
-            if(request.StartTime < DateTime.UtcNow)
+            if (request.StartTime < DateTime.UtcNow)
             {
                 ModelState.AddModelError(nameof(request.StartTime), "Start time must be set in the future.");
                 return BadRequest(ModelState);
             }
 
-            auction.StartTime = (DateTime) request.StartTime;
+            auction.StartTime = (DateTime)request.StartTime;
         }
 
-        if(request.EndTime is not null)
+        if (request.EndTime is not null)
         {
-            if(request.EndTime < auction.StartTime)
+            if (request.EndTime < auction.StartTime)
             {
                 ModelState.AddModelError(nameof(request.EndTime), "End time must be after the start time.");
                 return BadRequest(ModelState);
             }
-            auction.EndTime = (DateTime) request.EndTime;
+            auction.EndTime = (DateTime)request.EndTime;
         }
-        
+
         // Save changes
         _dbContext.Auctions.Entry(auction).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
-        
+
         // Return the updated result
         return Ok(new AuctionModel(auction));
     }
@@ -263,15 +268,18 @@ public class AuctionsController : ControllerBase
             return NotFound();
         }
 
+<<<<<<< HEAD
         if(!(await _authorizationService.AuthorizeAsync(User, auction, AuthorizationPolicies.UserOwnsResource)).Succeeded)
         {
             return Unauthorized();
         }
         
+=======
+>>>>>>> origin/dev/auctions
         // Delete the auction
         _dbContext.Entry(auction).State = EntityState.Deleted;
         await _dbContext.SaveChangesAsync();
-        
+
         // Return a 204 No Content response
         return NoContent();
     }
@@ -292,6 +300,27 @@ public class AuctionsController : ControllerBase
 
         // Activate the auction
         auction.CurrentStatus = Auction.Status.ACTIVE;
+        _dbContext.Entry(auction).State = EntityState.Modified;
+        await _dbContext.SaveChangesAsync();
+
+        return Ok();
+    }
+
+    [HttpPut("{auctionKey}/close")]
+    public async Task<IActionResult> Close(string auctionKey)
+    {
+        var guidAuctionKey = Guid.Parse(auctionKey);
+        // Get auction details
+        var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == guidAuctionKey);
+
+        // Make sure the auction exists
+        if (auction == null)
+        {
+            return NotFound();
+        }
+
+        // Activate the auction
+        auction.CurrentStatus = Auction.Status.CLOSED;
         _dbContext.Entry(auction).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
 
