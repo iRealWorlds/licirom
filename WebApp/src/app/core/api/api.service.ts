@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
+import { ApiOperationOptions } from '@licirom/core/api/api-operation-options.model';
+import { Params } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class ApiService {
@@ -32,4 +35,21 @@ export class ApiService {
     return segments.join('/');
   }
 
+  /**
+   * Build the parameters that reflect the given {@link options}.
+   *
+   * @param options
+   * @protected
+   */
+  protected buildParameters(options: ApiOperationOptions): Params {
+    const params = new HttpParams();
+
+    // Add expansions
+    for (const property of options.expand) {
+      params.append('expand', property);
+    }
+
+    // Return the result
+    return params;
+  }
 }
