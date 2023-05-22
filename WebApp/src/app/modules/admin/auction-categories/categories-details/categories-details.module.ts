@@ -7,6 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { categoryDetailsRouting } from '@licirom/modules/admin/auction-categories/categories-details/category-details.routing';
 import { CategoriesDetailsComponent } from '@licirom/modules/admin/auction-categories/categories-details/categories-details.component';
+import { FieldValidationErrorsComponent } from '@licirom/modules/shared/field-validation-errors/field-validation-errors.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 
 
@@ -17,10 +20,14 @@ import { CategoriesDetailsComponent } from '@licirom/modules/admin/auction-categ
   imports: [
     CommonModule,
     RouterModule.forChild(categoryDetailsRouting),
+    MatSnackBarModule,
+    ReactiveFormsModule,
+    MatInputModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule,
     MatSnackBarModule,
+    FieldValidationErrorsComponent,
+    MatIconModule
   ]
 })
 export class CategoriesDetailsModule { }

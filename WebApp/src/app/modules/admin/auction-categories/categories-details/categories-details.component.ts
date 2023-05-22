@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { AuctionCategoryModel } from '@licirom/modules/admin/auction-categories/auction-category.model';
 import { AuctionCategoriesService } from '@licirom/modules/admin/auction-categories/auction-categories.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuctionCategoryUpdateRequest } from '@licirom/modules/auctions/auction-category-update.request';
 
 @Component({
   selector: 'app-categories-details',
@@ -14,6 +16,12 @@ export class CategoriesDetailsComponent implements OnInit, OnDestroy {
   category?: AuctionCategoryModel;
   ownsCurrentAuction = false;
 
+  categoryForm = new FormGroup({
+    name: new FormControl('', { validators: [Validators.required], nonNullable: true  }),
+    description: new FormControl('', { nonNullable: true })
+  });
+
+   _loading = false;
   deleting = false;
 
   private readonly _unsubscribeAll = new Subject<void>();
@@ -51,6 +59,50 @@ export class CategoriesDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+  }
+
+
+   /**
+   * Update the auction category.
+   */
+   updateCategory(): void {
+    // Make sure an category exists
+    if (!this.category) {
+      throw new Error('No category provided.');
+    }
+
+    // If already loading, throw an error
+    if (this._loading) {
+      throw new Error('Already creating a category.');
+    }
+
+    // Mark the form as touched to display validation errors
+    this.categoryForm.markAllAsTouched();
+
+
+    if (this.categoryForm.valid) {
+      // Build the request data
+      const data = new AuctionCategoryUpdateRequest({
+        name: this.categoryForm.controls.name.value,
+        description: this.categoryForm.controls.description.value,
+      });
+
+      // Send the request
+      this._loading = true;
+      this._categoryService.updateByKey(this.category.key, data).subscribe({
+        next: async category => {
+          if(this.category){
+          await this._router.navigate(['/admin/categories']);
+          this._toastService.open('Category updated successfully.', 'Close');
+          }
+          this._loading = false;
+        },
+        error: () => {
+          this._loading = false;
+          this._toastService.open('category could not be updated.', 'Close');
+        }
+      });
+    }
   }
 
   /**

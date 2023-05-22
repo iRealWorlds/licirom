@@ -7,7 +7,7 @@ export const categoryDetailsRouting: Route[] = [
     path: ':categoryKey',
     component: CategoriesDetailsComponent,
     resolve: {
-      auction: CategoriesDetailsResolver
+      category: CategoriesDetailsResolver
     }
   }
 ];

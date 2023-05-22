@@ -1,5 +1,5 @@
 <form [formGroup]="categoryForm" (ngSubmit)="createCategory()" class="w-main-content mx-auto mt-7">
-    <a routerLink="/category" mat-flat-button class="mb-3">
+    <a routerLink="/admin/categories" mat-flat-button class="mb-3">
       <mat-icon>arrow_back</mat-icon>
       Back to list
     </a>
@@ -10,7 +10,7 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content class="flex flex-col gap-5 items-stretch">
-        <!-- Title -->
+        <!-- Name -->
         <mat-form-field>
           <mat-label>Name</mat-label>
           <input type="text" matInput [formControl]="categoryForm.controls.name">
