@@ -7,7 +7,7 @@ import {
 import { PaginatedResult } from '@licirom/core/pagination/paginated-result.model';
 import { Observable, of } from 'rxjs';
 import { AuctionCategoryModel } from '@licirom/modules/admin/auction-categories/auction-category.model';
-import { AdminCategoriesService } from '@licirom/modules/admin/auction-categories/auction-categories.service';
+import { AuctionCategoriesService } from '@licirom/modules/admin/auction-categories/auction-categories.service';
 
 
 @Injectable({
@@ -19,7 +19,7 @@ export class CategoryListResolver implements Resolve<PaginatedResult<AuctionCate
    * @param _auctionService 
    */
   constructor(
-    private readonly _auctionService: AdminCategoriesService
+    private readonly _auctionService: AuctionCategoriesService
   ){
     
   }
