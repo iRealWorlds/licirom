@@ -29,7 +29,7 @@ public class AuctionsController : ControllerBase
     [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int) HttpStatusCode.OK)]
     public async Task<IActionResult> IndexAsync([FromQuery] AuctionIndexModel query)
     {
-        var auctions = await _dbContext.Auctions.Include(a => a.Creator).ToListAsync();
+        var auctions = await _dbContext.Auctions.Include(a => a.Creator).OrderBy(a => a.StartTime).ToListAsync();
         var result = new PaginatedResult<Auction>(auctions, query).Map(delegate(Auction c)
         {
             var model = new AuctionModel(c);
