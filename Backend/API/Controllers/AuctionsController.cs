@@ -35,11 +35,14 @@ public class AuctionsController : ControllerBase
         {
             return Unauthorized();
         }
-        
+
         var auctions = await _dbContext.Auctions
-            .Where(a => a.CreatorKey == currentUser.Id || a.CurrentStatus == Auction.Status.ACTIVE || a.CurrentStatus == Auction.Status.ENDED ||
+                .Include(a => a.Creator)
+            .Where(a => a.CreatorKey == currentUser.Id || a.CurrentStatus == Auction.Status.ACTIVE ||
+                        a.CurrentStatus == Auction.Status.ENDED ||
                         a.CurrentStatus == Auction.Status.CLOSED)
             .ToListAsync();
+            
         var result = new PaginatedResult<Auction>(auctions, query).Map(delegate(Auction c)
         {
             var model = new AuctionModel(c);
@@ -55,9 +58,12 @@ public class AuctionsController : ControllerBase
     [HttpGet("pending")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> PendingIndexAsync([FromQuery] PaginatedRequestModel query)
+    public async Task<IActionResult> PendingIndexAsync([FromQuery] AuctionIndexModel query)
     {
-        var auctions = await _dbContext.Auctions.Where(auction => auction.CurrentStatus == Auction.Status.PENDING).ToListAsync();
+        var auctions = await _dbContext.Auctions
+            .Include(a => a.Creator)
+            .Where(auction => auction.CurrentStatus == Auction.Status.PENDING)
+            .ToListAsync();
         var result = new PaginatedResult<Auction>(auctions, query).Map(c => new AuctionModel(c));
         return new JsonResult(result);
     }
