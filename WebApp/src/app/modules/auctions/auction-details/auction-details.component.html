@@ -1,0 +1,47 @@
+<div class="w-main-content mx-auto mt-7" *ngIf="auction">
+  <a routerLink="/auctions" mat-flat-button class="mb-3">
+    <mat-icon>arrow_back</mat-icon>
+    Back to list
+  </a>
+  <mat-card>
+    <mat-card-header class="mb-3">
+      <mat-card-title class="text-xl">
+        <a [routerLink]="['/auctions/details', auction.key]">
+          {{ auction.title }}
+        </a>
+      </mat-card-title>
+      <mat-card-subtitle class="text-sm">
+        By {{ auction.creatorKey }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="text-sm text-gray-500">
+        <ng-container *ngIf="auction.description?.length; else noDescriptionTemplate">
+          {{ auction.description }}
+        </ng-container>
+        <ng-template #noDescriptionTemplate>
+          <em>No description</em>
+        </ng-template>
+      </p>
+    </mat-card-content>
+    <mat-card-actions align="end" *ngIf="ownsCurrentAuction" class="flex gap-4">
+      <!-- Update -->
+      <a [routerLink]="['/auctions/update', auction.key]" mat-flat-button color="primary">
+        <mat-icon>edit</mat-icon>
+        Update
+      </a>
+
+      <!-- Delete -->
+      <button type="button" mat-flat-button color="warn" (click)="deleteAuction()" [disabled]="deleting">
+        <mat-icon>delete</mat-icon>
+        <ng-container *ngIf="deleting === true">Deleting</ng-container>
+        <ng-container *ngIf="deleting === false">Delete</ng-container>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Comments -->
+  <div class="mt-5 grid grid-cols-1 xl:grid-cols-3">
+    <app-auction-comments class="col-span-2" [auction]="auction"></app-auction-comments>
+  </div>
+</div>

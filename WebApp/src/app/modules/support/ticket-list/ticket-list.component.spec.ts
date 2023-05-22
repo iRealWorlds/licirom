@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TicketListComponent } from '@licirom/modules/support/ticket-list/ticket-list.component';
 
-import { TicketListComponent } from './ticket-list.component';
 
 describe('TicketListComponent', () => {
   let component: TicketListComponent;

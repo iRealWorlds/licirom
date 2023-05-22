@@ -1,0 +1,17 @@
+<div class="w-main-content mx-auto mt-7">
+  <div class="mb-5 flex flex-col lg:flex-row lg:justify-between lg:items-center">
+    <h2 class="text-xl">
+      Auctions
+    </h2>
+    <a routerLink="/auctions/create" mat-flat-button color="primary">
+      <mat-icon>add</mat-icon>
+      Create
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+    <div *ngFor="let auction of auctions">
+      <app-auction-card [auction]="auction"></app-auction-card>
+    </div>
+  </div>
+</div>

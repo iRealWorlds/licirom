@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { TicketService } from '@licirom/modules/support/ticket.service';
 
-import { TicketService } from './ticket.service';
 
 describe('TicketService', () => {
   let service: TicketService;

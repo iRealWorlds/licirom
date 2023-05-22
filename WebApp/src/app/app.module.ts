@@ -22,7 +22,6 @@ import { identityLoadedGuard } from '@licirom/core/identity/identity-loaded.guar
       children: appRouting
     }]),
 
-
     // Core module
     CoreModule,
     LayoutModule,

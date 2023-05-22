@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TicketListComponent } from './ticket-list.component';
 import { RouterModule } from '@angular/router';
-import { ticketListRouting } from './ticket-list.routing';
+import { ticketListRouting } from '@licirom/modules/support/ticket-list/ticket-list.routing';
+import { TicketListComponent } from '@licirom/modules/support/ticket-list/ticket-list.component';
 
 
 
