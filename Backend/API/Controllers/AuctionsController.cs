@@ -252,6 +252,7 @@ public class AuctionsController : ControllerBase
     }
 
     [HttpPut("{auctionKey}/activate")]
+    [Authorize(Policy=AuthorizationPolicies.UserIsAdmin)]
     public async Task<IActionResult> Activate(string auctionKey)
     {
         var guidAuctionKey = Guid.Parse(auctionKey);
