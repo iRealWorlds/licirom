@@ -1,4 +1,5 @@
 using API.Database.Entities;
+using API.Services;
 using API.ViewModels;
 using API.ViewModels.Requests;
 using API.Authorization;
@@ -14,11 +15,13 @@ public class UsersController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IAuthorizationService _authorizationService;
+    private readonly UserService _userService;
     
-    public UsersController(UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
+    public UsersController(UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, UserService userService)
     {
         this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         this._authorizationService = authorizationService;
+        this._userService = userService;
     }
 
     [HttpPost]
@@ -82,6 +85,9 @@ public class UsersController : ControllerBase
         }
 
         // Otherwise, return the user's details
-        return new JsonResult(new UserViewModel(user));
+        return new JsonResult(new UserViewModel(user)
+        {
+            IsAdmin = _userService.IsAdminAsync(user).Result // TODO find a better way to pass this
+        });
     }
 }

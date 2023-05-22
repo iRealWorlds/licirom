@@ -60,8 +60,11 @@ export class PendingAuctionsComponent implements OnInit {
     );
   }
 
-
-  /** @inheritDoc */
+  /**
+   * Close an auction.
+   *
+   * @param auctionKey
+   */
   closeAuction(auctionKey: string): void {
     this.pendingAuctionService.Close(auctionKey).subscribe(
       () => {
