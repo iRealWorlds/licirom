@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 import { ExpandablePipeModule } from '@licirom/modules/shared/expandable-pipe/expandable-pipe.module';
 import { User } from '@licirom/modules/users/user.model';
+import { AuctionStatus } from '@licirom/modules/auctions/auction-status.enum';
 
 @Component({
   selector: 'app-auction-card',
@@ -15,6 +16,7 @@ import { User } from '@licirom/modules/users/user.model';
 })
 export class AuctionCardComponent {
   @Input() auction?: Auction;
+  statuses = AuctionStatus;
 
   /**
    * Display the creator's full name.

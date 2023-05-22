@@ -2,12 +2,21 @@
   <div class="flex items-center gap-3">
     <img ngSrc="assets/images/logo_dark_bg.png" alt="logo" height="60" width="160" class="mr-5">
 
-    <a routerLink="/home" routerLinkActive="bg-black/10" mat-button>
+    <!-- Home -->
+    <a routerLink="/" routerLinkActive="bg-black/10" mat-button [routerLinkActiveOptions]="{ exact: true }">
       Home
     </a>
+
+    <!-- Support -->
     <a routerLink="/support" routerLinkActive="bg-black/10" mat-button>
       Support
     </a>
+
+    <!-- Admin -->
+    <button mat-button routerLinkActive="bg-black/10" [matMenuTriggerFor]="menu">Admin</button>
+    <mat-menu #menu="matMenu">
+      <a routerLink="/admin/auctions" mat-menu-item>Pending auctions</a>
+    </mat-menu>
   </div>
 
   <div class="flex items-center gap-5">

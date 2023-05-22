@@ -23,6 +23,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     {
         base.OnModelCreating(builder);
 
+
+        builder.Entity<Auction>()
+        .Property(e => e.CurrentStatus)
+        .HasConversion<int>();
+
         builder.Entity<ApplicationUser>(b =>
         {
             b.ToTable("IdentityUsers");
@@ -69,17 +74,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         {
             b.ToTable("IdentityUserRoles");
         });
-        
+
         builder.Entity<SupportTicket>(b =>
         {
             b.ToTable("SupportTickets");
         });
-        
+
         builder.Entity<SupportMessage>(b =>
         {
             b.ToTable("SupportMessages");
         });
-        
+
         builder.Entity<AuctionCategory>(e =>
         {
             e.HasKey(c => c.Key);
@@ -93,7 +98,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 .OnDelete(DeleteBehavior.ClientCascade);
         });
         builder.Entity<Auction>(e =>
-        {   
+        {
             e.HasKey(a => a.Key);
             e.HasMany(a => a.Comments)
                 .WithOne(c => c.Auction)

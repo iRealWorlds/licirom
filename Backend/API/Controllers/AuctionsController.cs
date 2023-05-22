@@ -29,7 +29,17 @@ public class AuctionsController : ControllerBase
     [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int) HttpStatusCode.OK)]
     public async Task<IActionResult> IndexAsync([FromQuery] AuctionIndexModel query)
     {
-        var auctions = await _dbContext.Auctions.Include(a => a.Creator).OrderBy(a => a.StartTime).ToListAsync();
+        // Get current user's details
+        var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+        if (currentUser == null)
+        {
+            return Unauthorized();
+        }
+        
+        var auctions = await _dbContext.Auctions
+            .Where(a => a.CreatorKey == currentUser.Id || a.CurrentStatus == Auction.Status.ACTIVE || a.CurrentStatus == Auction.Status.ENDED ||
+                        a.CurrentStatus == Auction.Status.CLOSED)
+            .ToListAsync();
         var result = new PaginatedResult<Auction>(auctions, query).Map(delegate(Auction c)
         {
             var model = new AuctionModel(c);
@@ -39,6 +49,16 @@ public class AuctionsController : ControllerBase
             }
             return model;
         });
+        return new JsonResult(result);
+    }
+
+    [HttpGet("pending")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> PendingIndexAsync([FromQuery] PaginatedRequestModel query)
+    {
+        var auctions = await _dbContext.Auctions.Where(auction => auction.CurrentStatus == Auction.Status.PENDING).ToListAsync();
+        var result = new PaginatedResult<Auction>(auctions, query).Map(c => new AuctionModel(c));
         return new JsonResult(result);
     }
 
@@ -211,4 +231,26 @@ public class AuctionsController : ControllerBase
         // Return a 204 No Content response
         return NoContent();
     }
+
+    [HttpPut("{auctionKey}/activate")]
+    public async Task<IActionResult> Activate(string auctionKey)
+    {
+        var guidAuctionKey = Guid.Parse(auctionKey);
+        // Get auction details
+        var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == guidAuctionKey);
+
+        // Make sure the auction exists
+        if (auction == null)
+        {
+            return NotFound();
+        }
+
+        // Activate the auction
+        auction.CurrentStatus = Auction.Status.ACTIVE;
+        _dbContext.Entry(auction).State = EntityState.Modified;
+        await _dbContext.SaveChangesAsync();
+
+        return Ok();
+    }
+
 }
