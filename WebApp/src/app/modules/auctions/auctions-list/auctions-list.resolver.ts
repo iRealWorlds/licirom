@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 import { Auction } from '@licirom/modules/auctions/auction.model';
 import { AuctionService } from '@licirom/modules/auctions/auction.service';
 import { PaginatedResult } from '@licirom/core/pagination/paginated-result.model';
+import { AuctionFilters } from '@licirom/modules/auctions/auction.filters';
+import { IndexOptions } from '@licirom/core/api/index-options.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +31,11 @@ export class AuctionsListResolver implements Resolve<PaginatedResult<Auction>> {
    * @param state
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PaginatedResult<Auction>> { // eslint-disable-line @typescript-eslint/no-unused-vars
-    return this._auctionService.getAll();
+    const filters = AuctionFilters.fromParams(route.queryParams);
+
+    return this._auctionService.getAll(new IndexOptions({
+      expand: ['Creator'],
+      filters
+    }));
   }
 }

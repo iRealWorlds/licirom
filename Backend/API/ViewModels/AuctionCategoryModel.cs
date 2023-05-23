@@ -2,9 +2,8 @@ using API.Database.Entities;
 
 namespace API.ViewModels;
 
-public class AuctionCategoryModel
+public class AuctionCategoryModel : EntityModel<Guid>
 {
-    public Guid Key { get; set; }
     public string Name { get; set; }
     public string? Description { get; set; }
     public Guid? ParentKey { get; set; }

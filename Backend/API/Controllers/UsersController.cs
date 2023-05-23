@@ -1,6 +1,8 @@
 using API.Database.Entities;
+using API.Services;
 using API.ViewModels;
 using API.ViewModels.Requests;
+using API.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +14,14 @@ namespace API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IAuthorizationService _authorizationService;
+    private readonly UserService _userService;
     
-    public UsersController(UserManager<ApplicationUser> userManager)
+    public UsersController(UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, UserService userService)
     {
         this._userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+        this._authorizationService = authorizationService;
+        this._userService = userService;
     }
 
     [HttpPost]
@@ -75,8 +81,16 @@ public class UsersController : ControllerBase
             return new NotFoundResult();
         }
 
+        if(!(await _authorizationService.AuthorizeAsync(User, user, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+        {
+            return Unauthorized();
+        }
+
         // Otherwise, return the user's details
-        return new JsonResult(new UserViewModel(user));
+        return new JsonResult(new UserViewModel(user)
+        {
+            IsAdmin = _userService.IsAdminAsync(user).Result // TODO find a better way to pass this
+        });
     }
 
     [HttpPut("{userKey:guid}/password")]

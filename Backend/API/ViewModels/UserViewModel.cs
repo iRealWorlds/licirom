@@ -1,13 +1,14 @@
 using API.Database.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.ViewModels;
 
-public class UserViewModel
+public class UserViewModel : EntityModel<Guid>
 {
-    public Guid Key { get; set; } = Guid.Empty;
     public string EmailAddress { get; set; } = String.Empty;
     public string FirstName { get; set; } = String.Empty;
     public string LastName { get; set; } = String.Empty;
+    public bool IsAdmin { get; set; } = false;
     
     public UserViewModel()
     {

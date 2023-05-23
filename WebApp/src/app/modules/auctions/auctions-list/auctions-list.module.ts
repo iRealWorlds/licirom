@@ -6,12 +6,24 @@ import { AuctionsListComponent } from '@licirom/modules/auctions/auctions-list/a
 import { AuctionCardComponent } from '@licirom/modules/auctions/auctions-list/auction-card/auction-card.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import {
+  FieldValidationErrorsComponent
+} from '@licirom/modules/shared/field-validation-errors/field-validation-errors.component';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import {
+  AuctionFiltersComponent
+} from '@licirom/modules/auctions/auctions-list/auction-filters/auction-filters.component';
 
 
 
 @NgModule({
   declarations: [
-    AuctionsListComponent
+    AuctionsListComponent,
+    AuctionFiltersComponent,
   ],
   imports: [
     CommonModule,
@@ -19,6 +31,12 @@ import { MatIconModule } from '@angular/material/icon';
     AuctionCardComponent,
     MatButtonModule,
     MatIconModule,
+    MatCardModule,
+    FieldValidationErrorsComponent,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatCheckboxModule,
   ]
 })
 export class AuctionsListModule { }

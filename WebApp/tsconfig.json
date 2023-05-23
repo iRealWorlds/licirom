@@ -24,9 +24,15 @@
       "dom"
     ],
     "paths": {
-      "@licirom/*": ["src/app/*"],
-      "@licirom/core/*": ["src/app/core/*"],
-      "@licirom/modules/*": ["src/app/modules/*"],
+      "@licirom/*": [
+        "src/app/*"
+      ],
+      "@licirom/core/*": [
+        "src/app/core/*"
+      ],
+      "@licirom/modules/*": [
+        "src/app/modules/*"
+      ],
     }
   },
   "angularCompilerOptions": {

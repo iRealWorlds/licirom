@@ -11,4 +11,19 @@ public class AuctionCreateModel
     
     [Required]
     public Guid CategoryKey { get; set; }
+    
+    [Required]
+    public decimal ReservePrice { get; set; }
+    
+    [Required]
+    public decimal MinimumIncrement { get; set; }
+    
+    [Required]
+    public decimal StartPrice { get; set; }
+    
+    [Required]
+    public DateTime StartTime { get; set; }
+    
+    [Required]
+    public DateTime EndTime { get; set; }
 }

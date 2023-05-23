@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IdentityService } from '@licirom/core/identity/identity.service';
 import { AuctionService } from '@licirom/modules/auctions/auction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { User } from '@licirom/modules/users/user.model';
+import { AuctionCategory } from '@licirom/modules/auctions/auction-category.model';
 
 @Component({
   selector: 'app-auction-details',
@@ -46,9 +48,16 @@ export class AuctionDetailsComponent implements OnInit, OnDestroy {
       if ('auction' in data) {
         this.auction = data['auction'];
 
-        // Determine ownership
-        const identity = await firstValueFrom(this._identityService.currentIdentity$);
-        this.ownsCurrentAuction = identity?.key === this.auction?.creatorKey;
+        if (this.auction) {
+          // Determine ownership
+          const identity = await firstValueFrom(this._identityService.currentIdentity$);
+
+          if (typeof this.auction.creator === 'string') {
+            this.ownsCurrentAuction = identity?.key === this.auction.creator;
+          } else {
+            this.ownsCurrentAuction = identity?.key === this.auction.creator.key;
+          }
+        }
       }
     });
   }
@@ -87,5 +96,23 @@ export class AuctionDetailsComponent implements OnInit, OnDestroy {
         this.deleting = false;
       }
     });
+  }
+
+  /**
+   * Display the creator's full name.
+   *
+   * @param user
+   */
+  displayCreatorName(user: User): string {
+    return `${user.firstName} ${user.lastName}`;
+  }
+
+  /**
+   * Display the category's full name.
+   *
+   * @param category
+   */
+  displayCategoryName(category: AuctionCategory): string {
+    return category.name;
   }
 }

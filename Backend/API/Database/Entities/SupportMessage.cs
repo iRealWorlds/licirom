@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace API.Database.Entities;
 
-public class SupportMessage
+public class SupportMessage : IUserOwnable
 {
     public int Id { get; set; }
     public virtual SupportTicket Ticket { get; set; }
@@ -11,4 +11,9 @@ public class SupportMessage
     public Guid UserId { get; set; }
     public DateTime SentAt { get; set; } = DateTime.UtcNow;
     public string MessageContent { get; set; }
+
+    public Guid GetOwnerId()
+    {
+        return UserId;
+    }
 }

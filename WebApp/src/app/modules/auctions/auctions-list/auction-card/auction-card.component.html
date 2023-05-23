@@ -1,15 +1,25 @@
 <mat-card *ngIf="auction" class="w-full h-full">
-  <mat-card-header class="mb-3">
+  <mat-card-header class="mb-3 relative">
+    <div class="absolute top-0 right-0 px-3 py-1 bg-amber-500 text-white text-xs"
+      *ngIf="auction.currentStatus === statuses.PENDING">
+      Pending
+    </div>
+    <div class="absolute top-0 right-0 px-3 py-1 bg-red-500 text-white text-xs"
+      *ngIf="auction.currentStatus === statuses.CLOSED">
+      Closed
+    </div>
+
     <mat-card-title class="text-xl">
       <a [routerLink]="['/auctions/details', auction.key]">
         {{ auction.title }}
       </a>
     </mat-card-title>
     <mat-card-subtitle class="text-sm">
-      By {{ auction.creatorKey }}
+      By {{ auction.creator | expandable:displayCreatorName }}
     </mat-card-subtitle>
+
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content class="p-5">
     <p class="text-sm text-gray-500">
       <ng-container *ngIf="auction.description?.length; else noDescriptionTemplate">
         {{ auction.description }}
@@ -19,4 +29,39 @@
       </ng-template>
     </p>
   </mat-card-content>
+
+  <!-- Current status -->
+  <mat-card-content class="p-5">
+    <ng-container *ngIf="auction.currentStatus !== statuses.CLOSED; else closedTemplate">
+      <!-- Not yet started -->
+      <div class="flex flex-col items-center gap-2" *ngIf="timeUntilStart > 0; else alreadyStartedTemplate">
+        <h4 class="text-gray-500">Starts in</h4>
+        <app-time-cards [time]="timeUntilStart"></app-time-cards>
+      </div>
+
+      <ng-template #alreadyStartedTemplate>
+        <!-- Ends in -->
+        <div class="flex flex-col items-center gap-2" *ngIf="timeUntilEnd > 0">
+          <h4 class="text-gray-500">Ends in</h4>
+          <app-time-cards [time]="timeUntilEnd"></app-time-cards>
+        </div>
+
+        <!-- Ended on -->
+        <div class="flex flex-col items-center gap-2" *ngIf="timeUntilEnd <= 0">
+          <h4 class="text-gray-500">Ended on</h4>
+          <h2 class="text-lg text-primary-900 text-center">{{ auction.endTime | date: 'MMM d, y HH:mm' }}</h2>
+        </div>
+      </ng-template>
+    </ng-container>
+    <ng-template #closedTemplate>
+      <div class="flex flex-col items-center gap-2">
+        <h4 class="text-gray-500">Will not start</h4>
+        <h2 class="text-lg text-red-500 text-center">
+          Closed by an administrator
+        </h2>
+      </div>
+    </ng-template>
+
+  </mat-card-content>
+
 </mat-card>

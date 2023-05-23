@@ -1,9 +1,12 @@
 <mat-card>
-  <mat-card-header>
+  <mat-card-header class="p-5">
     <mat-card-title class="text-xl">
       Comments
     </mat-card-title>
   </mat-card-header>
+  <!-- Divider -->
+  <div class="h-2 w-20 bg-primary-500"></div>
+
   <mat-card-content class="p-5">
     <ng-container *ngIf="comments !== undefined; else loadingTemplate">
       <div class="flex flex-col gap-5 max-h-[250px] overflow-y-auto" #commentsWrapper *ngIf="comments.length; else noCommentsTemplate">
@@ -24,6 +27,6 @@
     </ng-template>
   </mat-card-content>
   <mat-card-footer class="p-5">
-    <app-auction-comment-create [auction]="auction" (created)="fetchComments()"></app-auction-comment-create>
+    <app-auction-comment-create [auction]="auction"></app-auction-comment-create>
   </mat-card-footer>
 </mat-card>
