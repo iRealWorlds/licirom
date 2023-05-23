@@ -8,7 +8,7 @@
       <div>
         <h2 class="text-xl group">
           {{ ticket.title }}
-          <span class="opacity-30">#{{ ticket.id }}</span>
+          <span class="opacity-30">#{{ ticket.key }}</span>
         </h2>
         <h4 class="text-sm text-gray-500">
           {{ ticket.createdAt | date: 'MMM d, y HH:mm' }}
@@ -41,7 +41,7 @@
                 <mat-icon class="scale-110">person</mat-icon>
               </div>
             </div>
-            <p>{{ message.userId | expandable: displayCreatorName }}</p>
+            <p>{{ message.user | expandable: displayCreatorName }}</p>
           </div>
         </mat-card-footer>
       </mat-card>
@@ -83,7 +83,7 @@
             </div>
           </div>
           <mat-card-title class="text-xl">
-            {{ ticket.userId | expandable: displayCreatorName }}
+            {{ ticket.user | expandable: displayCreatorName }}
           </mat-card-title>
           <mat-card-subtitle>
             Creator

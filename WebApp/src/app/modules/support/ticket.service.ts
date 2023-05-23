@@ -7,6 +7,7 @@ import { SupportTicket } from '@licirom/modules/support/support-ticket.model';
 import { CreateTicketRequest } from '@licirom/modules/support/create-ticket/create-ticket.request';
 import { SupportMessage } from '@licirom/modules/support/support-messages.model';
 import { MessageCreateRequest } from '@licirom/modules/support/ticket-details/message-create.request';
+import { ApiOperationOptions } from '@licirom/core/api/api-operation-options.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +30,10 @@ export class TicketService extends ApiService {
   /**
    * Fetch all tickets from the API.
    */
-  getAll(): Observable<SupportTicket[]> {
-    return this._http.get<SupportTicket[]>(this.buildApiEndpointUri(this.environment.api.endpoints.tickets));
+  getAll(options = new ApiOperationOptions()): Observable<SupportTicket[]> {
+    return this._http.get<SupportTicket[]>(this.buildApiEndpointUri(this.environment.api.endpoints.tickets), {
+      params: this.buildParameters(options)
+    });
   }
 
   /**
@@ -45,21 +48,27 @@ export class TicketService extends ApiService {
    * Get a ticket's details.
    *
    * @param ticketId
+   * @param options
    */
-  getTicket(ticketId: string): Observable<SupportTicket> {
+  getTicket(ticketId: string, options = new ApiOperationOptions()): Observable<SupportTicket> {
     const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}`;
-    return this._http.get<SupportTicket>(this.buildApiEndpointUri(endpoint));
+    return this._http.get<SupportTicket>(this.buildApiEndpointUri(endpoint), {
+      params: this.buildParameters(options)
+    });
   }
 
   /**
    * Get a list of messages for a ticket.
    *
    * @param ticketId
+   * @param options
    */
-  getMessages(ticketId: string): Observable<SupportMessage[]> {
+  getMessages(ticketId: string, options = new ApiOperationOptions()): Observable<SupportMessage[]> {
     const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/all`;
     console.log(endpoint);
-    return this._http.get<SupportMessage[]>(this.buildApiEndpointUri(endpoint));
+    return this._http.get<SupportMessage[]>(this.buildApiEndpointUri(endpoint), {
+      params: this.buildParameters(options)
+    });
   }
 
   /**

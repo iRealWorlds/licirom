@@ -74,7 +74,13 @@ export class TicketDetailsComponent implements OnInit {
       this.ticket = data['ticket'];
       this.messages = data['messages'];
       const identity = await firstValueFrom(this._identityService.currentIdentity$);
-      this.ownsCurrentTicket = identity?.key === this.ticket?.userId;
+      if (this.ticket) {
+        if (typeof this.ticket.user === 'object') {
+          this.ownsCurrentTicket = identity?.key === this.ticket.user.key;
+        } else {
+          this.ownsCurrentTicket = identity?.key === this.ticket?.user;
+        }
+      }
     });
   }
 

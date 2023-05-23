@@ -1,15 +1,17 @@
+using System.Text.Json.Serialization;
 using API.Database.Entities;
+using API.ViewModels.Converters;
 
 namespace API.ViewModels;
 
-public class SupportMessageModel
+public class SupportMessageModel : EntityModel<int>
 {
-    public int Id { get; set; }
-
-    public Guid UserId { get; set; }
+    [JsonConverter(typeof(ExpandableConverter<UserViewModel, Guid>))]
+    public ExpandableModel<UserViewModel, Guid> User { get; set; }
+    
     public DateTime SentAt { get; set; }
-
     public string MessageContent { get; set; }
+    
     public SupportMessageModel()
     {
 
@@ -17,9 +19,9 @@ public class SupportMessageModel
 
     public SupportMessageModel(SupportMessage message)
     {
-        this.Id = message.Id;
+        this.Key = message.Id;
         this.SentAt = message.SentAt;
-        this.UserId = message.UserId;
+        this.User = new ExpandableModel<UserViewModel, Guid>(new UserViewModel(message.User));
         this.MessageContent = message.MessageContent;
     }
 }
