@@ -30,7 +30,7 @@ public class AuctionsController : ControllerBase
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(typeof(PaginatedResult<AuctionModel>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> IndexAsync([FromQuery] AuctionIndexModel query)
+    public async Task<IActionResult> IndexAsync([FromQuery] AuctionIndexModel filters)
     {
         // Get current user's details
         var currentUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -46,37 +46,38 @@ public class AuctionsController : ControllerBase
                         a.CurrentStatus == Auction.Status.ENDED ||
                         a.CurrentStatus == Auction.Status.CLOSED);
 
-        if(query.Query != null)
+
+        if(filters.Query != null)
         {
-            auctions = auctions.Where(a => a.Title.Contains(query.Query) || a.Description!.Contains(query.Query));
+            auctions = auctions.Where(a => a.Title.Contains(filters.Query) || a.Description!.Contains(filters.Query));
         }
 
-        if(query.CreatedByMe == true)
+        if(filters.CreatedByMe == true)
         {
             auctions = auctions.Where(a => a.CreatorKey == currentUser.Id);
         }
-        else if(query.CreatedByMe == false)
+        else if(filters.CreatedByMe == false)
         {
             auctions = auctions.Where(a => a.CreatorKey != currentUser.Id);
         }
 
-        if(query.CategoryKeys != null)
+        if(filters.CategoryKeys != null)
         {
-            auctions = auctions.Where(a => query.CategoryKeys.Any(c => a.CategoryKey == Guid.Parse(c)));
+            auctions = auctions.Where(a => filters.CategoryKeys.Any(c => a.CategoryKey == Guid.Parse(c)));
         }
 
-        if(query.Statuses != null)
+        if(filters.Statuses != null)
         {
-            auctions = auctions.Where(a => query.Statuses.Any(s => a.CurrentStatus == s));
+            auctions = auctions.Where(a => filters.Statuses.Any(s => a.CurrentStatus == s));
         }
 
         var auctionList = await auctions.ToListAsync();
             
-        var result = new PaginatedResult<Auction>(auctionList, query).Map(delegate(Auction c)
+        var result = new PaginatedResult<Auction>(auctionList, filters).Map(delegate(Auction c)
 
         {
             var model = new AuctionModel(c);
-            foreach (var property in query.Expand)
+            foreach (var property in filters.Expand)
             {
                 model.Expand(property);
             }
