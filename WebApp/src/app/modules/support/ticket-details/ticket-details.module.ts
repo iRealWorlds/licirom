@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FieldValidationErrorsComponent } from '@licirom/modules/shared/field-validation-errors/field-validation-errors.component';
+import { ExpandablePipeModule } from '@licirom/modules/shared/expandable-pipe/expandable-pipe.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { FieldValidationErrorsComponent } from '@licirom/modules/shared/field-va
     MatCardModule,
     MatButtonModule,
     MatSnackBarModule,
-    MatIconModule
+    MatIconModule,
+    ExpandablePipeModule
   ]
 })
 export class TicketDetailsModule { }

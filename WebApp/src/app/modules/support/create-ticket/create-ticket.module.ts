@@ -9,6 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { createTicketRouting } from '@licirom/modules/support/create-ticket/create-ticket.routing';
 import { CreateTicketComponent } from '@licirom/modules/support/create-ticket/create-ticket.component';
+import { MatButtonModule } from '@angular/material/button';
+import {
+  FieldValidationErrorsComponent
+} from '@licirom/modules/shared/field-validation-errors/field-validation-errors.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +27,8 @@ import { CreateTicketComponent } from '@licirom/modules/support/create-ticket/cr
     MatCardModule,
     MatIconModule,
     MatSnackBarModule,
+    MatButtonModule,
+    FieldValidationErrorsComponent,
   ]
 })
 export class CreateTicketModule { }

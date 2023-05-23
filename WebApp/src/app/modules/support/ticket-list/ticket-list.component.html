@@ -1,27 +1,50 @@
-<h1 class="text-3xl font-bold underline m-10">
-    All tickets
-</h1>
+<div class="w-main-content mx-auto my-7">
 
-<div class="flex flex-row m-5 justify-end">
-    <span class="text-lg mx-5">Add ticket:</span>
-    <div class="">
-        <a routerLink="/support/create" class="bg-green-300 px-8 py-3 text-3xl text-white font-bold border-4 ">+</a>
-    </div>
-</div>
+  <div class="mb-7 flex flex-col lg:flex-row gap-5 lg:justify-between items-center">
+    <h2 class="text-3xl font-bold">
+      Support centre
+    </h2>
+    <a routerLink="/support/create" mat-flat-button color="primary">
+      <mat-icon>add</mat-icon>
+      Create a ticket
+    </a>
+  </div>
 
+  <div class="flex flex-col items-start gap-5">
+    <mat-card *ngFor="let ticket of tickets" class="w-full group">
+      <mat-card-header class="relative">
+        <mat-card-title class="text-xl">
+          <a [routerLink]="['/support/details', ticket.id]">
+            {{ ticket.title }}
+            <span class="opacity-30 group-hover:opacity-90 transition-all">#{{ ticket.id }}</span>
+          </a>
+        </mat-card-title>
+        <mat-card-subtitle class="text-sm">
+          {{ ticket.createdAt | date: 'MMM d, y HH:mm' }}
+        </mat-card-subtitle>
 
-<div class="flex flex-col items-start gap-5 ">
+        <div class="absolute top-0 right-0 px-3 py-1 bg-amber-500 text-white text-xs flex items-center gap-2" *ngIf="ticket.resolved === false">
+          <mat-icon class="scale-75">hourglass_empty</mat-icon>
+          Pending
+        </div>
+        <div class="absolute top-0 right-0 px-3 py-1 bg-green-500 text-white text-xs flex items-center gap-2" *ngIf="ticket.resolved === true">
+          <mat-icon class="scale-75">check</mat-icon>
+          Solved
+        </div>
+      </mat-card-header>
+      <mat-card-content class="p-5">
+      </mat-card-content>
+      <mat-card-footer class="p-5">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center justify-center">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-800 text-white">
+              <mat-icon class="scale-110">person</mat-icon>
+            </div>
+          </div>
+          <p>{{ ticket.userId | expandable: displayCreatorName }}</p>
+        </div>
+      </mat-card-footer>
+    </mat-card>
 
-    <div *ngFor="let ticket of tickets" class="flex ml-5 flex-col bg-gray-100 w-full"
-        [ngClass]="{'hover:bg-yellow-300': ticket.resolved !== true,'hover:bg-green-300': ticket.resolved === true} ">
-        <a [routerLink]="['/support/details',ticket.id]">
-            <h2 class="text-left text-xl font-bold my-3">{{ticket.title}}</h2>
-            <div><span class="xl font-bold">Ticket Id: </span> {{ticket.id}}</div>
-            <div><span class="xl font-bold">User Id: </span>{{ticket.userId}}</div>
-            <div> <span class="xl font-bold">Submitted At: </span>{{ticket.createdAt}}</div>
-            <div *ngIf="ticket.resolved">Issue Resolved</div>
-            <div *ngIf="ticket.resolved !== true">Issue Unresolved</div>
-        </a>
-    </div>
-
+  </div>
 </div>

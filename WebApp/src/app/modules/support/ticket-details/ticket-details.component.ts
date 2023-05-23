@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IdentityService } from '@licirom/core/identity/identity.service';
 import { firstValueFrom, Subject } from 'rxjs';
@@ -8,6 +8,7 @@ import { SupportTicket } from '@licirom/modules/support/support-ticket.model';
 import { SupportMessage } from '@licirom/modules/support/support-messages.model';
 import { TicketService } from '@licirom/modules/support/ticket.service';
 import { MessageCreateRequest } from '@licirom/modules/support/ticket-details/message-create.request';
+import { User } from '@licirom/modules/users/user.model';
 
 @Component({
   selector: 'app-ticket-details',
@@ -16,7 +17,7 @@ import { MessageCreateRequest } from '@licirom/modules/support/ticket-details/me
 })
 export class TicketDetailsComponent implements OnInit {
   messageForm = new FormGroup({
-    messageContent: new FormControl('', { nonNullable: true })
+    messageContent: new FormControl('', { validators: [Validators.required], nonNullable: true })
   });
 
   ticket!: SupportTicket;
@@ -67,32 +68,8 @@ export class TicketDetailsComponent implements OnInit {
     }
   }
 
-  /**
-   * Check ticket resolved status.
-   */
-  checkTicketResolvedStatus(): void {
-    if (this.ticket && this.ticket.resolved) {
-      // Perform any additional actions or update component state as needed for a resolved ticket
-    }
-  }
-
   /** @inheritDoc */
   ngOnInit(): void {
-    const ticketId = this._activatedRoute.snapshot.paramMap.get('ticketKey');
-
-    if (ticketId !== null) {
-      this.ticketService.getTicket(ticketId).subscribe({
-        next: ticket => {
-          this.ticket = ticket;
-          this.checkTicketResolvedStatus();
-        },
-        error: error => {
-          console.error('Failed to fetch ticket:', error);
-          // Perform error handling or show error messages to the user
-        }
-      });
-    }
-
     this._activatedRoute.data.subscribe(async data => {
       this.ticket = data['ticket'];
       this.messages = data['messages'];
@@ -112,7 +89,6 @@ export class TicketDetailsComponent implements OnInit {
     this.messageForm.markAllAsTouched();
 
     if (this.messageForm.valid) {
-
       const ticketId = this._activatedRoute.snapshot.paramMap.get('ticketKey');
       if (ticketId !== null) { // Check if ticketId is not null // Get the ticket ID from the route parameter
         const data = new MessageCreateRequest({
@@ -121,8 +97,10 @@ export class TicketDetailsComponent implements OnInit {
 
         this.loading = true;
         this.ticketService.createMessage(ticketId, data).subscribe({
-          next: async () => {
+          next: async message => {
             this.loading = false;
+            this.messages.push(message);
+            this.messageForm.reset();
           },
           error: () => {
             this.loading = false;
@@ -153,5 +131,14 @@ export class TicketDetailsComponent implements OnInit {
         }
       );
     }
+  }
+
+  /**
+   * Display the creator's full name.
+   *
+   * @param user
+   */
+  displayCreatorName(user: User): string {
+    return `${user.firstName} ${user.lastName}`;
   }
 }

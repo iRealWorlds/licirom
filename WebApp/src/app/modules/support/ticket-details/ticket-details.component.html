@@ -1,28 +1,102 @@
-<h1>{{ticket.id}}</h1>
-<div *ngFor="let message of messages">
-    <h3>{{ message.messageContent }}</h3>
-    <p>{{ message.userId }}</p>
+<div class="w-main-content mx-auto my-7" *ngIf="ticket">
+  <div class="mb-7">
+    <div class="flex items-center gap-3">
+      <a routerLink="/support" mat-icon-button>
+        <mat-icon>arrow_back</mat-icon>
+      </a>
 
+      <div>
+        <h2 class="text-xl group">
+          {{ ticket.title }}
+          <span class="opacity-30">#{{ ticket.id }}</span>
+        </h2>
+        <h4 class="text-sm text-gray-500">
+          {{ ticket.createdAt | date: 'MMM d, y HH:mm' }}
+        </h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-7">
+    <div class="px-3 py-1 bg-amber-500 text-white text-xs inline-flex items-center gap-2" *ngIf="ticket.resolved === false">
+      <mat-icon class="scale-75">hourglass_empty</mat-icon>
+      Pending
+    </div>
+    <div class="px-3 py-1 bg-green-500 text-white text-xs inline-flex items-center gap-2" *ngIf="ticket.resolved === true">
+      <mat-icon class="scale-75">check</mat-icon>
+      Solved
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-5 gap-5">
+    <div class="xl:col-span-4 order-3 xl:order-1 flex flex-col gap-5">
+      <mat-card *ngFor="let message of messages">
+        <mat-card-content class="p-5">
+          <p class="whitespace-pre-wrap">{{ message.messageContent }}</p>
+        </mat-card-content>
+        <mat-card-footer class="p-5">
+          <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-800 text-white">
+                <mat-icon class="scale-110">person</mat-icon>
+              </div>
+            </div>
+            <p>{{ message.userId | expandable: displayCreatorName }}</p>
+          </div>
+        </mat-card-footer>
+      </mat-card>
+
+      <mat-card *ngIf="!ticket.resolved">
+        <mat-card-header>
+          <mat-card-title class="text-xl">
+            New message
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-5">
+
+          <form [formGroup]="messageForm" (ngSubmit)="createMessage() " class="flex items-center gap-4">
+
+            <mat-form-field class="grow">
+              <mat-label>Description</mat-label>
+              <textarea type="text" matInput [formControl]="messageForm.controls.messageContent"></textarea>
+
+              <mat-error *ngFor="let error of messageForm.controls.messageContent.errors | keyvalue">
+                <app-field-validation-errors [error]="error.key"></app-field-validation-errors>
+              </mat-error>
+            </mat-form-field>
+
+            <button type="submit" mat-flat-button color="primary" [disabled]="messageForm.disabled">
+              <ng-container *ngIf="loading === true">Creating</ng-container>
+              <ng-container *ngIf="loading === false">Create</ng-container>
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="order-2">
+      <mat-card class="xl:sticky top-5">
+        <mat-card-content class="p-5 text-center">
+          <div class="flex items-center justify-center mb-5">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center bg-gray-800 text-white">
+              <mat-icon class="scale-150">person</mat-icon>
+            </div>
+          </div>
+          <mat-card-title class="text-xl">
+            {{ ticket.userId | expandable: displayCreatorName }}
+          </mat-card-title>
+          <mat-card-subtitle>
+            Creator
+          </mat-card-subtitle>
+        </mat-card-content>
+        <mat-card-actions align="end" *ngIf="!ticket.resolved">
+          <!-- Resolve -->
+          <a (click)="resolveTicket()" mat-flat-button color="primary" class="w-full">
+            <mat-icon>edit</mat-icon>
+            Mark as resolved
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
 </div>
-
-<mat-card-actions align="end" *ngIf="ownsCurrentTicket && ticket.resolved===false" class="m-10">
-    <!-- Resolve -->
-    <a (click)="resolveTicket()" mat-flat-button color="primary">
-        <mat-icon>edit</mat-icon>
-        Mark as resolved
-    </a>
-</mat-card-actions>
-<form [formGroup]="messageForm" (ngSubmit)="createMessage() " *ngIf="ownsCurrentTicket && ticket.resolved===false"
-    class="m-5">
-
-    <mat-form-field>
-        <mat-label>Description</mat-label>
-        <textarea type="text" matInput [formControl]="messageForm.controls.messageContent"></textarea>
-
-    </mat-form-field>
-    <button type="submit" mat-flat-button color="primary" [disabled]="messageForm.disabled">
-        <ng-container *ngIf="loading === true">Creating</ng-container>
-        <ng-container *ngIf="loading === false">Create</ng-container>
-    </button>
-
-</form>
