@@ -31,13 +31,17 @@ public class TicketsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = AuthorizationPolicies.UserIsAdmin)]
     public async Task<IActionResult> IndexAsync()
     {
         var user = await this._userManager.GetUserAsync(HttpContext.User);
 
         // Handle null user 
         if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        if(!(await _authorizationService.AuthorizeAsync(User, ticket, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
         {
             return Unauthorized();
         }
