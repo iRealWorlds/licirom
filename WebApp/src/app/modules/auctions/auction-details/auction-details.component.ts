@@ -6,6 +6,7 @@ import { IdentityService } from '@licirom/core/identity/identity.service';
 import { AuctionService } from '@licirom/modules/auctions/auction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '@licirom/modules/users/user.model';
+import { AuctionCategory } from '@licirom/modules/auctions/auction-category.model';
 
 @Component({
   selector: 'app-auction-details',
@@ -104,5 +105,14 @@ export class AuctionDetailsComponent implements OnInit, OnDestroy {
    */
   displayCreatorName(user: User): string {
     return `${user.firstName} ${user.lastName}`;
+  }
+
+  /**
+   * Display the category's full name.
+   *
+   * @param category
+   */
+  displayCategoryName(category: AuctionCategory): string {
+    return category.name;
   }
 }

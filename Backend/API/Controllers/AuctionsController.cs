@@ -41,6 +41,7 @@ public class AuctionsController : ControllerBase
 
         var auctions = _dbContext.Auctions
             .Include(a => a.Creator)
+            .Include(a => a.Category)
             .Where(a => a.CreatorKey == currentUser.Id || a.CurrentStatus == Auction.Status.ACTIVE ||
                         a.CurrentStatus == Auction.Status.ENDED ||
                         a.CurrentStatus == Auction.Status.CLOSED);
@@ -91,6 +92,7 @@ public class AuctionsController : ControllerBase
     {
         var auctions = await _dbContext.Auctions
             .Include(a => a.Creator)
+            .Include(a => a.Category)
             .Where(auction => auction.CurrentStatus == Auction.Status.PENDING)
             .ToListAsync();
         var result = new PaginatedResult<Auction>(auctions, query).Map(c => new AuctionModel(c));
@@ -146,7 +148,10 @@ public class AuctionsController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> ShowAsync(Guid auctionKey, [FromQuery] AuctionShowModel options)
     {
-        var auction = await _dbContext.Auctions.Include(a => a.Creator).FirstOrDefaultAsync(c => c.Key == auctionKey);
+        var auction = await _dbContext.Auctions
+            .Include(a => a.Category)
+            .Include(a => a.Creator)
+            .FirstOrDefaultAsync(c => c.Key == auctionKey);
 
         if (auction == null)
         {
@@ -170,7 +175,10 @@ public class AuctionsController : ControllerBase
     public async Task<IActionResult> UpdateAsync(Guid auctionKey, AuctionUpdateModel request)
     {
         // Find auction
-        var auction = await _dbContext.Auctions.Include(a => a.Creator).FirstOrDefaultAsync(c => c.Key == auctionKey);
+        var auction = await _dbContext.Auctions
+            .Include(a => a.Category)
+            .Include(a => a.Creator)
+            .FirstOrDefaultAsync(c => c.Key == auctionKey);
 
         // Make sure that the auction exists
         if (auction is null)

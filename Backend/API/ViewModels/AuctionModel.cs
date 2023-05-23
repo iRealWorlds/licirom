@@ -12,7 +12,9 @@ public class AuctionModel : EntityModel<Guid>
     [JsonConverter(typeof(ExpandableConverter<UserViewModel, Guid>))]
     public ExpandableModel<UserViewModel, Guid> Creator { get; set; }
     
-    public Guid? CategoryKey { get; set; }
+    [JsonConverter(typeof(ExpandableConverter<AuctionCategoryModel, Guid>))]
+    public ExpandableModel<AuctionCategoryModel, Guid>? Category { get; set; }
+    
     public Auction.Status CurrentStatus { get; set; } = Auction.Status.PENDING;
     public decimal ReservePrice { get; set; }
     public decimal MinimumIncrement { get; set; }
@@ -35,7 +37,7 @@ public class AuctionModel : EntityModel<Guid>
         this.Title = auction.Title;
         this.Description = auction.Description ?? String.Empty;
         this.Creator = new ExpandableModel<UserViewModel, Guid>(new UserViewModel(auction.Creator));
-        this.CategoryKey = auction.CategoryKey;
+        this.Category = auction.Category is not null ? new ExpandableModel<AuctionCategoryModel, Guid>(new AuctionCategoryModel(auction.Category)) : null;
         this.CurrentStatus = auction.CurrentStatus;
         this.ReservePrice = auction.ReservePrice;
         this.MinimumIncrement = auction.MinimumIncrement;

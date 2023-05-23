@@ -37,7 +37,7 @@ export class AuctionDetailsResolver implements Resolve<Auction> {
     }
 
     return this._auctionService.getByKey(auctionKey, new ApiOperationOptions({
-      expand: ['Creator']
+      expand: ['Creator', 'Category']
     }));
   }
 }
