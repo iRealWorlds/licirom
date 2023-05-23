@@ -1,9 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace API.ViewModels;
+namespace API.ViewModels.Converters;
 
-public class ExpandableSerializer<TModel, TKey> : JsonConverter<ExpandableModel<TModel, TKey>> where TModel : EntityModel<TKey>
+public class ExpandableConverter<TModel, TKey> : JsonConverter<ExpandableModel<TModel, TKey>> where TModel : EntityModel<TKey>
 {
     public override ExpandableModel<TModel, TKey>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

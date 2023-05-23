@@ -6,6 +6,7 @@ import { ExpandablePipeModule } from '@licirom/modules/shared/expandable-pipe/ex
 import {
   AuctionBidEntryComponent
 } from '@licirom/modules/auctions/auction-details/auction-bids/auction-bids-list/auction-bid-entry/auction-bid-entry.component';
+import { TimeCardsComponent } from '@licirom/modules/shared/time-cards/time-cards.component';
 
 
 
@@ -17,10 +18,11 @@ import {
   exports: [
     AuctionBidsListComponent
   ],
-  imports: [
-    CommonModule,
-    MatCardModule,
-    ExpandablePipeModule
-  ]
+    imports: [
+        CommonModule,
+        MatCardModule,
+        ExpandablePipeModule,
+        TimeCardsComponent
+    ]
 })
 export class AuctionBidsListModule { }

@@ -16,7 +16,7 @@ export class AuctionBidCreateComponent implements OnChanges {
   @Input() auction?: Auction;
 
   bidForm = new FormGroup({
-    amount: new FormControl<number>(0, {validators: [Validators.required, Validators.min(0)], nonNullable: true}),
+    amount: new FormControl<number|null>(null, { validators: [Validators.required, Validators.min(0)] }),
   });
 
   private _loading = false;
@@ -64,10 +64,6 @@ export class AuctionBidCreateComponent implements OnChanges {
           Validators.min(this.auction?.startPrice)
         ]);
         this.bidForm.controls.amount.updateValueAndValidity();
-
-        if (this.bidForm.controls.amount.value < this.auction.startPrice) {
-          this.bidForm.controls.amount.setValue(this.auction.startPrice);
-        }
       }
     }
   }
@@ -91,7 +87,9 @@ export class AuctionBidCreateComponent implements OnChanges {
 
     if (this.bidForm.valid) {
       // Build the request data
-      const data = new AuctionBidCreateRequest(this.bidForm.value);
+      const data = new AuctionBidCreateRequest({
+        amount: this.bidForm.value.amount ?? 0
+      });
 
       // Send the request
       this.loading = true;

@@ -5,6 +5,7 @@ import { AuthModule } from '@licirom/core/auth/auth.module';
 import { HttpClientModule } from '@angular/common/http';
 import { IdentityModule } from '@licirom/core/identity/identity.module';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
 
 
 @NgModule({
@@ -24,6 +25,12 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
         duration: 2500
       }
     },
+    {
+      provide: DATE_PIPE_DEFAULT_OPTIONS,
+      useValue: {
+        timezone: '+0300'
+      }
+    }
   ]
 })
 export class CoreModule {

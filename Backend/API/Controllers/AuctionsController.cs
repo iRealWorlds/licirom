@@ -47,7 +47,7 @@ public class AuctionsController : ControllerBase
 
         if(query.Query != null)
         {
-            auctions = auctions.Where(a => a.Title.Contains(query.Query) || a.Description.Contains(query.Query));
+            auctions = auctions.Where(a => a.Title.Contains(query.Query) || a.Description!.Contains(query.Query));
         }
 
         if(query.CreatedByMe == true)
@@ -178,16 +178,12 @@ public class AuctionsController : ControllerBase
             return NotFound();
         }
 
-<<<<<<< HEAD
         if(!(await _authorizationService.AuthorizeAsync(User, auction, AuthorizationPolicies.UserOwnsResource)).Succeeded)
         {
             return Unauthorized();
         }
 
-        if(request.Title is not null)
-=======
         if (request.Title is not null)
->>>>>>> origin/dev/auctions
         {
             auction.Title = request.Title;
         }
@@ -268,14 +264,11 @@ public class AuctionsController : ControllerBase
             return NotFound();
         }
 
-<<<<<<< HEAD
         if(!(await _authorizationService.AuthorizeAsync(User, auction, AuthorizationPolicies.UserOwnsResource)).Succeeded)
         {
             return Unauthorized();
         }
         
-=======
->>>>>>> origin/dev/auctions
         // Delete the auction
         _dbContext.Entry(auction).State = EntityState.Deleted;
         await _dbContext.SaveChangesAsync();

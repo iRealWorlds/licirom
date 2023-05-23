@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using API.Database.Entities;
+using API.ViewModels.Converters;
 
 namespace API.ViewModels;
 
@@ -8,7 +9,7 @@ public class AuctionModel : EntityModel<Guid>
     public string Title { get; set; }
     public string Description { get; set; }
 
-    [JsonConverter(typeof(ExpandableSerializer<UserViewModel, Guid>))]
+    [JsonConverter(typeof(ExpandableConverter<UserViewModel, Guid>))]
     public ExpandableModel<UserViewModel, Guid> Creator { get; set; }
     
     public Guid? CategoryKey { get; set; }
@@ -16,7 +17,11 @@ public class AuctionModel : EntityModel<Guid>
     public decimal ReservePrice { get; set; }
     public decimal MinimumIncrement { get; set; }
     public decimal StartPrice { get; set; }
+    
+    [JsonConverter(typeof(IsoDateTimeConverter))]
     public DateTime StartTime { get; set; }
+    
+    [JsonConverter(typeof(IsoDateTimeConverter))]
     public DateTime EndTime { get; set; }
 
     public AuctionModel()

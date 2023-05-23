@@ -1,8 +1,23 @@
-<mat-card class="w-full h-full">
-  <mat-card-header class="p-5">
+<mat-card class="w-full h-full" *ngIf="auction">
+  <mat-card-header class="p-5 flex items-center justify-between">
     <mat-card-title class="block text-xl">
       Top 3 bids
     </mat-card-title>
+
+    <ng-container *ngIf="auction.currentStatus !== statuses.CLOSED">
+      <!-- Not yet started -->
+      <div class="flex items-center gap-4" *ngIf="timeUntilStart > 0; else alreadyStartedTemplate">
+        <h4 class="text-gray-500">Starts in</h4>
+        <app-time-cards [time]="timeUntilStart"></app-time-cards>
+      </div>
+      <ng-template #alreadyStartedTemplate>
+        <!-- Ends in -->
+        <div class="flex items-center gap-4" *ngIf="timeUntilEnd > 0">
+          <h4 class="text-gray-500">Ends in</h4>
+          <app-time-cards [time]="timeUntilEnd"></app-time-cards>
+        </div>
+      </ng-template>
+    </ng-container>
   </mat-card-header>
 
   <!-- Divider -->
