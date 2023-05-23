@@ -248,6 +248,30 @@ public class AuctionsController : ControllerBase
             auction.EndTime = (DateTime)request.EndTime;
         }
 
+        if(request.Status == Auction.Status.ACTIVE)
+        {
+            // Only admins may activate an auction
+            if(!(await _authorizationService.AuthorizeAsync(User, auction, AuthorizationPolicies.UserIsAdmin)).Succeeded)
+            {
+                return Unauthorized();
+            }
+            auction.CurrentStatus = Auction.Status.ACTIVE;
+        }
+        else if(request.Status == Auction.Status.CLOSED)
+        {
+            // Only admins and the owner may close an auction
+            if(!(await _authorizationService.AuthorizeAsync(User, auction, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+            {
+                return Unauthorized();
+            }
+            auction.CurrentStatus = Auction.Status.CLOSED;
+        }
+        else if(request.Status != null)
+        {
+            ModelState.AddModelError(nameof(request.Status), "Auctions may only be changed to ACTIVE or CLOSED.");
+            return BadRequest(ModelState);
+        }
+
         // Save changes
         _dbContext.Auctions.Entry(auction).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
@@ -284,48 +308,4 @@ public class AuctionsController : ControllerBase
         // Return a 204 No Content response
         return NoContent();
     }
-
-    [HttpPut("{auctionKey}/activate")]
-    [Authorize(Policy=AuthorizationPolicies.UserIsAdmin)]
-    public async Task<IActionResult> Activate(string auctionKey)
-    {
-        var guidAuctionKey = Guid.Parse(auctionKey);
-        // Get auction details
-        var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == guidAuctionKey);
-
-        // Make sure the auction exists
-        if (auction == null)
-        {
-            return NotFound();
-        }
-
-        // Activate the auction
-        auction.CurrentStatus = Auction.Status.ACTIVE;
-        _dbContext.Entry(auction).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync();
-
-        return Ok();
-    }
-
-    [HttpPut("{auctionKey}/close")]
-    public async Task<IActionResult> Close(string auctionKey)
-    {
-        var guidAuctionKey = Guid.Parse(auctionKey);
-        // Get auction details
-        var auction = await _dbContext.Auctions.FirstOrDefaultAsync(c => c.Key == guidAuctionKey);
-
-        // Make sure the auction exists
-        if (auction == null)
-        {
-            return NotFound();
-        }
-
-        // Activate the auction
-        auction.CurrentStatus = Auction.Status.CLOSED;
-        _dbContext.Entry(auction).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync();
-
-        return Ok();
-    }
-
 }

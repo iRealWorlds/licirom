@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { PaginatedResult } from '@licirom/core/pagination/paginated-result.model';
 import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
 import { Auction } from '@licirom/modules/auctions/auction.model';
+import { AuctionStatus } from '@licirom/modules/auctions/auction-status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -39,8 +40,10 @@ export class PendingAuctionsService extends ApiService {
    * @constructor
    */
   Activate(auctionKey: string): Observable<boolean> {
-    const uri = this.buildApiEndpointUri(`api/Auctions/${auctionKey}/activate`);
-    return this._http.put<boolean>(uri, auctionKey);
+    const uri = this.buildApiEndpointUri(`api/Auctions/${auctionKey}`);
+    return this._http.patch<boolean>(uri, {
+      status: AuctionStatus.ACTIVE
+    });
   }
 
   /**
@@ -50,8 +53,10 @@ export class PendingAuctionsService extends ApiService {
    * @constructor
    */
   Close(auctionKey: string): Observable<boolean> {
-    const uri = this.buildApiEndpointUri(`api/Auctions/${auctionKey}/close`);
-    return this._http.put<boolean>(uri, auctionKey);
+    const uri = this.buildApiEndpointUri(`api/Auctions/${auctionKey}`);
+    return this._http.patch<boolean>(uri, {
+      status: AuctionStatus.CLOSED
+    });
   }
 
 }

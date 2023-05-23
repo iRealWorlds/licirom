@@ -64,7 +64,7 @@ export class TicketService extends ApiService {
    * @param options
    */
   getMessages(ticketId: string, options = new ApiOperationOptions()): Observable<SupportMessage[]> {
-    const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/all`;
+    const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/messages`;
     console.log(endpoint);
     return this._http.get<SupportMessage[]>(this.buildApiEndpointUri(endpoint), {
       params: this.buildParameters(options)
@@ -78,7 +78,7 @@ export class TicketService extends ApiService {
    * @param messageContent
    */
   createMessage(ticketId: string, messageContent: MessageCreateRequest): Observable<SupportMessage> {
-    const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/addMessage`;
+    const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/messages`;
     return this._http.post<SupportMessage>(this.buildApiEndpointUri(endpoint), messageContent);
   }
 
@@ -88,7 +88,9 @@ export class TicketService extends ApiService {
    * @param ticketId
    */
   resolveTicket(ticketId: string): Observable<boolean> {
-    const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/resolve`;
-    return this._http.put<boolean>(this.buildApiEndpointUri(endpoint), {});
+    const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}`;
+    return this._http.patch<boolean>(this.buildApiEndpointUri(endpoint), {
+      resolved: true
+    });
   }
 }
