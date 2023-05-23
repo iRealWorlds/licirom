@@ -64,7 +64,6 @@ builder.Services.AddAuthentication(options => {
 
     // Prevent default behaviour which renames claims such as "sub" to "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
     options.MapInboundClaims = false;
-
 });
 
 builder.Services.Configure<IdentityOptions>(options =>

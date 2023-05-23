@@ -137,9 +137,7 @@ public class TicketsController : ControllerBase
         return new JsonResult(model);
     }
 
-
-
-    [HttpGet("{key}/all")]
+    [HttpGet("{key}/messages")]
     public async Task<IActionResult> GetAllMessagesForTicketId(int key, [FromQuery] TicketIndexModel options)
     {
         // Retrieve all tickets for the specified ticket ID from the database
@@ -161,7 +159,7 @@ public class TicketsController : ControllerBase
         }));
     }
 
-    [HttpPost("{key}/addMessage")]
+    [HttpPost("{key}/messages")]
     public async Task<IActionResult> CreateAsync(string key, [FromBody] MessageCreateModel data)
     {
         var user = await this._userManager.GetUserAsync(HttpContext.User);
@@ -185,8 +183,8 @@ public class TicketsController : ControllerBase
 
     }
 
-    [HttpPut("{key}/resolve")]
-    public async Task<IActionResult> ResolveTicket(string key)
+    [HttpPatch("{key}")]
+    public async Task<IActionResult> UpdateTicket(string key, [FromBody] TicketPatchModel request)
     {
         int intKey = int.Parse(key);
         var ticket = await _dbContext.SupportTickets.FindAsync(intKey);
@@ -195,23 +193,18 @@ public class TicketsController : ControllerBase
             return NotFound();
         }
 
-        ticket.Resolved = true; // Set the Resolved property to true
+        if(!(await _authorizationService.AuthorizeAsync(User, ticket, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+        {
+            return Unauthorized();
+        }
+
+        if(request.Resolved is not null)
+        {
+            ticket.Resolved = (bool) request.Resolved;
+        }
+
         _dbContext.SupportTickets.Entry(ticket).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
         return Ok();
     }
-
-    [HttpGet("{key}/isResolved")]
-    public async Task<IActionResult> isResolved(string key)
-    {
-        int intKey = int.Parse(key);
-        var ticket = await _dbContext.SupportTickets.FindAsync(intKey);
-        if (ticket == null)
-        {
-            return NotFound();
-        }
-        bool isTicketResolved = ticket.Resolved;
-        return Ok(isTicketResolved);
-    }
-
 }

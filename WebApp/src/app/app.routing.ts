@@ -24,6 +24,7 @@ export const appRouting: Route[] = [
       { path: 'auth/sign-out', loadChildren: () => import('src/app/modules/auth/sign-out/sign-out.module').then(m => m.SignOutModule) },
       { path: 'support', loadChildren: () => import('src/app/modules/support/support.module').then(m => m.SupportModule) },
       { path: 'auctions', loadChildren: () => import('src/app/modules/auctions/auctions.module').then(m => m.AuctionsModule) },
+      { path: 'profile', loadChildren: () => import('src/app/modules/profile/profile.module').then(m => m.ProfileModule)},
       { path: 'admin', loadChildren: () => import('src/app/modules/admin/admin.module').then(m => m.AdminModule) },
     ],
   },

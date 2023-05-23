@@ -61,17 +61,19 @@ public class UsersController : ControllerBase
         }
         
         // Return a 201 Created response
-        return CreatedAtAction(nameof(ShowAsync), new { key = user.Id }, new UserViewModel(user));
+        return CreatedAtAction(nameof(ShowAsync), new { userKey = user.Id }, new UserViewModel(user));
     }
 
-    [HttpGet("{key:guid}")]
+    [HttpGet("{userKey:guid}")]
     [ActionName(nameof(ShowAsync))]
     [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ShowAsync(Guid key)
+    [Authorize]
+    public async Task<IActionResult> ShowAsync(Guid userKey)
     {
         // Find the user
-        var user = await this._userManager.FindByIdAsync(key.ToString());
+        var user = await this._userManager.FindByIdAsync(userKey.ToString());
 
         // If none found, return a 404 response
         if (user == null)
@@ -89,5 +91,78 @@ public class UsersController : ControllerBase
         {
             IsAdmin = _userService.IsAdminAsync(user).Result // TODO find a better way to pass this
         });
+    }
+
+    [HttpPut("{userKey:guid}/password")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> ChangePasswordAsync([FromBody] PasswordChangeModel data, Guid userKey)
+    {
+        var user = await this._userManager.FindByIdAsync(userKey.ToString());
+
+        if (user == null)
+        {
+            return new NotFoundResult();
+        }
+
+        if(!(await _authorizationService.AuthorizeAsync(User, user, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+        {
+            return Unauthorized();
+        }
+
+        if(!(await this._userManager.ChangePasswordAsync(user, data.CurrentPassword, data.NewPassword)).Succeeded)
+        {
+            return new UnprocessableEntityResult();
+        }
+
+        return new NoContentResult();
+    }
+
+    [HttpDelete("{userKey:guid}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeleteUserAsync(Guid userKey)
+    {
+        var user = await this._userManager.FindByIdAsync(userKey.ToString());
+
+        if(user == null)
+        {
+            return new NotFoundResult();
+        }
+
+        if(!(await _authorizationService.AuthorizeAsync(User, user, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+        {
+            return Unauthorized();
+        }
+
+        return new NoContentResult();
+    }
+
+    [HttpPatch("{userKey:guid}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
+    public async Task<IActionResult> PatchUserAsync([FromBody] PatchUserModel data, Guid userKey)
+    {
+        var user = await this._userManager.FindByIdAsync(userKey.ToString());
+
+        if(user == null)
+        {
+            return new NotFoundResult();
+        }
+
+        if(!(await _authorizationService.AuthorizeAsync(User, user, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+        {
+            return Unauthorized();
+        }
+
+        user.FirstName = data.FirstName;
+        user.LastName = data.LastName;
+
+        await this._userManager.UpdateAsync(user);
+
+        return new JsonResult(new UserViewModel(user));
     }
 }

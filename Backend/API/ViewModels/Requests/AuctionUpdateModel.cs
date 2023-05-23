@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using API.Database.Entities;
 
 namespace API.ViewModels.Requests;
 
@@ -11,4 +12,5 @@ public class AuctionUpdateModel
     public decimal? StartPrice { get; set; } = null;
     public DateTime? StartTime { get; set; } = null;
     public DateTime? EndTime { get; set; } = null;
+    public Auction.Status? Status { get; set; } = null;
 }
