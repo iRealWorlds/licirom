@@ -9,9 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-
-
-
 namespace API.Controllers;
 
 [Authorize]
@@ -31,7 +28,7 @@ public class TicketsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> IndexAsync()
+    public async Task<IActionResult> IndexAsync([FromQuery] TicketIndexModel options)
     {
         var user = await this._userManager.GetUserAsync(HttpContext.User);
 
@@ -46,17 +43,29 @@ public class TicketsController : ControllerBase
         if (await _userManager.IsInRoleAsync(user, "Administrator"))
         {
             ticketList = await this._dbContext.SupportTickets
+                .Include(t => t.User)
+                .OrderByDescending(t => t.CreatedAt)
                 .ToListAsync();
         }
         else
         {
             ticketList = await this._dbContext.SupportTickets
                 .Where(t => user.Id == t.UserId)
+                .Include(t => t.User)
+                .OrderByDescending(t => t.CreatedAt)
                 .ToListAsync();
         }
 
         // Return the result
-        return new JsonResult(ticketList.Select(ticket => new SupportTicketModel(ticket)));
+        return new JsonResult(ticketList.Select(ticket =>
+        {
+            var model = new SupportTicketModel(ticket);
+            foreach (var property in options.Expand)
+            {
+                model.Expand(property);
+            }
+            return model;
+        }));
     }
 
 
@@ -100,10 +109,12 @@ public class TicketsController : ControllerBase
 
     [HttpGet("{key}")]
     [ActionName(nameof(ShowAsync))]
-    public async Task<IActionResult> ShowAsync(int key)
+    public async Task<IActionResult> ShowAsync(int key, [FromQuery] TicketShowModel options)
     {
         // Find the ticket
-        var ticket = await this._dbContext.SupportTickets.FirstOrDefaultAsync(ticket => ticket.Id == key);
+        var ticket = await this._dbContext.SupportTickets
+            .Include(t => t.User)
+            .FirstOrDefaultAsync(ticket => ticket.Id == key);
 
         // Handle no ticket found
         if (ticket == null)
@@ -115,23 +126,39 @@ public class TicketsController : ControllerBase
         {
             return Unauthorized();
         }
+        
+        var model = new SupportTicketModel(ticket);
+        foreach (var property in options.Expand)
+        {
+            model.Expand(property);
+        }
 
         // Return the result
-        return new JsonResult(new SupportTicketModel(ticket));
+        return new JsonResult(model);
     }
 
 
 
     [HttpGet("{key}/all")]
-    public async Task<IActionResult> GetAllMessagesForTicketId(int key)
+    public async Task<IActionResult> GetAllMessagesForTicketId(int key, [FromQuery] TicketIndexModel options)
     {
         // Retrieve all tickets for the specified ticket ID from the database
         var messages = (await this._dbContext.SupportMessages
             .Where(t => t.TicketId == key)
-            .ToListAsync())
-            .Select(m => new SupportMessageModel(m));
+            .Include(t => t.User)
+            .ToListAsync());
+
         // Return the list of tickets as JSON
-        return new JsonResult(messages);
+        return new JsonResult(messages.Select(m =>
+        {
+            
+            var model = new SupportMessageModel(m);
+            foreach (var property in options.Expand)
+            {
+                model.Expand(property);
+            }
+            return model;
+        }));
     }
 
     [HttpPost("{key}/addMessage")]

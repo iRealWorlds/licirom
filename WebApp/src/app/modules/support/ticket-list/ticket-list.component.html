@@ -14,9 +14,9 @@
     <mat-card *ngFor="let ticket of tickets" class="w-full group">
       <mat-card-header class="relative">
         <mat-card-title class="text-xl">
-          <a [routerLink]="['/support/details', ticket.id]">
+          <a [routerLink]="['/support/details', ticket.key]">
             {{ ticket.title }}
-            <span class="opacity-30 group-hover:opacity-90 transition-all">#{{ ticket.id }}</span>
+            <span class="opacity-30 group-hover:opacity-90 transition-all">#{{ ticket.key }}</span>
           </a>
         </mat-card-title>
         <mat-card-subtitle class="text-sm">
@@ -41,7 +41,7 @@
               <mat-icon class="scale-110">person</mat-icon>
             </div>
           </div>
-          <p>{{ ticket.userId | expandable: displayCreatorName }}</p>
+          <p>{{ ticket.user | expandable: displayCreatorName }}</p>
         </div>
       </mat-card-footer>
     </mat-card>
