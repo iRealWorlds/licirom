@@ -1,57 +1,35 @@
-<ng-container class="mx-5 mt-7"  *ngIf="profile">
-  <ng-container class="  mt-7" *ngIf="personalProfile">
-    <h1 class="text-xl mx-3 text-green-500">
-      Personal Page
-    </h1>
-    </ng-container>
+<div class="w-main-content mx-auto mt-7" *ngIf="profile">
+  <mat-card>
+    <mat-card-header class="bg-primary-500 text-white relative">
+      <mat-card-title class="text-xl text-center">
+        <h2 class="px-32 pt-10 pb-3 flex items-center gap-2">
+          {{profile.firstName}} {{profile.lastName}}
+          <mat-icon *ngIf="profile.isAdmin" class="text-amber-30" matTooltip="Administrator">engineering</mat-icon>
+        </h2>
+      </mat-card-title>
 
-    <mat-card>
-      <mat-card-header class="mb-3">
-        <mat-card-title class="text-xl">
-          <h2>
-           <mat-icon class="">account_circle</mat-icon> {{profile.firstName}} {{profile.lastName}}
-         </h2>
-         <div class="flex items-center gap-5 mt-4">
-          <a routerLink="/auth/sign-out" mat-flat-button color="warn">
-            Sign out
-          </a>
+      <div class="flex items-center justify-center absolute top-full left-5 -translate-y-1/2">
+        <div class="w-24 h-24 rounded-full flex items-center justify-center bg-gray-800 text-white">
+          <mat-icon class="scale-[200%]">person</mat-icon>
         </div>
-        </mat-card-title>
-        <mat-card-subtitle class="text-md mt-4">
+      </div>
+
+    </mat-card-header>
+    <mat-card-content>
+      <mat-card-subtitle class="text-md px-32 pt-3 flex items-center gap-2">
+        <mat-icon>mail</mat-icon>
+        <a href="mailto:{{profile.emailAddress}}">
           {{profile.emailAddress}}
-        </mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-      </mat-card-content>
-      <mat-card-actions align="end"  class="flex gap-4">
-        <!-- Update -->
-        <a [routerLink]="['/profile/update', profile.key]" mat-flat-button color="primary">
-          <mat-icon>edit</mat-icon>
-         Edit 
         </a>
-  
-        <!-- Delete -->
+      </mat-card-subtitle>
+    </mat-card-content>
 
-    <!--<button type="button" mat-flat-button color="warn" (click)="openDialog()">
-      <mat-icon>delete</mat-icon> Delete </button> -->
-      </mat-card-actions> 
-    </mat-card> 
-
-
-<!-- <mat-card>
-  <mat-card-header class="mb-3">
-    <mat-card-title class="text-xl">
-      <p>Your Auctions</p>
-    </mat-card-title>
-  </mat-card-header>
-</mat-card> -->
-    
-<mat-card>
-  <mat-card-header class="mb-3">
-    <mat-card-title class="text-xl">
-      <p>Profile Reviews</p>
-    </mat-card-title>
-  </mat-card-header>
-</mat-card>
-
-  </ng-container>
+    <mat-card-actions align="end"  class="flex gap-4">
+      <!-- Update -->
+      <a [routerLink]="['/profile/update', profile.key]" mat-flat-button color="accent">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </a>
+    </mat-card-actions>
+  </mat-card>
+</div>
