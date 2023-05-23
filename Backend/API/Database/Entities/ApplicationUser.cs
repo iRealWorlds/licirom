@@ -10,6 +10,8 @@ public class ApplicationUser : IdentityUser<Guid>, IUserOwnable
     public virtual ICollection<Auction> Auctions { get; set; }
     public virtual ICollection<Bid> Bids { get; set; }
     public virtual ICollection<AuctionComment> AuctionComments { get; set; }
+    public virtual ICollection<ProfileReview> ReviewsGiven { get; set; }
+    public virtual ICollection<ProfileReview> ReviewsReceived { get; set; }
 
     public Guid GetOwnerId()
     {

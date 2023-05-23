@@ -13,6 +13,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public DbSet<Auction> Auctions { get; set; }
     public DbSet<AuctionComment> AuctionComments { get; set; }
     public DbSet<Bid> Bids { get; set; }
+    public DbSet<ProfileReview> ProfileReviews { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -42,6 +43,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
             b.HasMany(a => a.AuctionComments)
                 .WithOne(c => c.Author)
                 .HasForeignKey(b => b.AuthorKey)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            b.HasMany(a => a.ReviewsGiven)
+                .WithOne(r => r.Reviewer)
+                .HasForeignKey(b => b.ReviewerKey)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            b.HasMany(a => a.ReviewsReceived)
+                .WithOne(r => r.Target)
+                .HasForeignKey(b => b.TargetKey)
                 .OnDelete(DeleteBehavior.ClientCascade);
         });
 
@@ -121,6 +130,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         {
             e.HasKey(b => b.Key);
             e.Property(b => b.Amount).HasPrecision(10, 2);
+        });
+        builder.Entity<ProfileReview>(e =>
+        {
+            e.HasKey(r => r.Id);
         });
     }
 }
