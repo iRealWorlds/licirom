@@ -3,11 +3,18 @@
       You are signed in
     </h1>
     <h2>
-        {{identity.firstName}}
+      <i class="material-icons">co_present</i> {{identity.firstName}}
     </h2>
     <div class="flex items-center gap-5 mt-5">
       <a routerLink="/auth/sign-out" mat-flat-button color="warn">
         Sign out
       </a>
     </div>
+
+    <h2>
+      <p>Your Auctions</p>
+    </h2>
+    <h2>
+      <p>Reviews</p>
+    </h2>
   </ng-container>

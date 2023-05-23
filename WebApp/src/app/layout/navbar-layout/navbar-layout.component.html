@@ -18,10 +18,11 @@
         {{ user.firstName }} {{ user.lastName }}
       </button>
       <mat-menu #userMenu="matMenu">
-        <button disabled mat-menu-item>
+       <!-- <button  mat-menu-item>-->
+          <a routerLink="/" mat-menu-item>
           <mat-icon>account_circle</mat-icon>
           <span>Profile</span>
-        </button>
+        </a>
         <button disabled mat-menu-item>
           <mat-icon>settings</mat-icon>
           <span>Settings</span>
