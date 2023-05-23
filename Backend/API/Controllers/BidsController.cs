@@ -132,13 +132,13 @@ public class BidsController : ControllerBase
             Encrypted = true
         };
 
+        // Send a Pusher event
         var pusher = new Pusher(
             this._configuration.GetValue<string>("Pusher:AppId"),
             this._configuration.GetValue<string>("Pusher:AppKey"),
             this._configuration.GetValue<string>("Pusher:AppSecret"),
             options);
-
-        var result = await pusher.TriggerAsync(
+        await pusher.TriggerAsync(
             $"auctions.{auction.Key}",
             "bids.created",
             new { auctionKey = auction.Key, bidKey = bid.Key } );
