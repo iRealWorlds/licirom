@@ -9,9 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-
-
-
 namespace API.Controllers;
 
 [Authorize]
@@ -46,12 +43,14 @@ public class TicketsController : ControllerBase
         if (await _userManager.IsInRoleAsync(user, "Administrator"))
         {
             ticketList = await this._dbContext.SupportTickets
-                .ToListAsync();
+                    .OrderByDescending(t => t.CreatedAt)
+                    .ToListAsync();
         }
         else
         {
             ticketList = await this._dbContext.SupportTickets
                 .Where(t => user.Id == t.UserId)
+                .OrderByDescending(t => t.CreatedAt)
                 .ToListAsync();
         }
 
