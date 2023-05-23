@@ -8,27 +8,6 @@
         Home
       </a>
 
-  <div class="flex items-center gap-5">
-    <!-- Current user -->
-    <ng-container *ngIf="currentUser$ | async as user; else guestTemplate">
-      <button mat-button [matMenuTriggerFor]="userMenu">
-        <mat-icon>person</mat-icon>
-        {{ user.firstName }} {{ user.lastName }}
-      </button>
-      <mat-menu #userMenu="matMenu">
-       <!-- <button  mat-menu-item>-->
-          <a [routerLink]="['/profile', user.key]" mat-menu-item>
-          <mat-icon>account_circle</mat-icon>
-          <span>Profile</span>
-        </a>
-        <button disabled mat-menu-item>
-          <mat-icon>settings</mat-icon>
-          <span>Settings</span>
-        </button>
-        <a routerLink="/auth/sign-out" mat-menu-item>
-          <mat-icon>power_settings_new</mat-icon>
-          <span>Sign out</span>
-        </a>
       <!-- Support -->
       <a routerLink="/support" routerLinkActive="bg-black/10" mat-button>
         Support
