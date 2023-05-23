@@ -4,7 +4,7 @@ import { ProfileResolver } from '@licirom/modules/profile/profile.resolver';
 
 export const profileRouting: Route[] =[
     {   
-        path:'',
+        path:':profileKey',
         component: ProfileComponent,
         resolve: {
             profile: ProfileResolver

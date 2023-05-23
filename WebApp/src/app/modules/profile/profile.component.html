@@ -1,22 +1,63 @@
-<ng-container *ngIf="profile">
-  <ng-container *ngIf="personalProfile">
+<ng-container class="mx-5 mt-7"  *ngIf="profile">
+  <ng-container class="  mt-7" *ngIf="personalProfile">
     <h1 class="text-xl text-green-500">
       Personal Page
     </h1>
     </ng-container>
-    <h2>
-      <i class="material-icons">co_present</i> {{profile.firstName}}
-    </h2>
-    <div class="flex items-center gap-5 mt-5">
-      <a routerLink="/auth/sign-out" mat-flat-button color="warn">
-        Sign out
-      </a>
-    </div>
 
-    <h2>
+    <mat-card>
+      <mat-card-header class="mb-3">
+        <mat-card-title class="text-xl">
+          <h2>
+           <mat-icon class="">account_circle</mat-icon> {{profile.firstName}} {{profile.lastName}}
+         </h2>
+         <div class="flex items-center gap-5 ">
+          <a routerLink="/auth/sign-out" mat-flat-button color="warn">
+            Sign out
+          </a>
+        </div>
+        </mat-card-title>
+        <mat-card-subtitle class="text-sm">
+          Profile email
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="text-sm text-gray-500">   
+          Profile Content
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end"  class="flex gap-4">
+        <!-- Update -->
+        <a [routerLink]="" mat-flat-button color="primary">
+          <mat-icon>edit</mat-icon>
+         Edit 
+        </a>
+  
+        <!-- Delete -->
+        <button type="button" mat-flat-button color="warn"  >
+          <mat-icon>delete</mat-icon>
+          <ng-container >Delete Account</ng-container>
+         <!-- (click)=""  <ng-container *ngIf="deleting === true">Deleting</ng-container>
+          <ng-container *ngIf="deleting === false">Delete</ng-container> -->
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+
+<mat-card>
+  <mat-card-header class="mb-3">
+    <mat-card-title class="text-xl">
       <p>Your Auctions</p>
-    </h2>
-    <h2>
-      <p>Reviews</p>
-    </h2>
+    </mat-card-title>
+  </mat-card-header>
+</mat-card>
+    
+<mat-card>
+  <mat-card-header class="mb-3">
+    <mat-card-title class="text-xl">
+      <p>Profile Reviews</p>
+    </mat-card-title>
+  </mat-card-header>
+</mat-card>
+
   </ng-container>

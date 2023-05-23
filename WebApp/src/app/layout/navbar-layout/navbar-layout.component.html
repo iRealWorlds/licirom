@@ -19,7 +19,7 @@
       </button>
       <mat-menu #userMenu="matMenu">
        <!-- <button  mat-menu-item>-->
-          <a routerLink="/" mat-menu-item>
+          <a [routerLink]="['/profile', user.key]" mat-menu-item>
           <mat-icon>account_circle</mat-icon>
           <span>Profile</span>
         </a>
