@@ -1,25 +1,52 @@
 import { Injectable } from '@angular/core';
-import {
-  Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
-} from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
 import { SupportTicket } from '@licirom/modules/support/support-ticket.model';
+import { TicketService } from '@licirom/modules/support/ticket.service';
+import { SupportMessage } from '@licirom/modules/support/support-messages.model';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable({ providedIn: 'root' })
 export class TicketResolver implements Resolve<SupportTicket> {
   /**
-   * Resolve the ticket details from the API.
+   * TicketResolver constructor method.
+   *
+   * @param ticketService
+   */
+  constructor(private ticketService: TicketService) { }
+
+  /**
+   * Resolve the data from the API.
    *
    * @param route
-   * @param state
-   *
    */
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<SupportTicket> { // eslint-disable-line @typescript-eslint/no-unused-vars
-    return of();
+  resolve(route: ActivatedRouteSnapshot): Observable<SupportTicket> {
+    const ticketId = route.paramMap.get('ticketKey');
+    if (ticketId === null) {
+      return throwError(() => new Error('No ticket id provided'));
+    }
+    return this.ticketService.getTicket(ticketId);
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class MessagesResolver implements Resolve<SupportMessage[]> {
+  /**
+   * MessagesResolver constructor method.
+   *
+   * @param ticketService
+   */
+  constructor(private ticketService: TicketService) { }
+
+  /**
+   * Resolve the data from the API.
+   *
+   * @param route
+   */
+  resolve(route: ActivatedRouteSnapshot): Observable<SupportMessage[]> {
+    const ticketId = route.paramMap.get('ticketKey');
+    if (ticketId === null) {
+      return throwError(() => new Error('No ticket id provided'));
+    }
+    return this.ticketService.getMessages(ticketId);
   }
 }

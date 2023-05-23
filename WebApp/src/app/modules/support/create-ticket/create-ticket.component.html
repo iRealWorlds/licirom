@@ -1,27 +1,45 @@
-<form [formGroup]="ticketForm" class="m-5" (ngSubmit)="submitTicket()">
+<div class="w-main-content mx-auto my-7">
+  <a routerLink="/support" mat-flat-button class="mb-3">
+    <mat-icon>arrow_back</mat-icon>
+    Back to list
+  </a>
+  <form [formGroup]="ticketForm" (ngSubmit)="submitTicket()">
     <mat-card>
-        <mat-card-header class="mb-7">
-            <h1 mat-card-title class="text-3xl font-bold">Create a ticket</h1>
-        </mat-card-header>
-        <mat-card-content>
-            <mat-form-field>
-                <mat-label>Ticket Name</mat-label>
-                <input matInput [formControl]="ticketForm.controls.title">
-            </mat-form-field>
+      <mat-card-header class="mb-7">
+        <h1 mat-card-title class="text-3xl font-bold">Create a ticket</h1>
+      </mat-card-header>
+      <mat-card-content class="flex flex-col gap-5 p-5">
+        <!-- Title -->
+        <mat-form-field>
+          <mat-label>
+            Title
+          </mat-label>
+          <input type="text" matInput [formControl]="ticketForm.controls.title" />
+          <mat-error *ngFor="let error of ticketForm.controls.title.errors | keyvalue">
+            <app-field-validation-errors [error]="error.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
 
-            <mat-form-field class="block">
-                <mat-label>Complaint</mat-label>
-                <textarea matInput [formControl]="ticketForm.controls.content"></textarea>
-            </mat-form-field>
-        </mat-card-content>
-        <mat-card-footer>
-            <mat-card-actions align="end">
-                <button type="submit"
-                    class="rounded bg-primary-500 hover:bg-primary-600 text-white px-5 py-2 flex items-center gap-2">
-                    <mat-icon>check</mat-icon>
-                    Submit
-                </button>
-            </mat-card-actions>
-        </mat-card-footer>
+        <!-- Contents -->
+        <mat-form-field>
+          <mat-label>
+            Content
+          </mat-label>
+          <textarea matInput [formControl]="ticketForm.controls.content"></textarea>
+          <mat-error *ngFor="let error of ticketForm.controls.content.errors | keyvalue">
+            <app-field-validation-errors [error]="error.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-footer class="p-5">
+        <mat-card-actions align="end">
+          <button type="submit" mat-flat-button color="primary" [disabled]="ticketForm.disabled">
+            <mat-icon>check</mat-icon>
+            <ng-container *ngIf="loading === true">Creating</ng-container>
+            <ng-container *ngIf="loading === false">Create</ng-container>
+          </button>
+        </mat-card-actions>
+      </mat-card-footer>
     </mat-card>
-</form>
+  </form>
+</div>

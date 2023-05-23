@@ -16,6 +16,8 @@ export class CreateTicketComponent {
     content: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
   });
 
+  private _loading = false;
+
   /**
    * CreateTicketComponent constructor method.
    *
@@ -30,19 +32,49 @@ export class CreateTicketComponent {
   ) { }
 
   /**
+   * Get the current loading state for this component.
+   */
+  get loading(): boolean {
+    return this._loading;
+  }
+
+  /**
+   * Set a new loading state for this component.
+   *
+   * @param value
+   */
+  set loading(value: boolean) {
+    this._loading = value;
+
+    if (value) {
+      this.ticketForm.disable();
+    } else {
+      this.ticketForm.enable();
+    }
+  }
+
+  /**
    * Submit the ticket to the API.
    */
   submitTicket(): void {
+    // If already loading, throw an exception
+    if (this.loading) {
+      throw new Error('Already loading.');
+    }
+
     this.ticketForm.markAllAsTouched();
 
     if (this.ticketForm.valid) {
+      this.loading = true;
       this._ticketService.create(new CreateTicketRequest(this.ticketForm.value)).subscribe({
         next: async () => {
           await this._router.navigate(['/support']);
           this._toastService.open('Ticket created successfully.', 'Close');
+          this.loading = false;
         },
         error: () => {
           this._toastService.open('An error has occurred.', 'Close');
+          this.loading = false;
         }
       });
     }

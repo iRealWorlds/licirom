@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
 } from '@angular/router';
 import { PaginatedResult } from '@licirom/core/pagination/paginated-result.model';
 import { Observable } from 'rxjs';

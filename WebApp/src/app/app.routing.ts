@@ -33,6 +33,7 @@ export const appRouting: Route[] = [
     path: '',
     children: [
     ],
+
   },
 
   // Catch all route

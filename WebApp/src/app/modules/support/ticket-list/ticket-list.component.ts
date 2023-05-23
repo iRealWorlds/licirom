@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { SupportTicket } from '@licirom/modules/support/support-ticket.model';
+import { User } from '@licirom/modules/users/user.model';
 
 @Component({
   selector: 'app-ticket-list',
@@ -42,4 +43,12 @@ export class TicketListComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.complete();
   }
 
+  /**
+   * Display the creator's full name.
+   *
+   * @param user
+   */
+  displayCreatorName(user: User): string {
+    return `${user.firstName} ${user.lastName}`;
+  }
 }
