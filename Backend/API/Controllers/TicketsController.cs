@@ -41,18 +41,22 @@ public class TicketsController : ControllerBase
             return Unauthorized();
         }
 
-        if(!(await _authorizationService.AuthorizeAsync(User, ticket, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+        IEnumerable<SupportTicket> ticketList;
+
+        if (await _userManager.IsInRoleAsync(user, "Administrator"))
         {
-            return Unauthorized();
+            ticketList = await this._dbContext.SupportTickets
+                .ToListAsync();
+        }
+        else
+        {
+            ticketList = await this._dbContext.SupportTickets
+                .Where(t => user.Id == t.UserId)
+                .ToListAsync();
         }
 
-        var ticketList = await this._dbContext.SupportTickets
-            .Where(t => user.Id == t.UserId)
-            .Select(ticket => new SupportTicketModel(ticket))
-            .ToListAsync();
-
         // Return the result
-        return new JsonResult(ticketList);
+        return new JsonResult(ticketList.Select(ticket => new SupportTicketModel(ticket)));
     }
 
 
