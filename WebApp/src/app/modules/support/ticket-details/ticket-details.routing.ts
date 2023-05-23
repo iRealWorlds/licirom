@@ -1,15 +1,15 @@
 import { Route } from '@angular/router';
-import { TicketDetailsComponent } from './ticket-details.component';
-import { TicketResolver, MessagesResolver } from './ticket.resolver';
+import { TicketDetailsComponent } from '@licirom/modules/support/ticket-details/ticket-details.component';
+import { MessagesResolver, TicketResolver } from '@licirom/modules/support/ticket-details/ticket.resolver';
 
 
 export const ticketDetailsRouting: Route[] = [
-    {
-        path: ':ticketKey',
-        component: TicketDetailsComponent,
-        resolve: {
-            ticket: TicketResolver,
-            messages: MessagesResolver
-        }
+  {
+    path: ':ticketKey',
+    component: TicketDetailsComponent,
+    resolve: {
+      ticket: TicketResolver,
+      messages: MessagesResolver
     }
+  }
 ];

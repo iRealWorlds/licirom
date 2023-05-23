@@ -1,20 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SupportTicket } from '../support-ticket.model';
-import { SupportMessage } from '../support-messages.model';
-import { TicketService } from '../ticket.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuctionCreateRequest } from '@licirom/modules/auctions/auction-create.request';
-import { AuctionService } from '@licirom/modules/auctions/auction.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MessageCreateRequest } from './message-create.request';
-import { async } from '@angular/core/testing';
-import { Subject, firstValueFrom, takeUntil } from 'rxjs';
 import { IdentityService } from '@licirom/core/identity/identity.service';
-
-
-
+import { firstValueFrom, Subject } from 'rxjs';
+import { SupportTicket } from '@licirom/modules/support/support-ticket.model';
+import { SupportMessage } from '@licirom/modules/support/support-messages.model';
+import { TicketService } from '@licirom/modules/support/ticket.service';
+import { MessageCreateRequest } from '@licirom/modules/support/ticket-details/message-create.request';
 
 @Component({
   selector: 'app-ticket-details',
@@ -22,14 +15,48 @@ import { IdentityService } from '@licirom/core/identity/identity.service';
   styleUrls: ['./ticket-details.component.scss']
 })
 export class TicketDetailsComponent implements OnInit {
+  messageForm = new FormGroup({
+    messageContent: new FormControl('', { nonNullable: true })
+  });
+
+  ticket!: SupportTicket;
+
+  messages!: SupportMessage[];
 
   ownsCurrentTicket = false;
 
-  private readonly _unsubscribeAll = new Subject<void>();
   private _loading = false;
+
+  private readonly _unsubscribeAll = new Subject<void>();
+
+  /**
+   * TicketDetailsComponent constructor method.
+   *
+   * @param _activatedRoute
+   * @param ticketService
+   * @param _identityService
+   * @param _router
+   */
+  constructor(
+    private _activatedRoute: ActivatedRoute,
+    private ticketService: TicketService,
+    private readonly _identityService: IdentityService,
+    private readonly _router: Router
+
+  ) { }
+
+  /**
+   * Get the current loading state.
+   */
   get loading(): boolean {
     return this._loading;
   }
+
+  /**
+   * Set a new loading state.
+   *
+   * @param value
+   */
   set loading(value: boolean) {
     this._loading = value;
 
@@ -40,59 +67,46 @@ export class TicketDetailsComponent implements OnInit {
     }
   }
 
-  messageForm = new FormGroup({
-    messageContent: new FormControl('', { nonNullable: true })
-  });
-
-  public ticket!: SupportTicket;
-
-
-  public messages!: SupportMessage[];
-  constructor(
-    private _activatedRoute: ActivatedRoute,
-    private ticketService: TicketService,
-    private readonly _identityService: IdentityService,
-    private readonly _router: Router
-
-  ) { }
-
+  /**
+   * Check ticket resolved status.
+   */
   checkTicketResolvedStatus(): void {
-    if (this.ticket && this.ticket.resolved === true) {
+    if (this.ticket && this.ticket.resolved) {
       // Perform any additional actions or update component state as needed for a resolved ticket
     }
   }
 
+  /** @inheritDoc */
   ngOnInit(): void {
-
     const ticketId = this._activatedRoute.snapshot.paramMap.get('ticketKey');
+
     if (ticketId !== null) {
-      this.ticketService.getTicket(ticketId).subscribe(
-        (ticket) => {
+      this.ticketService.getTicket(ticketId).subscribe({
+        next: ticket => {
           this.ticket = ticket;
           this.checkTicketResolvedStatus();
         },
-        (error) => {
+        error: error => {
           console.error('Failed to fetch ticket:', error);
           // Perform error handling or show error messages to the user
         }
-      );
+      });
     }
 
-
-    this._activatedRoute.data.subscribe(async (data) => {
+    this._activatedRoute.data.subscribe(async data => {
       this.ticket = data['ticket'];
       this.messages = data['messages'];
       const identity = await firstValueFrom(this._identityService.currentIdentity$);
       this.ownsCurrentTicket = identity?.key === this.ticket?.userId;
     });
-
-
   }
 
-
+  /**
+   * Send a new message to the API.
+   */
   createMessage(): void {
     if (this.loading) {
-      throw new Error("Already creating an auction.");
+      throw new Error('Already creating an auction.');
     }
 
     this.messageForm.markAllAsTouched();
@@ -118,8 +132,9 @@ export class TicketDetailsComponent implements OnInit {
     }
   }
 
-
-
+  /**
+   * Mark a ticket as having been resolved.
+   */
   resolveTicket(): void {
     const ticketId = this._activatedRoute.snapshot.paramMap.get('ticketKey');
     if (ticketId !== null) {
@@ -127,11 +142,11 @@ export class TicketDetailsComponent implements OnInit {
         () => {
           // Successful response handling
           console.log('Ticket resolved successfully.');
-          console.log("Resolved status: " + this.ticket.resolved);
+          console.log('Resolved status: ' + this.ticket.resolved);
           this.ticket.resolved = true;
           // Perform any additional actions or update component state as needed
         },
-        (error) => {
+        error => {
           // Error handling
           console.error('Failed to resolve ticket:', error);
           // Perform any error-specific actions or show error messages to the user

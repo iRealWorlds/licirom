@@ -2,12 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/core/api/api.service';
 import { EnvironmentConfig } from 'src/app/core/environment/environment-config.model';
-//import { SupportTicket } from './support-ticket.model';
-import { SupportMessage } from './support-messages.model';
 import { Observable } from 'rxjs';
 import { SupportTicket } from '@licirom/modules/support/support-ticket.model';
 import { CreateTicketRequest } from '@licirom/modules/support/create-ticket/create-ticket.request';
-import { MessageCreateRequest } from './ticket-details/message-create.request';
+import { SupportMessage } from '@licirom/modules/support/support-messages.model';
+import { MessageCreateRequest } from '@licirom/modules/support/ticket-details/message-create.request';
 
 @Injectable({
   providedIn: 'root'
@@ -42,32 +41,45 @@ export class TicketService extends ApiService {
     return this._http.post<SupportTicket>(this.buildApiEndpointUri(this.environment.api.endpoints.tickets), data);
   }
 
+  /**
+   * Get a ticket's details.
+   *
+   * @param ticketId
+   */
   getTicket(ticketId: string): Observable<SupportTicket> {
     const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}`;
     return this._http.get<SupportTicket>(this.buildApiEndpointUri(endpoint));
   }
 
+  /**
+   * Get a list of messages for a ticket.
+   *
+   * @param ticketId
+   */
   getMessages(ticketId: string): Observable<SupportMessage[]> {
     const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/all`;
     console.log(endpoint);
-    return this._http.get<SupportMessage[]>(this.buildApiEndpointUri(endpoint))
+    return this._http.get<SupportMessage[]>(this.buildApiEndpointUri(endpoint));
   }
 
+  /**
+   * Create a new message.
+   *
+   * @param ticketId
+   * @param messageContent
+   */
   createMessage(ticketId: string, messageContent: MessageCreateRequest): Observable<SupportMessage> {
     const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/addMessage`;
     return this._http.post<SupportMessage>(this.buildApiEndpointUri(endpoint), messageContent);
   }
 
+  /**
+   * Mark a ticket as having been resolved.
+   *
+   * @param ticketId
+   */
   resolveTicket(ticketId: string): Observable<boolean> {
     const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/resolve`;
     return this._http.put<boolean>(this.buildApiEndpointUri(endpoint), {});
   }
-
-  // isResolved(ticketId: string): Observable<boolean> {
-  //   const endpoint = `${this.environment.api.endpoints.tickets}/${ticketId}/isResolved`;
-  //   return this._http.get<boolean>(this.buildApiEndpointUri(endpoint));
-
-  // }
-
-
 }

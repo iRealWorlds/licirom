@@ -13,7 +13,7 @@
 <div class="flex flex-col items-start gap-5 ">
 
     <div *ngFor="let ticket of tickets" class="flex ml-5 flex-col bg-gray-100 w-full"
-        [ngClass]="{'hover:bg-yellow-300':ticket.resolved !==true,'hover:bg-green-300':ticket.resolved ==true} ">
+        [ngClass]="{'hover:bg-yellow-300': ticket.resolved !== true,'hover:bg-green-300': ticket.resolved === true} ">
         <a [routerLink]="['/support/details',ticket.id]">
             <h2 class="text-left text-xl font-bold my-3">{{ticket.title}}</h2>
             <div><span class="xl font-bold">Ticket Id: </span> {{ticket.id}}</div>

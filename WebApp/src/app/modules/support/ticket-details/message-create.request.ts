@@ -1,5 +1,5 @@
 export class MessageCreateRequest {
-    messageContent: string = '';
+    messageContent = '';
     /**
      * AuctionCategoryCreateRequest constructor mehtod.
      *
