@@ -6,6 +6,8 @@ import {
   AuctionBidCreateRequest
 } from '@licirom/modules/auctions/auction-details/auction-bids/auction-bid-create.request';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuctionStatus } from '@licirom/modules/auctions/auction-status.enum';
+import { utcToDate } from '@licirom/core/utils/utc-to-date.util';
 
 @Component({
   selector: 'app-auction-bid-create',
@@ -18,6 +20,29 @@ export class AuctionBidCreateComponent implements OnChanges {
   bidForm = new FormGroup({
     amount: new FormControl<number|null>(null, { validators: [Validators.required, Validators.min(0)] }),
   });
+
+  /**
+   * Check whether bidding has started on this auction.
+   */
+  get biddingStarted(): boolean {
+    if (!this.auction) {
+      return false;
+    }
+
+    if (this.auction.currentStatus !==  AuctionStatus.ACTIVE) {
+      return false;
+    }
+
+    if (new Date() < utcToDate(this.auction.startTime)) {
+      return false;
+    }
+
+    if (new Date() > utcToDate(this.auction.endTime)) {
+      return false;
+    }
+
+    return true;
+  }
 
   private _loading = false;
 

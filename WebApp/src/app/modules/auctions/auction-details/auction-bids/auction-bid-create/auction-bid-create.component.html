@@ -9,25 +9,33 @@
     <!-- Divider -->
     <div class="h-2 w-20 bg-primary-500"></div>
 
-    <mat-card-content class="p-5">
-      <!-- Amount -->
-      <mat-form-field class="w-full">
-        <mat-label>Amount</mat-label>
-        <input type="number" [step]="auction.minimumIncrement" matInput [formControl]="bidForm.controls.amount">
-        <mat-hint class="text-sm">
-          You have to increase by at least {{ auction.minimumIncrement | currency }} over the highest bid.
-        </mat-hint>
-        <mat-error *ngFor="let value of bidForm.controls.amount.errors | keyvalue">
-          <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
-        </mat-error>
-      </mat-form-field>
+    <ng-container *ngIf="biddingStarted; else biddingNotStartedTemplate">
+      <mat-card-content class="p-5">
+        <!-- Amount -->
+        <mat-form-field class="w-full">
+          <mat-label>Amount</mat-label>
+          <input type="number" [step]="auction.minimumIncrement" matInput [formControl]="bidForm.controls.amount">
+          <mat-hint class="text-sm">
+            You have to increase by at least {{ auction.minimumIncrement | currency }} over the highest bid.
+          </mat-hint>
+          <mat-error *ngFor="let value of bidForm.controls.amount.errors | keyvalue">
+            <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
+      </mat-card-content>
 
-    </mat-card-content>
-
-    <mat-card-footer class="p-5">
-      <button type="submit" mat-flat-button color="accent" class="w-full">
-        Bid now
-      </button>
-    </mat-card-footer>
+      <mat-card-footer class="p-5">
+        <button type="submit" mat-flat-button color="accent" class="w-full">
+          Bid now
+        </button>
+      </mat-card-footer>
+    </ng-container>
+    <ng-template #biddingNotStartedTemplate>
+      <mat-card-content class="p-5">
+        <h3 class="text-center text-gray-500">
+          Bidding has not started yet
+        </h3>
+      </mat-card-content>
+    </ng-template>
   </mat-card>
 </form>
