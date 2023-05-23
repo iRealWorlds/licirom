@@ -1,0 +1,16 @@
+<form [formGroup]="commentForm" (ngSubmit)="saveComment()" class="w-full h-full flex gap-5 items-center">
+
+  <!-- Content -->
+  <mat-form-field class="grow">
+    <mat-label>New comment</mat-label>
+    <textarea type="text" matInput [formControl]="commentForm.controls.content"></textarea>
+    <mat-error *ngFor="let value of commentForm.controls.content.errors | keyvalue">
+      <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Button -->
+  <button mat-mini-fab color="accent">
+    <mat-icon>send</mat-icon>
+  </button>
+</form>

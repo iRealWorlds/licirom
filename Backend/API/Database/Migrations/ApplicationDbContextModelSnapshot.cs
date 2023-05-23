@@ -96,6 +96,135 @@ namespace API.Database.Migrations
                     b.ToTable("IdentityUsers", (string)null);
                 });
 
+            modelBuilder.Entity("API.Database.Entities.Auction", b =>
+                {
+                    b.Property<Guid>("Key")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CategoryKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatorKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CurrentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("MinimumIncrement")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("ReservePrice")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("StartPrice")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Key");
+
+                    b.HasIndex("CategoryKey");
+
+                    b.HasIndex("CreatorKey");
+
+                    b.ToTable("Auctions");
+                });
+
+            modelBuilder.Entity("API.Database.Entities.AuctionCategory", b =>
+                {
+                    b.Property<Guid>("Key")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ParentKey")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Key");
+
+                    b.HasIndex("ParentKey");
+
+                    b.ToTable("AuctionCategories");
+                });
+
+            modelBuilder.Entity("API.Database.Entities.AuctionComment", b =>
+                {
+                    b.Property<Guid>("Key")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AuctionKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AuthorKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubmitTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Key");
+
+                    b.HasIndex("AuctionKey");
+
+                    b.HasIndex("AuthorKey");
+
+                    b.ToTable("AuctionComments");
+                });
+
+            modelBuilder.Entity("API.Database.Entities.Bid", b =>
+                {
+                    b.Property<Guid>("Key")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<Guid>("AuctionKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BuyerKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("SubmitTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Key");
+
+                    b.HasIndex("AuctionKey");
+
+                    b.HasIndex("BuyerKey");
+
+                    b.ToTable("Bids");
+                });
+
             modelBuilder.Entity("API.Database.Entities.SupportMessage", b =>
                 {
                     b.Property<int>("Id")
@@ -285,6 +414,73 @@ namespace API.Database.Migrations
                     b.ToTable("IdentityUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("API.Database.Entities.Auction", b =>
+                {
+                    b.HasOne("API.Database.Entities.AuctionCategory", "Category")
+                        .WithMany("Auctions")
+                        .HasForeignKey("CategoryKey")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("API.Database.Entities.ApplicationUser", "Creator")
+                        .WithMany("Auctions")
+                        .HasForeignKey("CreatorKey")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("API.Database.Entities.AuctionCategory", b =>
+                {
+                    b.HasOne("API.Database.Entities.AuctionCategory", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentKey")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("API.Database.Entities.AuctionComment", b =>
+                {
+                    b.HasOne("API.Database.Entities.Auction", "Auction")
+                        .WithMany("Comments")
+                        .HasForeignKey("AuctionKey")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Database.Entities.ApplicationUser", "Author")
+                        .WithMany("AuctionComments")
+                        .HasForeignKey("AuthorKey")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+
+                    b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("API.Database.Entities.Bid", b =>
+                {
+                    b.HasOne("API.Database.Entities.Auction", "Auction")
+                        .WithMany("Bids")
+                        .HasForeignKey("AuctionKey")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Database.Entities.ApplicationUser", "Buyer")
+                        .WithMany("Bids")
+                        .HasForeignKey("BuyerKey")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+
+                    b.Navigation("Buyer");
+                });
+
             modelBuilder.Entity("API.Database.Entities.SupportMessage", b =>
                 {
                     b.HasOne("API.Database.Entities.SupportTicket", "Ticket")
@@ -364,6 +560,29 @@ namespace API.Database.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("API.Database.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("AuctionComments");
+
+                    b.Navigation("Auctions");
+
+                    b.Navigation("Bids");
+                });
+
+            modelBuilder.Entity("API.Database.Entities.Auction", b =>
+                {
+                    b.Navigation("Bids");
+
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("API.Database.Entities.AuctionCategory", b =>
+                {
+                    b.Navigation("Auctions");
+
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("API.Database.Entities.SupportTicket", b =>

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TicketService } from '../ticket.service';
-import { CreateTicketRequest } from './create-ticket.request';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CreateTicketRequest } from '@licirom/modules/support/create-ticket/create-ticket.request';
+import { TicketService } from '@licirom/modules/support/ticket.service';
 
 @Component({
   selector: 'app-create-ticket',
@@ -15,13 +15,24 @@ export class CreateTicketComponent {
     title: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     content: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
   });
+
+  /**
+   * CreateTicketComponent constructor method.
+   *
+   * @param _ticketService
+   * @param _router
+   * @param _toastService
+   */
   constructor(
     private readonly _ticketService: TicketService,
     private readonly _router: Router,
     private readonly _toastService: MatSnackBar
   ) { }
 
-  submitTicket() {
+  /**
+   * Submit the ticket to the API.
+   */
+  submitTicket(): void {
     this.ticketForm.markAllAsTouched();
 
     if (this.ticketForm.valid) {

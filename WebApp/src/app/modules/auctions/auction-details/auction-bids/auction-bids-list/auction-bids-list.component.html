@@ -1,0 +1,49 @@
+<mat-card class="w-full h-full" *ngIf="auction">
+  <mat-card-header class="p-5 flex items-center justify-between">
+    <mat-card-title class="block text-xl">
+      Top 3 bids
+    </mat-card-title>
+
+    <ng-container *ngIf="auction.currentStatus !== statuses.CLOSED">
+      <!-- Not yet started -->
+      <div class="flex items-center gap-4" *ngIf="timeUntilStart > 0; else alreadyStartedTemplate">
+        <h4 class="text-gray-500">Starts in</h4>
+        <app-time-cards [time]="timeUntilStart"></app-time-cards>
+      </div>
+      <ng-template #alreadyStartedTemplate>
+        <!-- Ends in -->
+        <div class="flex items-center gap-4" *ngIf="timeUntilEnd > 0">
+          <h4 class="text-gray-500">Ends in</h4>
+          <app-time-cards [time]="timeUntilEnd"></app-time-cards>
+        </div>
+      </ng-template>
+    </ng-container>
+  </mat-card-header>
+
+  <!-- Divider -->
+  <div class="h-2 w-20 bg-primary-500"></div>
+
+  <mat-card-content class="flex flex-col gap-5 p-5">
+    <ng-container *ngIf="bids; else loadingTemplate">
+      <ng-container *ngIf="bids.length; else noBidsTemplate">
+        <app-auction-bid-entry
+          [position]="index + 1"
+          [bid]="bid" *ngFor="let bid of bids; let index = index"></app-auction-bid-entry>
+      </ng-container>
+      <ng-template #noBidsTemplate>
+        <h3 class="text-xl text-center text-gray-500">
+          No bids on this auction
+        </h3>
+      </ng-template>
+    </ng-container>
+    <ng-template #loadingTemplate>
+      <div class="flex gap-5 items-center group" *ngFor="let i of [1, 2, 3]">
+        <div class="w-10 h-10 skeleton"></div>
+        <div>
+          <div class="w-36 h-5 skeleton mb-2"></div>
+          <div class="w-20 h-2 skeleton"></div>
+        </div>
+      </div>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

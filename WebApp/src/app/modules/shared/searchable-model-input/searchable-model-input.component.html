@@ -1,0 +1,15 @@
+<div class="relative w-full h-full">
+  <mat-form-field class="w-full" style="margin-bottom: -100% !important;">
+    <mat-label *ngIf="label?.length">{{ label }}</mat-label>
+    <input type="text" [formControl]="searchControl" matInput #searchInput>
+  </mat-form-field>
+
+  <!-- Suggestions -->
+  <div class="absolute top-full left-0 w-full bg-white z-30 shadow border" *ngIf="searchFocused$ | async">
+    <ul>
+      <li *ngFor="let suggestion of suggestions" (click)="useSuggestion(suggestion)" class="px-5 py-2 hover:bg-gray-50 transition-all cursor-pointer">
+        {{ displayFn(suggestion) }}
+      </li>
+    </ul>
+  </div>
+</div>

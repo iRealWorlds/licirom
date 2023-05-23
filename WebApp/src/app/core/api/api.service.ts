@@ -3,6 +3,7 @@ import { EnvironmentConfig } from '@licirom/core/environment/environment-config.
 import { ApiOperationOptions } from '@licirom/core/api/api-operation-options.model';
 import { Params } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
+import { IndexOptions } from '@licirom/core/api/index-options.model';
 
 @Injectable()
 export class ApiService {
@@ -41,12 +42,39 @@ export class ApiService {
    * @param options
    * @protected
    */
-  protected buildParameters(options: ApiOperationOptions): Params {
-    const params = new HttpParams();
+  protected buildParameters(options: IndexOptions<unknown>|ApiOperationOptions): Params {
+    let params = new HttpParams();
+
+    // Add filters (if present)
+    if ('filters' in options) {
+      if (options.filters) {
+        for (const [key, value] of Object.entries(options.filters)) {
+          if (Array.isArray(value)) {
+            for (const valueElement of value) {
+              params = params.append(key, valueElement);
+            }
+          } else {
+            params = params.append(key, value);
+          }
+        }
+      }
+    }
+
+    // Add pagination (if present)
+    if ('page' in options) {
+      if (options.page) {
+        params = params.append('page', options.page);
+      }
+    }
+    if ('pageSize' in options) {
+      if (options.pageSize) {
+        params = params.append('pageSize', options.pageSize);
+      }
+    }
 
     // Add expansions
     for (const property of options.expand) {
-      params.append('expand', property);
+      params = params.append('expand', property);
     }
 
     // Return the result

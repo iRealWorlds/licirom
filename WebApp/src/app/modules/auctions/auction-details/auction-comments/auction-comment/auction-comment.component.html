@@ -1,0 +1,14 @@
+<div *ngIf="comment" class="p-5 bg-primary-50">
+  <div class="mb-3 flex items-center gap-4">
+    <mat-icon>
+      person
+    </mat-icon>
+    <div>
+      <h3>{{ comment.authorKey }}</h3>
+      <p class="text-sm text-gray-500">
+        On {{ comment.submitTime | date }} at {{ comment.submitTime | date: 'HH:mm:ss' }}
+      </p>
+    </div>
+  </div>
+  <p class="whitespace-pre-wrap">{{ comment.content }}</p>
+</div>
