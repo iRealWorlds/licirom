@@ -1,9 +1,11 @@
-<ng-container *ngIf="identity$ | async as identity;">
+<ng-container *ngIf="profile">
+  <ng-container *ngIf="personalProfile">
     <h1 class="text-xl text-green-500">
-      You are signed in
+      Personal Page
     </h1>
+    </ng-container>
     <h2>
-      <i class="material-icons">co_present</i> {{identity.firstName}}
+      <i class="material-icons">co_present</i> {{profile.firstName}}
     </h2>
     <div class="flex items-center gap-5 mt-5">
       <a routerLink="/auth/sign-out" mat-flat-button color="warn">
