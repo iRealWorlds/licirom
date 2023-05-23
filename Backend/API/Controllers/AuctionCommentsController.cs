@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PusherServer;
 
 namespace API.Controllers;
 
@@ -17,11 +18,13 @@ public class AuctionCommentsController : ControllerBase
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IConfiguration _configuration;
 
-    public AuctionCommentsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+    public AuctionCommentsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, IConfiguration configuration)
     {
         _dbContext = dbContext;
         _userManager = userManager;
+        _configuration = configuration;
     }
 
     [HttpGet]
@@ -84,6 +87,24 @@ public class AuctionCommentsController : ControllerBase
         // Persist the comment
         await _dbContext.AuctionComments.AddAsync(comment);
         await _dbContext.SaveChangesAsync();
+        
+        // Send a notification through Pusher
+        var options = new PusherOptions
+        {
+            Cluster = this._configuration.GetValue<string>("Pusher:Cluster"),
+            Encrypted = true
+        };
+
+        // Send a Pusher event
+        var pusher = new Pusher(
+            this._configuration.GetValue<string>("Pusher:AppId"),
+            this._configuration.GetValue<string>("Pusher:AppKey"),
+            this._configuration.GetValue<string>("Pusher:AppSecret"),
+            options);
+        await pusher.TriggerAsync(
+            $"auctions.{auction.Key}",
+            "comments.created",
+            new { auctionKey = auction.Key, commentKey = comment.Key } );
         
         // Return a 201 Created response
         return new JsonResult(new AuctionCommentModel(comment))

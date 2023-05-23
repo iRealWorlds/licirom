@@ -11,7 +11,7 @@ public class UserOwnsResourceOrIsAdminRequirement :
                                                    UserOwnsResourceOrIsAdminRequirement requirement,
                                                    IUserOwnable resource)
     {
-        if(context.User.IsInRole("Admin"))
+        if(context.User.IsInRole("Administrator"))
         {
             context.Succeed(requirement);
             return Task.CompletedTask;
