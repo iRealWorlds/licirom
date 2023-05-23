@@ -1,6 +1,7 @@
 using System.Text;
 using API.Database;
 using API.Database.Entities;
+using API.AuthorizationPolicies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +37,12 @@ builder.Services.AddAuthentication(options => {
         ValidAudience = builder.Configuration["JWT:ValidAudience"],  
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],  
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))  
-    };  
+    };
+    options.MapInboundClaims = false; // Prevent default behaviour which renames claims such as "sub" to "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+});
+
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("OwnsUser", policy => policy.Requirements.Add(new OwnsUserRequirement()));
 });
 
 builder.Services.AddEndpointsApiExplorer();
