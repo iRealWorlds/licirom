@@ -98,7 +98,6 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [Authorize(Policy="OwnsUser")]
     public async Task<IActionResult> ChangePasswordAsync([FromBody] PasswordChangeModel data, Guid userKey)
     {
         var user = await this._userManager.FindByIdAsync(userKey.ToString());
@@ -106,6 +105,11 @@ public class UsersController : ControllerBase
         if (user == null)
         {
             return new NotFoundResult();
+        }
+
+        if(!(await _authorizationService.AuthorizeAsync(User, user, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+        {
+            return Unauthorized();
         }
 
         if(!(await this._userManager.ChangePasswordAsync(user, data.CurrentPassword, data.NewPassword)).Succeeded)
@@ -119,7 +123,6 @@ public class UsersController : ControllerBase
     [HttpDelete("{userKey:guid}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [Authorize(Policy="OwnsUser")]
     public async Task<IActionResult> DeleteUserAsync(Guid userKey)
     {
         var user = await this._userManager.FindByIdAsync(userKey.ToString());
@@ -129,6 +132,11 @@ public class UsersController : ControllerBase
             return new NotFoundResult();
         }
 
+        if(!(await _authorizationService.AuthorizeAsync(User, user, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+        {
+            return Unauthorized();
+        }
+
         return new NoContentResult();
     }
 
@@ -136,7 +144,6 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
-    [Authorize(Policy="OwnsUser")]
     public async Task<IActionResult> PatchUserAsync([FromBody] PatchUserModel data, Guid userKey)
     {
         var user = await this._userManager.FindByIdAsync(userKey.ToString());
@@ -144,6 +151,11 @@ public class UsersController : ControllerBase
         if(user == null)
         {
             return new NotFoundResult();
+        }
+
+        if(!(await _authorizationService.AuthorizeAsync(User, user, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+        {
+            return Unauthorized();
         }
 
         user.FirstName = data.FirstName;
