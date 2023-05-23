@@ -1,53 +1,57 @@
-<mat-toolbar color="primary" class="flex justify-between items-center">
-  <div class="flex items-center gap-3">
-    <img ngSrc="assets/images/logo_dark_bg.png" alt="logo" height="60" width="160" class="mr-5">
+<div class="min-w-screen min-h-screen flex flex-col justify-between">
+  <mat-toolbar class="flex justify-between items-center bg-gray-800 text-white">
+    <div class="flex items-center gap-3">
+      <img ngSrc="assets/images/logo_dark_bg.png" alt="logo" height="60" width="160" class="mr-5">
 
-    <!-- Home -->
-    <a routerLink="/" routerLinkActive="bg-black/10" mat-button [routerLinkActiveOptions]="{ exact: true }">
-      Home
-    </a>
+      <!-- Home -->
+      <a routerLink="/" routerLinkActive="bg-black/10" mat-button [routerLinkActiveOptions]="{ exact: true }">
+        Home
+      </a>
 
-    <!-- Support -->
-    <a routerLink="/support" routerLinkActive="bg-black/10" mat-button>
-      Support
-    </a>
+      <!-- Support -->
+      <a routerLink="/support" routerLinkActive="bg-black/10" mat-button>
+        Support
+      </a>
 
-    <!-- Admin -->
-    <button mat-button routerLinkActive="bg-black/10" [matMenuTriggerFor]="menu">Admin</button>
-    <mat-menu #menu="matMenu">
-      <a routerLink="/admin/categories" mat-menu-item>Categories</a>
-      <a routerLink="/admin/auctions" mat-menu-item>Pending auctions</a>
-    </mat-menu>
-  </div>
-
-  <div class="flex items-center gap-5">
-    <!-- Current user -->
-    <ng-container *ngIf="currentUser$ | async as user; else guestTemplate">
-      <button mat-button [matMenuTriggerFor]="userMenu">
-        <mat-icon>person</mat-icon>
-        {{ user.firstName }} {{ user.lastName }}
-      </button>
-      <mat-menu #userMenu="matMenu">
-        <button disabled mat-menu-item>
-          <mat-icon>account_circle</mat-icon>
-          <span>Profile</span>
-        </button>
-        <button disabled mat-menu-item>
-          <mat-icon>settings</mat-icon>
-          <span>Settings</span>
-        </button>
-        <a routerLink="/auth/sign-out" mat-menu-item>
-          <mat-icon>power_settings_new</mat-icon>
-          <span>Sign out</span>
-        </a>
+      <!-- Admin -->
+      <button mat-button routerLinkActive="bg-black/10" [matMenuTriggerFor]="menu">Admin</button>
+      <mat-menu #menu="matMenu">
+        <a routerLink="/admin/categories" mat-menu-item>Categories</a>
+        <a routerLink="/admin/auctions" mat-menu-item>Pending auctions</a>
       </mat-menu>
-    </ng-container>
-    <ng-template #guestTemplate>
-      <a routerLink="/auth/sign-in" mat-button>Sign in</a>
-      <a routerLink="/auth/sign-up" mat-button>Create account</a>
-    </ng-template>
+    </div>
 
-  </div>
-</mat-toolbar>
+    <div class="flex items-center gap-5">
+      <!-- Current user -->
+      <ng-container *ngIf="currentUser$ | async as user; else guestTemplate">
+        <button mat-button [matMenuTriggerFor]="userMenu">
+          <mat-icon class="scale-125">person</mat-icon>
+          {{ user.firstName }} {{ user.lastName }}
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button disabled mat-menu-item>
+            <mat-icon>account_circle</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button disabled mat-menu-item>
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+          <a routerLink="/auth/sign-out" mat-menu-item>
+            <mat-icon>power_settings_new</mat-icon>
+            <span>Sign out</span>
+          </a>
+        </mat-menu>
+      </ng-container>
+      <ng-template #guestTemplate>
+        <a routerLink="/auth/sign-in" mat-button>Sign in</a>
+        <a routerLink="/auth/sign-up" mat-button>Create account</a>
+      </ng-template>
 
-<router-outlet></router-outlet>
+    </div>
+  </mat-toolbar>
+
+  <main class="bg-gray-100 grow">
+    <router-outlet></router-outlet>
+  </main>
+</div>
