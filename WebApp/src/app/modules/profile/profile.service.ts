@@ -4,6 +4,7 @@ import { ApiService } from '@licirom/core/api/api.service';
 import { EnvironmentConfig } from '@licirom/core/environment/environment-config.model';
 import { IdentityUser } from '@licirom/core/identity/identity-user.model';
 import { Observable } from 'rxjs';
+import { ProfileUpdateRequest } from '@licirom/modules/profile/profile-update.request';
 
 @Injectable({
   providedIn: 'root'
@@ -32,4 +33,27 @@ export class ProfileService extends ApiService{
     const uri = this.buildApiEndpointUri(['api','Users',profileKey]);
     return this._http.get<IdentityUser>(uri);
    }
+
+/**
+   * Delete the given user from the API.
+   *
+   * @param profileKey
+   */
+deleteByKey(profileKey: string): Observable<void> {
+  const uri = this.buildApiEndpointUri(['api', 'Users', profileKey]);
+  return this._http.delete<void>(uri);
+}
+
+
+    /**
+   * Update an user in the API.
+   *
+   * @param profileKey
+   * @param data
+   */
+   updateByKey(profileKey: string, data: ProfileUpdateRequest): Observable<IdentityUser> {
+    const uri = this.buildApiEndpointUri(['api', 'Users', profileKey]);
+    return this._http.patch<IdentityUser>(uri, data);
+  }
+
 }

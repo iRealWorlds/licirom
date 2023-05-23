@@ -8,7 +8,7 @@ export class AuctionUpdateRequest {
   endTime?: string;
 
   /**
-   * AuctionCategoryCreateRequest constructor mehtod.
+   * AuctionUpdateRequest constructor mehtod.
    *
    * @param initial
    */

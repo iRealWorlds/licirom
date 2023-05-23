@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
 import { IdentityUser } from '@licirom/core/identity/identity-user.model';
-import { Observable, Subject , firstValueFrom, takeUntil} from 'rxjs';
+import {  Subject , firstValueFrom, takeUntil} from 'rxjs';
 import { IdentityService } from '@licirom/core/identity/identity.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '@licirom/modules/profile/profile.service';
@@ -13,6 +13,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy{
+/* //Delete Dialogue Window
+openDialog() {
+throw new Error('Method not implemented.');
+} 
+*/ 
   profile?: IdentityUser;
   personalProfile = false;
 
