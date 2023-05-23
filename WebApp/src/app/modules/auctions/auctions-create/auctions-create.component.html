@@ -1,4 +1,4 @@
-<form [formGroup]="auctionForm" (ngSubmit)="createAuction()" class="w-main-content mx-auto mt-7">
+<form [formGroup]="auctionForm" (ngSubmit)="createAuction()" class="w-main-content mx-auto my-7">
   <a routerLink="/auctions" mat-flat-button class="mb-3">
     <mat-icon>arrow_back</mat-icon>
     Back to list
@@ -9,7 +9,7 @@
         Create auction
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content class="flex flex-col gap-5 items-stretch">
+    <mat-card-content class="flex flex-col gap-5 items-stretch p-5">
       <!-- Title -->
       <mat-form-field>
         <mat-label>Title</mat-label>
@@ -19,13 +19,83 @@
         </mat-error>
       </mat-form-field>
 
+      <!-- Category -->
+      <app-searchable-model-input
+        [formControl]="auctionForm.controls.category"
+        label="Category"
+        [displayFn]="formatCategorySuggestion"
+        [searchFn]="searchCategories.bind(this)"></app-searchable-model-input>
+      <ng-container *ngIf="auctionForm.controls.category.touched || auctionForm.controls.category.dirty">
+        <p class="text-red-500" *ngFor="let value of auctionForm.controls.category.errors | keyvalue">
+          <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+        </p>
+      </ng-container>
+
       <!-- Description -->
       <mat-form-field>
         <mat-label>Description</mat-label>
         <textarea type="text" matInput [formControl]="auctionForm.controls.description"></textarea>
       </mat-form-field>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Starting price -->
+        <mat-form-field>
+          <mat-label>Starting price</mat-label>
+          <input type="number" matInput [formControl]="auctionForm.controls.startPrice">
+          <mat-hint>
+            This auction's starting point.
+          </mat-hint>
+          <mat-error *ngFor="let value of auctionForm.controls.startPrice.errors | keyvalue">
+            <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Reserve price -->
+        <mat-form-field>
+          <mat-label>Reserve price</mat-label>
+          <input type="number" matInput [formControl]="auctionForm.controls.reservePrice">
+          <mat-hint>
+            A value under which you are unwilling to sell.
+          </mat-hint>
+          <mat-error *ngFor="let value of auctionForm.controls.reservePrice.errors | keyvalue">
+            <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Minimum increment -->
+      <mat-form-field>
+        <mat-label>Minimum increment</mat-label>
+        <input type="number" matInput [formControl]="auctionForm.controls.minimumIncrement">
+        <mat-hint>
+          The minimum value that a bid should increase over the previous highest one.
+        </mat-hint>
+        <mat-error *ngFor="let value of auctionForm.controls.minimumIncrement.errors | keyvalue">
+          <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+        </mat-error>
+      </mat-form-field>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Starting time -->
+        <mat-form-field>
+          <mat-label>Starting time</mat-label>
+          <input type="datetime-local" matInput [formControl]="auctionForm.controls.startTime">
+          <mat-error *ngFor="let value of auctionForm.controls.startTime.errors | keyvalue">
+            <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Ending time -->
+        <mat-form-field>
+          <mat-label>Ending time</mat-label>
+          <input type="datetime-local" matInput [formControl]="auctionForm.controls.endTime">
+          <mat-error *ngFor="let value of auctionForm.controls.endTime.errors | keyvalue">
+            <app-field-validation-errors [error]="value.key"></app-field-validation-errors>
+          </mat-error>
+        </mat-form-field>
+      </div>
     </mat-card-content>
-    <mat-card-actions align="end">
+    <mat-card-actions align="end" class="p-5">
       <button type="submit" mat-flat-button color="primary" [disabled]="auctionForm.disabled">
         <ng-container *ngIf="loading === true">Creating</ng-container>
         <ng-container *ngIf="loading === false">Create</ng-container>

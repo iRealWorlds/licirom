@@ -3,6 +3,7 @@ using API.Database;
 using API.Database.Entities;
 using API.ViewModels;
 using API.ViewModels.Requests;
+using API.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,16 +28,22 @@ public class AuctionCategoriesController : ControllerBase
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(typeof(PaginatedResult<AuctionCategoryModel>), (int) HttpStatusCode.OK)]
-    public async Task<IActionResult> IndexAsync([FromQuery] AuctionCategoryIndexModel query)
+    public async Task<IActionResult> IndexAsync([FromQuery] AuctionCategoryIndexModel options)
     {
         var categories = await _dbContext.AuctionCategories.ToListAsync();
-        var result = new PaginatedResult<AuctionCategory>(categories, query).Map(c => new AuctionCategoryModel(c));
+        if (!string.IsNullOrWhiteSpace(options.Query))
+        {
+            categories = categories.Where(c => c.Name.ToLowerInvariant().StartsWith(options.Query.ToLowerInvariant())).ToList();
+        }
+        
+        var result = new PaginatedResult<AuctionCategory>(categories, options).Map(c => new AuctionCategoryModel(c));
         return new JsonResult(result);
     }
 
     [HttpPost]
     [Produces("application/json")]
     [ProducesResponseType(typeof(AuctionCategoryModel), (int) HttpStatusCode.Created)]
+    [Authorize(Policy=AuthorizationPolicies.UserIsAdmin)]
     public async Task<IActionResult> CreateAsync(AuctionCategoryCreateModel request)
     {
         // Make sure parent category exists
@@ -87,6 +94,7 @@ public class AuctionCategoriesController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(AuctionCategoryModel), (int) HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [Authorize(Policy=AuthorizationPolicies.UserIsAdmin)]
     public async Task<IActionResult> UpdateAsync(Guid categoryKey, AuctionCategoryUpdateModel request)
     {
         // Find category
@@ -127,6 +135,7 @@ public class AuctionCategoriesController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [Authorize(Policy=AuthorizationPolicies.UserIsAdmin)]
     public async Task<IActionResult> DeleteAsync(Guid categoryKey)
     {
         // Get category details

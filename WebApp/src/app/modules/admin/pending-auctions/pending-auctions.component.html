@@ -1,0 +1,23 @@
+<div class="w-main-content mx-auto mt-7">
+  <div class="mb-5 flex flex-col lg:flex-row lg:justify-between lg:items-center">
+    <h2 class="text-xl">
+      Pending auctions
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+    <mat-card *ngFor="let auction of auctionList">
+      <mat-card-content class="text-center text-xl">
+        <p>{{ auction.title }}</p>
+      </mat-card-content>
+      <mat-card-actions class="flex gap-5">
+        <button (click)="activateAuction(auction.key)" mat-flat-button color="primary" class="w-full">
+          Activate auction
+        </button>
+        <button (click)="closeAuction(auction.key)" mat-flat-button color="warn" class="w-full">
+          Close auction
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="flex items-center gap-5">
+  <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-primary-900 text-xl">
+    {{ hours | number:'2.0' }}
+  </div>
+  <div>:</div>
+  <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-primary-900 text-xl">
+    {{ minutes | number:'2.0' }}
+  </div>
+  <div>:</div>
+  <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-primary-900 text-xl">
+    {{ seconds | number:'2.0' }}
+  </div>
+</div>

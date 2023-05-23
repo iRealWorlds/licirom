@@ -3,6 +3,7 @@ using API.Database;
 using API.Database.Entities;
 using API.ViewModels;
 using API.ViewModels.Requests;
+using API.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,14 +21,17 @@ public class TicketsController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationDbContext _dbContext;
+    private readonly IAuthorizationService _authorizationService;
 
-    public TicketsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+    public TicketsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
     {
         this._dbContext = dbContext;
         this._userManager = userManager;
+        this._authorizationService = authorizationService;
     }
 
     [HttpGet]
+    [Authorize(Policy = AuthorizationPolicies.UserIsAdmin)]
     public async Task<IActionResult> IndexAsync()
     {
         var user = await this._userManager.GetUserAsync(HttpContext.User);
@@ -97,6 +101,11 @@ public class TicketsController : ControllerBase
         if (ticket == null)
         {
             return NotFound();
+        }
+
+        if(!(await _authorizationService.AuthorizeAsync(User, ticket, AuthorizationPolicies.UserOwnsResourceOrIsAdmin)).Succeeded)
+        {
+            return Unauthorized();
         }
 
         // Return the result

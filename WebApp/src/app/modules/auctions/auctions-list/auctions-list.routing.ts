@@ -6,6 +6,7 @@ export const auctionsListRouting: Route[] = [
   {
     path: '',
     component: AuctionsListComponent,
+    runGuardsAndResolvers: 'always',
     resolve: {
       auctions: AuctionsListResolver
     },

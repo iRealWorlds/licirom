@@ -1,15 +1,12 @@
 using API.Database.Entities;
-
 namespace API.ViewModels;
 
 public class SupportTicketModel
 {
     public int Id { get; set; }
     public string Title { get; set; } = String.Empty;
-
     public Guid UserId { get; set; }
     public bool Resolved { get; set; } = false;
-
     public DateTime CreatedAt { get; set; }
 
     public SupportTicketModel()
