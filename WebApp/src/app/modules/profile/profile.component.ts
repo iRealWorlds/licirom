@@ -13,10 +13,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy{
-/* openDialog() {
+/* //Delete Dialogue Window
+openDialog() {
 throw new Error('Method not implemented.');
 } 
-//Delete Dialogue Window
 */ 
   profile?: IdentityUser;
   personalProfile = false;
