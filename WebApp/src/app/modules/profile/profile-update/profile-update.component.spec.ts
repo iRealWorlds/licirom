@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProfileUpdateComponent } from './profile-update.component';
+import { ProfileUpdateComponent } from '@licirom/modules/profile/profile-update/profile-update.component';
 
 describe('ProfileUpdateComponent', () => {
   let component: ProfileUpdateComponent;

@@ -6,8 +6,8 @@ export const userUpdateRouting: Route[] = [
   {
     path: ':userKey',
     component: ProfileUpdateComponent,
-    resolve: {
-      //profile: ProfileDetailsResolver
-    },
+   /* Resolve: {
+      profile: ProfileDetailsResolver
+   },*/ 
   }
 ];
