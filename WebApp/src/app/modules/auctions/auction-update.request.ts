@@ -3,7 +3,7 @@ export class AuctionUpdateRequest {
   description?: string|null;
 
   /**
-   * AuctionCategoryCreateRequest constructor mehtod.
+   * AuctionUpdateRequest constructor mehtod.
    *
    * @param initial
    */

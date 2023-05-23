@@ -10,20 +10,23 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { FieldValidationErrorsComponent } from '@licirom/modules/shared/field-validation-errors/field-validation-errors.component';
 import { userUpdateRouting } from '@licirom/modules/profile/profile-update/profile-update.routing';
+import { ProfileUpdateComponent } from '@licirom/modules/profile/profile-update/profile-update.component';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ProfileUpdateComponent
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(userUpdateRouting),
     FieldValidationErrorsComponent,
+    MatFormFieldModule,
+    MatInputModule,
     MatButtonModule,
     MatCardModule,
-    MatFormFieldModule,
     MatIconModule,
-    MatInputModule,
     ReactiveFormsModule,
     MatSnackBarModule
   ]

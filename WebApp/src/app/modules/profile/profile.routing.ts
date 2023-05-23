@@ -9,5 +9,9 @@ export const profileRouting: Route[] =[
         resolve: {
             profile: ProfileResolver
         }
-    }
+    },
+    {
+        path: 'update',
+        loadChildren: () => import('src/app/modules/profile/profile-update/profile-update.module').then(m => m.ProfileUpdateModule),
+      }
 ];

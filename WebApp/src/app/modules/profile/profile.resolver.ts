@@ -4,7 +4,7 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ProfileService } from '@licirom/modules/profile/profile.service';
 import { IdentityUser } from '@licirom/core/identity/identity-user.model';
 
@@ -22,13 +22,13 @@ export class ProfileResolver implements Resolve<IdentityUser> {
   ){}
 
   /** @inheritdoc */
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IdentityUser> {
-    const profileKey = route.paramMap.get('profileKey');
+  resolve(route: ActivatedRouteSnapshot): Observable<IdentityUser> {
+    const userKey = route.paramMap.get('profileKey');
 
-    if(!profileKey){
+    if(!userKey){
       throw new Error('Invalid profile key');
     }
 
-    return this._profileService.getByKey(profileKey);
+    return this._profileService.getByKey(userKey);
   }
 }
